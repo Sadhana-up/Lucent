@@ -1,0 +1,15 @@
+/* Lucent design tokens — paste into globals.css */
+:root {
+  --lucent-primary:    #831843;
+  --lucent-active:     #BE185D;
+  --lucent-blush:      #EC4899;
+  --lucent-petal:      #FBCFE8;
+  --lucent-mist:       #FDF2F8;
+  --lucent-ink:        #1C1917;
+  --lucent-smoke:      #44403C;
+  --lucent-accent:     #4C1D95;
+  --lucent-success:    #14532D;
+  --lucent-success-bg: #BBF7D0;
+  --lucent-warn:       #78350F;
+  --lucent-warn-bg:    #FEF3C7;
+}

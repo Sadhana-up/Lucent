@@ -1,12 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
-import { UserProfileModal } from "@/components/user-profile-modal";
 import {
   Camera,
   MessageCircle,
@@ -142,10 +139,7 @@ const TESTIMONIALS = [
 /* ─── Main component ─────────────────────────────────────────────────────────── */
 
 export default function LandingPage() {
-  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const { data: session } = authClient.useSession();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -182,47 +176,21 @@ export default function LandingPage() {
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            {session ? (
-              <button
-                onClick={() => setProfileOpen(true)}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-transform hover:scale-105"
-                style={{
-                  background: session.user.image ? "transparent" : C.petal,
-                  color: C.primary,
-                  border: session.user.image ? "none" : `0.5px solid ${C.petal}`,
-                }}
-              >
-                {session.user.image ? (
-                  <img
-                    src={session.user.image}
-                    alt={session.user.name}
-                    className="w-9 h-9 rounded-full object-cover"
-                  />
-                ) : (
-                  session.user.name?.charAt(0).toUpperCase()
-                )}
-              </button>
-            ) : (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-sm"
-                  style={{ color: C.primary }}
-                  onClick={() => router.push("/sign-in")}
-                >
-                  Sign in
-                </Button>
-                <Button
-                  size="sm"
-                  className="text-sm font-medium text-white"
-                  style={{ background: C.primary }}
-                  onClick={() => router.push("/sign-up")}
-                >
-                  Get started
-                </Button>
-              </>
-            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-sm"
+              style={{ color: C.primary }}
+            >
+              Sign in
+            </Button>
+            <Button
+              size="sm"
+              className="text-sm font-medium text-white"
+              style={{ background: C.primary }}
+            >
+              Get started
+            </Button>
           </div>
         </div>
       </header>
@@ -482,7 +450,7 @@ export default function LandingPage() {
                     ))}
                   </div>
                   <p className="text-sm leading-relaxed mb-5" style={{ color: C.smoke }}>
-                    &quot;{t.quote}&quot;
+                    "{t.quote}"
                   </p>
                   <div className="flex items-center gap-3">
                     <div
@@ -513,14 +481,14 @@ export default function LandingPage() {
           <br />a real plan.
         </h2>
         <p className="text-lg mb-10 max-w-xl mx-auto" style={{ color: C.smoke }}>
-          Five minutes. One photo. A skincare routine that&apos;s actually yours.
+          Five minutes. One photo. A skincare routine that's actually yours.
         </p>
         <Button
           size="lg"
           className="text-base font-medium text-white px-10 h-12"
           style={{ background: C.primary }}
         >
-          Analyze my skin — it&apos;s free
+          Analyze my skin — it's free
           <ArrowRight size={16} className="ml-2" />
         </Button>
       </section>
@@ -551,15 +519,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-      {/* User Profile Modal */}
-      {session && (
-        <UserProfileModal
-          isOpen={profileOpen}
-          onClose={() => setProfileOpen(false)}
-          user={session.user}
-        />
-      )}
     </div>
   );
 }
