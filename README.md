@@ -29,3 +29,31 @@ To learn more about Next.js, take a look at the following resources:
 
 
 
+                Selfie
+                   │
+                   ▼
+        Face Detection (MediaPipe)
+                   │
+      ┌────────────┼────────────┐
+      ▼            ▼            ▼
+ Acne Model   Dark Spot     Wrinkle
+                Model         Model
+      │            │            │
+      └────────────┼────────────┘
+                   ▼
+        Vision Results (JSON)
+                   │
+                   ▼
+      User Questionnaire
+                   │
+                   ▼
+        Combined Skin Profile
+                   │
+                   ▼
+          LLM Recommendation
+                   │
+                   ▼
+ Morning Routine • Night Routine
+ Ingredient Advice • Progress Tips
+
+
