@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { Sparkles } from "lucide-react";
+import { Sparkles, User, Store } from "lucide-react";
 
 const C = {
   primary: "#831843",
@@ -18,8 +18,11 @@ const C = {
   smoke: "#44403C",
 };
 
+type Role = "customer" | "seller";
+
 export default function SignUpPage() {
   const router = useRouter();
+  const [role, setRole] = useState<Role>("customer");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,6 +38,8 @@ export default function SignUpPage() {
       name,
       email,
       password,
+    }, {
+      body: { role },
     });
 
     setLoading(false);
@@ -93,6 +98,43 @@ export default function SignUpPage() {
         >
           <CardContent className="p-6">
             <form onSubmit={handleSignUp} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label
+                  className="text-sm font-medium"
+                  style={{ color: C.primary }}
+                >
+                  Continue as
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setRole("customer")}
+                    className="flex flex-col items-center gap-2 p-4 rounded-lg text-sm font-medium transition-all"
+                    style={{
+                      border: `1px solid ${role === "customer" ? C.primary : C.petal}`,
+                      background: role === "customer" ? C.mist : "#fff",
+                      color: C.primary,
+                    }}
+                  >
+                    <User size={20} />
+                    Customer
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRole("seller")}
+                    className="flex flex-col items-center gap-2 p-4 rounded-lg text-sm font-medium transition-all"
+                    style={{
+                      border: `1px solid ${role === "seller" ? C.primary : C.petal}`,
+                      background: role === "seller" ? C.mist : "#fff",
+                      color: C.primary,
+                    }}
+                  >
+                    <Store size={20} />
+                    Seller
+                  </button>
+                </div>
+              </div>
+
               <div className="flex flex-col gap-1.5">
                 <label
                   className="text-sm font-medium"

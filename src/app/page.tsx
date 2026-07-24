@@ -183,25 +183,36 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center gap-3">
             {session ? (
-              <button
-                onClick={() => setProfileOpen(true)}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-transform hover:scale-105"
-                style={{
-                  background: session.user.image ? "transparent" : C.petal,
-                  color: C.primary,
-                  border: session.user.image ? "none" : `0.5px solid ${C.petal}`,
-                }}
-              >
-                {session.user.image ? (
-                  <img
-                    src={session.user.image}
-                    alt={session.user.name}
-                    className="w-9 h-9 rounded-full object-cover"
-                  />
-                ) : (
-                  session.user.name?.charAt(0).toUpperCase()
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <Badge
+                  className="text-xs font-medium px-2 py-0.5 rounded-full border-0 hidden sm:inline-flex"
+                  style={{
+                    background: (session.user as { role?: string }).role === "seller" ? C.primary : C.petal,
+                    color: (session.user as { role?: string }).role === "seller" ? "#fff" : C.primary,
+                  }}
+                >
+                  {(session.user as { role?: string }).role === "seller" ? "Seller" : "Customer"}
+                </Badge>
+                <button
+                  onClick={() => setProfileOpen(true)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-transform hover:scale-105"
+                  style={{
+                    background: session.user.image ? "transparent" : C.petal,
+                    color: C.primary,
+                    border: session.user.image ? "none" : `0.5px solid ${C.petal}`,
+                  }}
+                >
+                  {session.user.image ? (
+                    <img
+                      src={session.user.image}
+                      alt={session.user.name}
+                      className="w-9 h-9 rounded-full object-cover"
+                    />
+                  ) : (
+                    session.user.name?.charAt(0).toUpperCase()
+                  )}
+                </button>
+              </div>
             ) : (
               <>
                 <Button

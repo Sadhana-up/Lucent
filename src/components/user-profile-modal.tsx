@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/lib/auth-client";
 import { LogOut, User, Mail, X } from "lucide-react";
 
@@ -22,6 +23,7 @@ interface UserProfileModalProps {
     name: string;
     email: string;
     image?: string | null;
+    role?: string;
   };
 }
 
@@ -100,6 +102,19 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
               {user.email}
             </span>
           </div>
+
+          {/* Role Badge */}
+          {user.role && (
+            <Badge
+              className="mt-3 text-xs font-medium px-3 py-1 rounded-full border-0"
+              style={{
+                background: user.role === "seller" ? C.primary : C.petal,
+                color: user.role === "seller" ? "#fff" : C.primary,
+              }}
+            >
+              {user.role === "seller" ? "Seller" : "Customer"}
+            </Badge>
+          )}
         </div>
 
         {/* Sign Out Button */}
