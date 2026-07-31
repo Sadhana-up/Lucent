@@ -1,0 +1,165 @@
+Lucent - Role-Based Authentication Implementation
+=================================================
+Date: July 25, 2026
+
+SUMMARY
+-------
+Extended Better Auth to support two user roles: CUSTOMER and SELLER.
+Users can now select their account type during signup. The role is
+persisted in the database and accessible via the session/user object.
+
+
+FILES CHANGED
+-------------
+1. prisma/schema.prisma
+   - Added Role enum (CUSTOMER, SELLER)
+   - Added "role" field on User model with default CUSTOMER
+
+2. src/lib/auth.ts
+   - Added user.additionalFields.role config
+   - type: ["customer", "seller"]
+   - defaultValue: "customer"
+   - input: true (allows role to be passed during signup)
+
+3. src/app/(auth)/sign-up/page.tsx
+   - Added role selection UI ("Continue as" - Customer / Seller)
+   - Passes selected role to authClient.signUp.email()
+
+4. src/app/page.tsx
+   - Added role badge next to user avatar in navbar
+
+5. src/components/user-profile-modal.tsx
+   - Added role badge in profile modal
+   - Updated UserProfileModalProps to include role field
+
+
+DATABASE SCHEMA CHANGES
+-----------------------
+New enum added:
+  enum Role {
+    CUSTOMER
+    SELLER
+  }
+
+User model updated with new field:
+  role  Role  @default(CUSTOMER)
+
+Schema applied via: prisma db push
+
+
+BETTER AUTH CHANGES
+-------------------
+Added to auth config:
+  user: {
+    additionalFields: {
+      role: {
+        type: ["customer", "seller"],
+        required: false,
+        defaultValue: "customer",
+        input: true,
+      },
+    },
+  }
+
+- input: true allows the role to be sent during signup
+- Server validates role is one of ["customer", "seller"]
+- Role is included in session.user automatically
+
+
+SIGNUP FLOW CHANGES
+-------------------
+Before:
+  - User enters name, email, password
+  - Account created as default user
+
+After:
+  - User selects "Continue as" Customer or Seller
+  - User enters name, email, password
+  - Selected role is sent to server during signup
+  - Role is validated and stored in database
+  - Default is "customer" if not provided
+
+
+LOGIN FLOW CHANGES
+------------------
+No changes required. The role is already stored in the database.
+When a user logs in, Better Auth returns the user object with the
+role field included. The session automatically includes the role.
+
+
+GOOGLE OAUTH
+------------
+Users signing up via Google get "customer" role by default.
+Role selection during OAuth can be added later if needed.
+
+
+HOW ROLES ARE DETERMINED
+------------------------
+- Source of truth: role field on User table in PostgreSQL
+- Set during: Signup only (via input: true on additionalFields)
+- Immutable after: No public endpoint to change role
+- Accessed via: session.user.role on both server and client
+- Server-side validation: Better Auth validates role value
+
+
+COMMANDS RUN
+------------
+npx prisma generate        # Regenerated Prisma client
+npx prisma db push          # Applied schema changes to database
+
+To create a formal migration for version control:
+  npx prisma migrate dev --name add_user_role
+
+
+EXISTING USERS
+--------------
+All existing users get role = CUSTOMER by default.
+No data loss or breaking changes.
+
+
+POTENTIAL ISSUES
+----------------
+1. Google OAuth Role Assignment
+   Users signing up via Google are automatically assigned "customer"
+   role with no way to choose "seller" during the OAuth flow.
+   Fix: Add a post-OAuth callback page that prompts for role selection
+   if the user was just created.
+
+2. No Formal Migration File
+   Schema was applied via `prisma db push` instead of
+   `prisma migrate dev`. This means there is no migration SQL file
+   tracked in version control. Run:
+     npx prisma migrate dev --name add_user_role
+   to create a proper migration for production environments.
+
+3. Role Cannot Be Changed After Signup
+   The role is set once during signup and there is no endpoint or UI
+   to change it. If a user selects the wrong role, they must create
+   a new account. Consider adding a role-change request flow or admin
+   dashboard for role management.
+
+4. No Role-Based Route Protection
+   Currently all routes are accessible regardless of role. A seller
+   can access customer pages and vice versa. Middleware should be
+   added to protect role-specific routes (e.g., /seller/*, /admin/*).
+
+5. Session Type Inference
+   Better Auth infers additional fields on the session/user object,
+   but the client-side TypeScript types may require manual augmentation
+   in some edge cases. The current implementation uses type casts
+   (as { role?: string }) on the client side for safety.
+
+6. Schema Drift on Fresh Databases
+   If someone sets up a new database without `prisma db push`, the
+   Role enum and role field must be in the Prisma schema before
+   running `prisma migrate dev`. The schema.prisma file already
+   contains these, so this is only a concern for out-of-order setups.
+
+
+FOLLOW-UP WORK
+--------------
+- Add role selection for Google OAuth users after callback
+- Add middleware for role-based route protection (e.g., /seller/*)
+- Add seller-specific features (products, inventory, etc.)
+- Add customer-specific features (browse, purchase, orders)
+- Create a proper Prisma migration for version control
