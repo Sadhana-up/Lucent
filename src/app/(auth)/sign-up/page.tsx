@@ -34,20 +34,26 @@ export default function SignUpPage() {
     setError("");
     setLoading(true);
 
+    // Pass role as "initialRole" - the server maps it to the real "role" field
+    // via a databaseHook to prevent clients from self-assigning elevated roles
     const { error } = await authClient.signUp.email({
       name,
       email,
       password,
-    }, {
-      body: { role },
+      // @ts-ignore - initialRole is an additionalField defined in auth.ts
+      initialRole: role,
     });
 
     setLoading(false);
 
     if (error) {
-      setError(error.message || "Something went wrong");
+      setError(error.message || "Something went wrong. Please try again.");
     } else {
-      router.push("/");
+      if (role === "seller") {
+        router.push("/seller/dashboard");
+      } else {
+        router.push("/");
+      }
     }
   };
 

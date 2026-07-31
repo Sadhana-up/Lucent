@@ -23,7 +23,7 @@ interface UserProfileModalProps {
     name: string;
     email: string;
     image?: string | null;
-    role?: string;
+    role?: string | null;
   };
 }
 

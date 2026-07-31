@@ -1,8 +1,9 @@
 from __future__ import annotations
-
+from system_instruction import INSTRUCTION
 import base64
 import json
 import logging
+import pathlib
 import warnings
 from typing import AsyncIterator, Optional
 
@@ -18,6 +19,8 @@ from google.adk.agents.run_config import RunConfig, StreamingMode
 from google.adk.models.llm_request import LlmRequest
 from google.adk.models.llm_response import LlmResponse
 from google.adk.runners import InMemoryRunner
+from google.adk.skills import load_skill_from_dir
+from google.adk.tools.skill_toolset import SkillToolset
 from google.genai import types
 
 load_dotenv()
@@ -123,11 +126,39 @@ MODEL_NAME = "gemini-flash-latest"
 APP_NAME = "web_chat"
 USER_ID = "web-client"  # single-tenant demo; swap for a real user id if you add auth
 
+# ---------------------------------------------------------------------------
+# Skills — loaded from the skills/ directory next to this file.
+# Each sub-directory must contain a SKILL.md whose `name` field matches the
+# directory name (kebab-case, per ADK spec).
+# ---------------------------------------------------------------------------
+_SKILLS_DIR = pathlib.Path(__file__).parent / "skills"
+
+def _load_all_skills():
+    """Load every valid skill directory found under server/skills/."""
+    skills = []
+    if _SKILLS_DIR.is_dir():
+        for skill_dir in sorted(_SKILLS_DIR.iterdir()):
+            if skill_dir.is_dir():
+                try:
+                    skill = load_skill_from_dir(skill_dir)
+                    skills.append(skill)
+                    logging.getLogger("google_adk").info(
+                        "Loaded skill: %s", skill.name
+                    )
+                except Exception as exc:
+                    logging.getLogger("google_adk").warning(
+                        "Skipping skill directory '%s': %s", skill_dir.name, exc
+                    )
+    return skills
+
+skill_toolset = SkillToolset(skills=_load_all_skills())
+
 root_agent = Agent(
     model=MODEL_NAME,
     name="root_agent",
     description="Ai agent that can answer questions and perform tasks.",
-    instruction="You are a helpful assistant.",
+    instruction=INSTRUCTION,
+    tools=[skill_toolset],
     before_model_callback=before_model_callback,
     generate_content_config=types.GenerateContentConfig(
         thinking_config=types.ThinkingConfig(
