@@ -1,0 +1,1831 @@
+2026-07-31 11:47:27,143 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 11:47:27,144 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 11:47:31,011 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: True
+2026-07-31 11:47:31,011 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hello what can u do for me"}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,165 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Hello! I am an AI assistant here to help you
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Hello! I am an AI assistant here to help you"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":11,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":220}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,170 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ with a wide variety of tasks. Here are some of the main things I can do for you:
+
+1. **Answer Questions:** Provide
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" with a wide variety of tasks. Here are some of the main things I can do for you:\n\n1. **Answer Questions:** Provide"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":39,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":248}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,294 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ information on general knowledge, science, history, technology, concepts, and more.
+2. **Writing & Editing:** Help draft
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" information on general knowledge, science, history, technology, concepts, and more.\n2. **Writing & Editing:** Help draft"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":65,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":274}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,465 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ emails, essays, stories, resume summaries, or polish existing text for grammar and style.
+3. **Brainstorming & Planning
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" emails, essays, stories, resume summaries, or polish existing text for grammar and style.\n3. **Brainstorming & Planning"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":92,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":301}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,607 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+:** Generate ideas for projects, outline plans, suggest itineraries, or create strategies.
+4. **Coding & Tech Support
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":":** Generate ideas for projects, outline plans, suggest itineraries, or create strategies.\n4. **Coding & Tech Support"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":116,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":325}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,754 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+:** Assist with writing, debugging, or explaining code across various programming languages.
+5. **Math & Problem Solving:**
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":":** Assist with writing, debugging, or explaining code across various programming languages.\n5. **Math & Problem Solving:**"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":140,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":349}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,854 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ Work through mathematical problems, logic puzzles, or step-by-step reasoning.
+6. **Summarizing & Analyzing
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" Work through mathematical problems, logic puzzles, or step-by-step reasoning.\n6. **Summarizing & Analyzing"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":164,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":373}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,963 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+:** Distill key points from long texts, articles, or notes.
+
+How can I assist you today?
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":":** Distill key points from long texts, articles, or notes.\n\nHow can I assist you today?"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":186,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":395}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,969 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:02:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1946","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"","thought_signature":"EsEGCr4GARFNMg8oBc3R0CDP2L6_xyD3rxNQzNLDxGNQLA1H-JVzyPd1SjpMaqdQkPkDnvN8OZZ6ktUWcIJEEfY7sAHsaO7b9JJIYRrmB0ceLljGyDgrnMyegKyfTVnusPze2a-s48R9234cDRg1wXoLnJdNx0-Ys-EWdqK--Yi-O4BXmw_tuxFWUhmNeyZC7yHKLajCpoukx6RvJjdA4JxouJYnDnh2YAGyd0p55Oe3IgJ4SqIUbpBuER5tM3f3fAMhNNYafiFN5f1KU9R7FFyVdz4UedpiHqXGi5gdswW22KzLhW2J86lTBuTJ4YbDP8aqafqB2Ci7PbdNWlsNE-eK7xFL5ltucX-RDT8QhYk6OAfnPTJKKF9J1IHZ-7jEt6b7hyuln_uP4SM1DUa4dfnCw4bvVGd_ovqnsinfThREHjuh4KfLlPWzVj0s-xPeYIj3OI03HgKjn7wC78-wru2CN09Yzsd7m0kI6LruN4w3qHRwZXxkCBpONaKCYAQq6KVe5zpSjbLzBl_VuHf6AKpx4klxSGFU2Q-65w5UkolO7tYCb1vJPfM1rIK41-snG6e5KWu9AWimtA6OQUrnRn3xWWxqRi2bUI5XD0zHQg04i7ruHdahudHWRXKK8zghNjVmjW8KTGCTC9gRoyZWgBm7tI-ca_kvHPwxISLRWLfi_LhWSR_bAlFXI2sTV52yZuJVKFVdsNkvrKdZW9isuSW9ZAHLfAx85kIsmppMj8WZJ16xv4GhTrlZPIL1QSA97pME3k-bNdts3wPMxyfANJQ6L9-Zg2BSrhfrM9ZDt3jhs2mPqVuWrhjDvjOM3j1Mz7r5rTX8NN7Y4nscX2mbvktwjBov24gLIs_UFFChHq3viuw_DNYoGALvZ7vYhYuTFz1w0oNhE9bd7wWQFA_QDgPo4RXg4DY9T1YjT7SX48ui4oKLf4UfOFf_VQXe-yPj2z2XrH8d45s2tJJttiAxx4f-KuChWxEnI-km-B3s5ZodZkUE9EfE890jhZR9avo0KS9DmO5qLMNCbgbau-GtHnJ6i7IGxWBf1XPY627hZU7gIhc5GMiGzMynyOS3PQnWhMShxGJhbAmDHTCmsyiv2vs5vFo="}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"dzpsas-fJ87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":186,"prompt_token_count":46,"prompt_tokens_details":[{"modality":"TEXT","token_count":46}],"thoughts_token_count":163,"total_token_count":395}}
+-----------------------------------------------------------
+
+2026-07-31 11:47:33,973 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 11:47:33,973 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:04:23,888 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:04:23,895 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:04:26,618 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: True
+2026-07-31 12:04:26,623 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hello"}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:04:28,263 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Hello! How can I help you today?
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:19:28 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1328","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Hello! How can I help you today?"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"bz5sauvEFanhg8UP3arN8AY","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":68,"total_token_count":117}}
+-----------------------------------------------------------
+
+2026-07-31 12:04:28,273 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:19:28 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1328","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"","thought_signature":"EvMCCvACARFNMg-4cyCD4nmx6qGz-DskgdqdmoPQ490ZhhO6lUNTzvDQ2Ogmf2q2J2Rj4KJvn--dZr-0xKHmg88TxTZrAMqgYEdub9C6XmqGrys8NLwpEMWLXFDkL3G_VXkE5rLQy6Y7Q6SlIa7k97QwUbKLwzemYrM7rECX9Oc9hN3GYuCLrc661W6NAgfPc5Bj7zBg7x7D8MscemTtwaXfY-yxr1558NW1lpE5SVzhJoRsgkbT2dHa7uEpFojDNfM6a6quldFER2gqMQITvMfFt8S-BNk5mJSM2GWHjEtNEu2Zv_gLeI7hwO6YPENWDVDmEmaDq_prCRE499Nn8Rq7hM98pjnUOFyxkcWgwDF1-XfLQ5Fiv4X7rpbjqt8sDMUgo_SDo7a9PaAATjcHnlk1GCE5gQWQJoKBMKcIDj7_Bj5XRgohRfu9iy8uA3kJvKVz-enYTF4nwo0w2WPTPz3l3nPmG_1rDwrLHcZEeSOYO4M9JAw="}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"bz5sauvEFanhg8UP3arN8AY","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":68,"total_token_count":117}}
+-----------------------------------------------------------
+
+2026-07-31 12:04:28,283 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:04:28,283 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:04:35,922 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:04:35,922 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:04:36,155 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: True
+2026-07-31 12:04:36,156 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hello"}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:04:38,021 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Hello! How can I
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:19:38 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1621","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Hello! How can I"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"eD5saryrMMPUqfkP4tezoAM","usage_metadata":{"candidates_token_count":5,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":92,"total_token_count":137}}
+-----------------------------------------------------------
+
+2026-07-31 12:04:38,027 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ help you today?
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:19:38 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1621","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" help you today?"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"eD5saryrMMPUqfkP4tezoAM","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":92,"total_token_count":141}}
+-----------------------------------------------------------
+
+2026-07-31 12:04:38,028 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:19:38 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1621","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"","thought_signature":"Eo0ECooEARFNMg_KUyPkuiXFseqB1tnCDX50hXBnwqS8CxaDT2pmAu0nQxZHKtJhUx1vL5IR-nUnDcXK9y8v4xBTYFXCgRTa6XNeAAgi_x8YIVnpTC1h2bJE63-O14LskOFIq4E0MBtzXf40QbVTtc2rgVJOJSi_Cu5i3WKIX6LruDcHcNRJqaLl3Lfj557rnOWnA6HYdERwU5itHSJU0w7-QtEptMOMOWgGGI5GXexXCvvpMjIh6OTOEot72BxtZMf7mncKD-QI3jrCur133pyaqnbaoLu_DC4M8E6jgx7Mkye7w1zzkzFVt-c3f1GTSJqc6KdfqmYRJ9t0NMOhRhxoWjXuEBusR2vMt2V02LHGSS2lp3GND7zhbgrbJRq4rEVXd7mM_YGFCtRG76OpLq7vxDKlKWtInP41jtR2qjcID9tnvrWH6fJXOrRSop4jF_EYHWCAZqJjcp6c6asde6CxW1RBLArL3yuBPRGOhoI8aWHvcNgLu54kWotPNTeVaGGWMBmi-R8uIXalonQd-i26TYTHpoELUaofVdMK53ISgi12NYedBAmekFYW4PK5FM6to7iPrxzRpT5616Zrw84G1ZkmhNTd2bLaFmNqNNCh5ly31jidxjcRXBACRPiRVStPcQH0pE64nGCg939elgDU0Wo06S6LgUU50Mv5KimQIHw2Ny7nROi68KM_2YgI"}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"eD5saryrMMPUqfkP4tezoAM","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":92,"total_token_count":141}}
+-----------------------------------------------------------
+
+2026-07-31 12:04:38,031 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:04:38,031 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:08:13,372 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:08:13,374 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:08:13,618 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: True
+2026-07-31 12:08:13,621 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hi"}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:08:15,580 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Hello! How can I help
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:15 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1694","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Hello! How can I help"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Uj9satmWGaz-juMP0qfZiQM","usage_metadata":{"candidates_token_count":6,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":68,"total_token_count":114}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:15,623 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ you today?
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:15 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1694","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" you today?"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Uj9satmWGaz-juMP0qfZiQM","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":68,"total_token_count":117}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:15,631 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:15 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1694","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"","thought_signature":"EvACCu0CARFNMg-41UmnnwZ3CMieOAjduv3i_ep_bQWbCAWT7n6SHgQkPnMOP8obMzaSZHTVIjTKGjSfhZVR9f_gsWMr0tWew-h-3f1JbIoxBlNHDrTHt_y-z_owUa6B58E_mnaxnooQHf2G0EcBbJ6f8IOG5GpmNA1vVsEd2HUDywltKPm7yJJbmQIt4f6Yh5LxMvM_9xmABnZ_7N6PA8uUjUuN6MM1DalrdfAXBFG9Vcv-gPS5ZbCGka1EQMmdBaqbBJaYtD51FGv9v9dUNf0OAUv8lj-bMMjSKeGSNxkLyXyVR1QbdLT8pD8YKV-1hEpKjn7Q3XNq2cNHfUz_LHZnznl4Knf9-6OrgugBjkkwCOESdxpZT5xdtBkKjh4D8vBU_Ja7sXoQWh4Jf6Djxi7wTr9VmQvKOgWmvSURxlSV8N7RSt0OBkG1Ybnt91UYKhGJtpEp3WTyi85XfbPKHn0NLQfslpwmuDLJV_KgtKO4LlU="}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"Uj9satmWGaz-juMP0qfZiQM","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":68,"total_token_count":117}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:15,641 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:08:15,641 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:08:31,219 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:08:31,220 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:08:31,313 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: True
+2026-07-31 12:08:31,313 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hi"}],"role":"user"}
+{"parts":[{"text":"Hello! How can I help you today?"},{"text":"","thought_signature":"EvACCu0CARFNMg-41UmnnwZ3CMieOAjduv3i_ep_bQWbCAWT7n6SHgQkPnMOP8obMzaSZHTVIjTKGjSfhZVR9f_gsWMr0tWew-h-3f1JbIoxBlNHDrTHt_y-z_owUa6B58E_mnaxnooQHf2G0EcBbJ6f8IOG5GpmNA1vVsEd2HUDywltKPm7yJJbmQIt4f6Yh5LxMvM_9xmABnZ_7N6PA8uUjUuN6MM1DalrdfAXBFG9Vcv-gPS5ZbCGka1EQMmdBaqbBJaYtD51FGv9v9dUNf0OAUv8lj-bMMjSKeGSNxkLyXyVR1QbdLT8pD8YKV-1hEpKjn7Q3XNq2cNHfUz_LHZnznl4Knf9-6OrgugBjkkwCOESdxpZT5xdtBkKjh4D8vBU_Ja7sXoQWh4Jf6Djxi7wTr9VmQvKOgWmvSURxlSV8N7RSt0OBkG1Ybnt91UYKhGJtpEp3WTyi85XfbPKHn0NLQfslpwmuDLJV_KgtKO4LlU="}],"role":"model"}
+{"parts":[{"text":"write me a html file"}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:08:33,308 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"**Defining the Default HTML**\n\nI've decided on a well-structured HTML5 boilerplate as the optimal default response. Given the minimal user prompt, this provides a solid foundation with semantic elements and basic styling. It's a pragmatic and generally useful starting point, while not making assumptions about the user's specific needs.\n\n\n","thought":true}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"total_token_count":56}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:33,635 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Here is a clean, modern HTML template you can use
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Here is a clean, modern HTML template you can use"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":11,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":308}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:33,761 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ as a starting point. It includes standard responsive design tags and modern styling:
+
+```html
+<!DOCTYPE html>
+<html lang
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" as a starting point. It includes standard responsive design tags and modern styling:\n\n```html\n<!DOCTYPE html>\n<html lang"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":38,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":335}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:33,845 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width="}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":67,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":364}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:33,929 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+device-width, initial-scale=1.0">
+    <title>My Web Page</title>
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"device-width, initial-scale=1.0\">\n    <title>My Web Page</title>\n"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":91,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":388}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,041 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+    <style>
+        /* Basic CSS Reset & Styling */
+        * {
+            box-sizing: border-box
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"    <style>\n        /* Basic CSS Reset & Styling */\n        * {\n            box-sizing: border-box"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":117,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":414}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,149 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":";\n            margin: 0;\n            padding: 0;\n        }\n\n        body {\n            "}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":141,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":438}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,195 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial,"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":165,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":462}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,268 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ sans-serif;
+            line-height: 1.6;
+            color: #333;
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" sans-serif;\n            line-height: 1.6;\n            color: #333;"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":189,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":486}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,365 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"\n            background-color: #f8f9fa;\n            display: flex;\n            flex-direction: column;"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":216,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":513}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,612 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+            min-height: 100vh;
+        }
+
+        header {
+            background-color
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"\n            min-height: 100vh;\n        }\n\n        header {\n            background-color"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":240,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":537}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,613 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+: #0066cc;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":": #0066cc;\n            color: #ffffff;\n            padding: 1rem 2rem;\n            "}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":268,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":565}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,637 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"display: flex;\n            justify-content: space-between;\n            align-items: center;\n        }\n\n        header"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":296,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":593}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,769 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ h1 {
+            font-size: 1.5rem;
+        }
+
+        nav a {
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" h1 {\n            font-size: 1.5rem;\n        }\n\n        nav a {\n"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":320,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":617}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,824 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+
+        
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"            color: #ffffff;\n            text-decoration: none;\n            margin-left: 1rem;\n        }\n\n        "}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":349,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":646}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,878 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex:
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"nav a:hover {\n            text-decoration: underline;\n        }\n\n        main {\n            flex:"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":373,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":670}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:34,974 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ 1;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" 1;\n            max-width: 800px;\n            margin: 2rem auto;\n            padding: "}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":402,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":699}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,041 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+0 1rem;
+        }
+
+        .card {
+            background: #ffffff;
+            padding:
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"0 1rem;\n        }\n\n        .card {\n            background: #ffffff;\n            padding:"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":426,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":723}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,178 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" 2rem;\n            border-radius: 8px;\n            box-shadow: 0 4"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":450,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":747}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,238 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"px 6px rgba(0, 0, 0, 0.1);\n            margin-bottom: 1"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":477,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":774}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,306 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":".5rem;\n        }\n\n        .btn {\n            display: inline-block;\n            background-"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":501,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":798}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,485 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+color: #0066cc;
+            color: white;
+            padding: 0.5rem 1
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"color: #0066cc;\n            color: white;\n            padding: 0.5rem 1"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":527,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":824}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,487 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"rem;\n            text-decoration: none;\n            border-radius: 4px;\n            margin-"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":551,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":848}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,548 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #0
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"top: 1rem;\n        }\n\n        .btn:hover {\n            background-color: #0"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":575,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":872}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,659 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+052a3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"052a3;\n        }\n\n        footer {\n            text-align: center;\n            padding: 1rem"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":603,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":900}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,744 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+;
+            background-color: #e9ecef;
+            color: #6c757d
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":";\n            background-color: #e9ecef;\n            color: #6c757d"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":627,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":924}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,898 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>My
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":";\n        }\n    </style>\n</head>\n<body>\n\n    <header>\n        <h1>My"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":651,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":948}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,901 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ Website</h1>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" Website</h1>\n        <nav>\n            <a href=\"#home\">Home</a>\n            <a href=\"#about"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":675,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":972}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:35,965 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"\">About</a>\n            <a href=\"#contact\">Contact</a>\n        </nav>\n    </header>\n\n"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":699,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":996}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,103 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+    <main>
+        <section class="card">
+            <h2>Welcome to My Page</h2>
+            <p>
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"    <main>\n        <section class=\"card\">\n            <h2>Welcome to My Page</h2>\n            <p>"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":724,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1021}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,227 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+This is a modern HTML5 boilerplate page. You can customize this layout by editing the content and CSS styles.</p>
+            <
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"This is a modern HTML5 boilerplate page. You can customize this layout by editing the content and CSS styles.</p>\n            <"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":751,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1048}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,412 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+a href="#" class="btn">Click Here</a>
+        </section>
+
+        <section class="card">
+            
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"a href=\"#\" class=\"btn\">Click Here</a>\n        </section>\n\n        <section class=\"card\">\n            "}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":776,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1073}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,430 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+<h2>About Section</h2>
+            <p>Add your content here. HTML provides the structure, and CSS adds the styling to
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"<h2>About Section</h2>\n            <p>Add your content here. HTML provides the structure, and CSS adds the styling to"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":801,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1098}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,619 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ make it look great across all devices.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" make it look great across all devices.</p>\n        </section>\n    </main>\n\n    <footer>\n        <p>&copy"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":830,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1127}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,620 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+; 2025 My Website. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"; 2025 My Website. All rights reserved.</p>\n    </footer>\n\n</body>\n</html>\n"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":853,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1150}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,720 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+```
+
+### How to use this file:
+1. Copy the code above.
+2. Open a text editor (
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"```\n\n### How to use this file:\n1. Copy the code above.\n2. Open a text editor ("}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":878,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1175}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,796 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+like Notepad, TextEdit, VS Code, or Sublime Text).
+3. Paste the code into a new file.
+4. Save
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"like Notepad, TextEdit, VS Code, or Sublime Text).\n3. Paste the code into a new file.\n4. Save"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":906,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1203}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:36,922 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ the file with the name **`index.html`**.
+5. Double-click the saved `index.html` file to
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" the file with the name **`index.html`**.\n5. Double-click the saved `index.html` file to"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":933,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1230}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:37,030 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ open and view it in your web browser.
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" open and view it in your web browser."}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":942,"prompt_token_count":56,"prompt_tokens_details":[{"modality":"TEXT","token_count":56}],"thoughts_token_count":241,"total_token_count":1239}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:37,042 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:23:33 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1662","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"","thought_signature":"EpsJCpgJARFNMg8qvh18Jtl8jYwV_HGp1VunzevuFPhU3CVecetu6PTup1bSjF8t-V-BMqGLjXH2r_lMWgdLXu7zRztgEFUUgnzOC8Lz43j5pcQY7Pzdqvw0UDVBsiHLVJQwBVkgTsYQB48OOyN2qD6DEhz4BfmV8AQJcI79ym1zdsG-j55q60jTDxQsE1o5MzMqRhvwaMZKriKn1FxPbL_xcH3Dsw96qW4_Evy3quGiQNouFKaKpvOikATINNscLNipopB7d4xmlB3_s2qXLsVxlkr5GZ1dJb-31AxZkfcPTuVYGVZ3JXyUgsf_trZtTFgcnOWSYhq6BWXWB1lk2mwpFyBUxkGmqcjVsk0ivlLNG6r3aYq626uhuxXOo9rP7wYkjAb7_QpCmvrpyZBnl_M3HC8y2PmnZuGI8HlZ9iGjZBYO4KPp7MPym4h3wkOvXL6cM4IGxdS-4B1SrAi_zaje0jRCQKNISkfYvUGTmALQDbjtD-Gxf_iOHmstAqckfDyd9MdPcqkWSvJ2LVBvUVnL0d3B_1sgjMYUvnN0CPFcNAfgolVqqH_tjnxVBwd0kPWfkVeSMvmPd5SEIyivRnfdyEH-gxfD2w6OmbihqphgFsqkcMz3jllL21CA5IhXU0x_PqgfEpgSMaYEnY1f7T9PXIAfm2NhmiLC3U_reMYfqWrzFw1nRXCBdzJQKKJ5V_oravXSM95POKSTvaujg61fRwjAjzbS-n7rNZVARvEEPd28NXq_ihT2liqJLKdEpiCZxqZLzMzYN7zpcuhSmQyIupHdTCScVYgGnI5iWZEa6MNt8aG3mxAW_DcSEuLp7jlBtf1uUqE0zRzO3b3U2XUolQ0Bo7QKg7mVU2xugQjiBeifWRdFODx9wQTSM7Ylw6ZewPe5FX8-pL-wAjgdRXg2HzmmUtF6din26x9qPZparIz10cUrnBWZT0xru6_vyXmXpNe9ILPOaPsd-XkXdlkvu7PMvcjM-wduQEHlh4ZiimWMrEra1S0Z_2xlrLqP-_RzoLEaIpML8LkKaShURXBY1JYLaKds5ToBce5iHBeQ2Z0a-I82-XH0lfg5zT_dPQY9UOZV7K0FGqT4-dODMH0Yhh7pdLI-_5BYSKPkLSP9Z-bgZTSYGWKY4wagNmcsCB-WCRzpuu-OpajW_O9GJ4nPF_zE65FXLD2Wy5RYShw2dLbMUXgntFHW2gX_XVSdqbquL9LVzKgDREkSnX-tKRrY_nQdVZsgDXUbIr0KZKpwYuzwL3HHpK6oPypuLOpLOsHec_mj6HKdXkhgxucGWiNU2zu6hzzyqmg0QqMv0bAwsy76FqWNqE3qUckMsG0K45w7ZV0gDo5OPi9EtV7rsODaO1sMFvuD9d-loi69GMH9Oo6eSQMbgrc9mXdktT_Gyz83a56apbCjf0IPkBzQc-jG1RI7-iGf30dwxnp1is-3naP9576dHQYaWzj0GRwdhrhPxTq-U1_1sI-KYvyDdG_pnX0tCZJyQRlso-eSy_hAMOd0fHgPEGrVUD7Vto36w_uLTwm3sKc1CQVpHa0WB9DtnJKVOqN23mwzD-AV"}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"Yz9savqlPKa3juMP18uxkQM","usage_metadata":{"candidates_token_count":942,"prompt_token_count":124,"prompt_tokens_details":[{"modality":"TEXT","token_count":124}],"thoughts_token_count":241,"total_token_count":1307}}
+-----------------------------------------------------------
+
+2026-07-31 12:08:37,051 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:08:37,052 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:35:23,711 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:35:23,711 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:35:24,809 - ERROR - google_adk.google.adk.workflow._node_runner -
+Node execution failed with exception
+Traceback (most recent call last):
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+      self._track_event_in_context(event, ctx)
+      await self._enqueue_event(event, ctx)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_base_node.py", line 166, in run
+    async for item in agen:
+    ...<12 lines>...
+        yield Event(output=validated)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 599, in _run_impl
+    async for event in agen:
+    ...<4 lines>...
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 370, in run_llm_agent_as_node
+    async for event in run_iter:
+    ...<22 lines>...
+        break
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/base_agent.py", line 306, in run_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 548, in _run_async_impl
+    async for event in agen:
+    ...<8 lines>...
+        should_pause = True
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 956, in run_async
+    async for event in agen:
+      last_event = event
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1036, in _run_one_step_async
+    async for llm_response in agen:
+    ...<15 lines>...
+          yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1483, in _call_llm_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1391, in _call_llm_with_tracing
+    if response := await self._handle_before_model_callback(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1513, in _handle_before_model_callback
+    return await _handle_before_model_callback(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 247, in _handle_before_model_callback
+    callback_response = await callback_response
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sadhanauprety/Desktop/lucent/server/main.py", line 65, in before_model_callback
+    k for k in callback_context.state.keys()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'State' object has no attribute 'keys'
+2026-07-31 12:35:24,815 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:35:24,815 - ERROR - google_adk.google.adk.runners -
+Root node root_agent failed.
+Traceback (most recent call last):
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/runners.py", line 601, in _drive_root_node
+    await root_ctx._run_node_internal(
+    ...<3 lines>...
+    )
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/context.py", line 603, in _run_node_internal
+    raise DynamicNodeFailError(
+    ...<3 lines>...
+    )
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node root_agent failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/runners.py", line 906, in _cleanup_root_task
+    await task
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/runners.py", line 610, in _drive_root_node
+    raise e.error
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+      self._track_event_in_context(event, ctx)
+      await self._enqueue_event(event, ctx)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_base_node.py", line 166, in run
+    async for item in agen:
+    ...<12 lines>...
+        yield Event(output=validated)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 599, in _run_impl
+    async for event in agen:
+    ...<4 lines>...
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 370, in run_llm_agent_as_node
+    async for event in run_iter:
+    ...<22 lines>...
+        break
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/base_agent.py", line 306, in run_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 548, in _run_async_impl
+    async for event in agen:
+    ...<8 lines>...
+        should_pause = True
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 956, in run_async
+    async for event in agen:
+      last_event = event
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1036, in _run_one_step_async
+    async for llm_response in agen:
+    ...<15 lines>...
+          yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1483, in _call_llm_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1391, in _call_llm_with_tracing
+    if response := await self._handle_before_model_callback(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1513, in _handle_before_model_callback
+    return await _handle_before_model_callback(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 247, in _handle_before_model_callback
+    callback_response = await callback_response
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sadhanauprety/Desktop/lucent/server/main.py", line 65, in before_model_callback
+    k for k in callback_context.state.keys()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'State' object has no attribute 'keys'
+2026-07-31 12:36:11,687 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:36:11,688 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:36:11,698 - ERROR - google_adk.google.adk.workflow._node_runner -
+Node execution failed with exception
+Traceback (most recent call last):
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+      self._track_event_in_context(event, ctx)
+      await self._enqueue_event(event, ctx)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_base_node.py", line 166, in run
+    async for item in agen:
+    ...<12 lines>...
+        yield Event(output=validated)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 599, in _run_impl
+    async for event in agen:
+    ...<4 lines>...
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 370, in run_llm_agent_as_node
+    async for event in run_iter:
+    ...<22 lines>...
+        break
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/base_agent.py", line 306, in run_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 548, in _run_async_impl
+    async for event in agen:
+    ...<8 lines>...
+        should_pause = True
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 956, in run_async
+    async for event in agen:
+      last_event = event
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1036, in _run_one_step_async
+    async for llm_response in agen:
+    ...<15 lines>...
+          yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1483, in _call_llm_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1391, in _call_llm_with_tracing
+    if response := await self._handle_before_model_callback(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1513, in _handle_before_model_callback
+    return await _handle_before_model_callback(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 247, in _handle_before_model_callback
+    callback_response = await callback_response
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sadhanauprety/Desktop/lucent/server/main.py", line 65, in before_model_callback
+    k for k in callback_context.state.keys()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'State' object has no attribute 'keys'
+2026-07-31 12:36:11,705 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:36:11,705 - ERROR - google_adk.google.adk.runners -
+Root node root_agent failed.
+Traceback (most recent call last):
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/runners.py", line 601, in _drive_root_node
+    await root_ctx._run_node_internal(
+    ...<3 lines>...
+    )
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/context.py", line 603, in _run_node_internal
+    raise DynamicNodeFailError(
+    ...<3 lines>...
+    )
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node root_agent failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/runners.py", line 906, in _cleanup_root_task
+    await task
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/runners.py", line 610, in _drive_root_node
+    raise e.error
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+      self._track_event_in_context(event, ctx)
+      await self._enqueue_event(event, ctx)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_base_node.py", line 166, in run
+    async for item in agen:
+    ...<12 lines>...
+        yield Event(output=validated)
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 599, in _run_impl
+    async for event in agen:
+    ...<4 lines>...
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 370, in run_llm_agent_as_node
+    async for event in run_iter:
+    ...<22 lines>...
+        break
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/base_agent.py", line 306, in run_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/agents/llm_agent.py", line 548, in _run_async_impl
+    async for event in agen:
+    ...<8 lines>...
+        should_pause = True
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 956, in run_async
+    async for event in agen:
+      last_event = event
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1036, in _run_one_step_async
+    async for llm_response in agen:
+    ...<15 lines>...
+          yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1483, in _call_llm_async
+    async for event in agen:
+      yield event
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1391, in _call_llm_with_tracing
+    if response := await self._handle_before_model_callback(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1513, in _handle_before_model_callback
+    return await _handle_before_model_callback(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        invocation_context, llm_request, model_response_event
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/sadhanauprety/Desktop/lucent/server/.venv/lib/python3.14/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 247, in _handle_before_model_callback
+    callback_response = await callback_response
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sadhanauprety/Desktop/lucent/server/main.py", line 65, in before_model_callback
+    k for k in callback_context.state.keys()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'State' object has no attribute 'keys'
+2026-07-31 12:39:38,260 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:39:38,261 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:39:39,228 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: False
+2026-07-31 12:39:39,229 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hi"}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:39:41,903 - INFO - google_adk.google.adk.models.google_llm -
+Response received from the model.
+2026-07-31 12:39:41,903 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Hello! How can I help you today?
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"X-Gemini-Service-Tier":"standard","Content-Type":"application/json; charset=UTF-8","Vary":"Origin, X-Origin, Referer","Content-Encoding":"gzip","Date":"Fri, 31 Jul 2026 06:54:42 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=2457","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","Transfer-Encoding":"chunked"}},"candidates":[{"content":{"parts":[{"text":"**My Initial Processing of User Input**\n\nOkay, so the user has simply said \"hi.\" That's the starting point. My primary function, as \"root\\_agent,\" is to provide helpful responses and complete tasks, so I need to formulate a polite and effective reply. I am not designed to be overly conversational, but simply to address the greeting and then immediately offer assistance. This is my established persona. I need to acknowledge their \"hi\" and follow up with a proactive offer of help. I believe the best approach is: \"Hello! How can I help you today?\"\n\n\n","thought":true},{"text":"Hello! How can I help you today?","thought_signature":"EqEDCp4DARFNMg8NXxYz0fQFn4qpg8QVZa8kqd8jPy0i6Rk0vFnT-sBeRpkv8PSc0anZzCxfFRaN52jIMoVzDPz44ZZfw1wm4Q0t_Ez9Swz3Zj_2O4pWfbFO9v73Gk83MZ_kusQdrLnbvWNtE9fhPmBMjtwsLlHC5X6Yh3Fmv1NlE1iUeBZZm3cJyA3_IcB8oTvOs27BztIFiFJb3M5lTzhCqiaHP2bmv7JMNsIjgCVgu8JGFgidMUdK_rZMasylzt8Qan27EXcJDSqY4fcvncVpfm-zgEwrPkX3lebdKjhLA0Q2NmvGSj-Du7kttmywOrp_astkkrwcu-rWPk_zD1ijZrohr5HXP2VBqZpPw0fJy853PoJhQ_vbRAhUflaM2ngT_1MsFlblNEJTw0qFyH6qqQ7RNNF7MXhqaoii2ljZGDJseX1frCFRlAl3tgTBYXUYqGuvcvOK_M0BJ84skGMqa9aMhzNiEPmEfhX4wse3BQRTHo9WdaW2kXWfl7v5Ypl9_T8Cxvhz5yxwsOJ5WgqV8k4OL6Sm14QOrVjr-Kg8fRP1"}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"r0Zsat2qM87Lg8UPtdyywQ8","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":90,"total_token_count":139},"automatic_function_calling_history":[]}
+-----------------------------------------------------------
+
+2026-07-31 12:39:41,907 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:39:41,907 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:40:12,274 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:40:12,274 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:40:12,314 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: False
+2026-07-31 12:40:12,318 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hi"}],"role":"user"}
+{"parts":[{"text":"**My Initial Processing of User Input**\n\nOkay, so the user has simply said \"hi.\" That's the starting point. My primary function, as \"root\\_agent,\" is to provide helpful responses and complete tasks, so I need to formulate a polite and effective reply. I am not designed to be overly conversational, but simply to address the greeting and then immediately offer assistance. This is my established persona. I need to acknowledge their \"hi\" and follow up with a proactive offer of help. I believe the best approach is: \"Hello! How can I help you today?\"\n\n\n","thought":true},{"text":"Hello! How can I help you today?","thought_signature":"EqEDCp4DARFNMg8NXxYz0fQFn4qpg8QVZa8kqd8jPy0i6Rk0vFnT-sBeRpkv8PSc0anZzCxfFRaN52jIMoVzDPz44ZZfw1wm4Q0t_Ez9Swz3Zj_2O4pWfbFO9v73Gk83MZ_kusQdrLnbvWNtE9fhPmBMjtwsLlHC5X6Yh3Fmv1NlE1iUeBZZm3cJyA3_IcB8oTvOs27BztIFiFJb3M5lTzhCqiaHP2bmv7JMNsIjgCVgu8JGFgidMUdK_rZMasylzt8Qan27EXcJDSqY4fcvncVpfm-zgEwrPkX3lebdKjhLA0Q2NmvGSj-Du7kttmywOrp_astkkrwcu-rWPk_zD1ijZrohr5HXP2VBqZpPw0fJy853PoJhQ_vbRAhUflaM2ngT_1MsFlblNEJTw0qFyH6qqQ7RNNF7MXhqaoii2ljZGDJseX1frCFRlAl3tgTBYXUYqGuvcvOK_M0BJ84skGMqa9aMhzNiEPmEfhX4wse3BQRTHo9WdaW2kXWfl7v5Ypl9_T8Cxvhz5yxwsOJ5WgqV8k4OL6Sm14QOrVjr-Kg8fRP1"}],"role":"model"}
+{"parts":[{"text":"describe this image for me"},{"inline_data":{"mime_type":"image/jpeg"}}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:40:24,843 - INFO - google_adk.google.adk.models.google_llm -
+Response received from the model.
+2026-07-31 12:40:24,844 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+This image features a majestic **white Buddhist stupa (Peace Pagoda / Shanti Stupa)** set against a vast, clear sky.
+
+Here are the key details of the scene:
+
+* **The Stupa:** Centered in the lower third of the image, the stupa consists of a large, smooth white hemispherical dome topped with a golden spire (*chhatra*). A golden Buddha statue is visible sitting inside a recessed niche near the top of the dome. 
+* **The Base & Visitors:** The stupa stands on multi-tiered white terraces. Tiny figures of visitors can be seen walking around the terrace, giving a sense of the monument's large scale.
+* **Framing:** Dense, dark green trees flank both the bottom-left and bottom-right edges of the photo, beautifully framing the brilliant white structure.
+* **The Sky:** A clear, pale blue sky fills the upper two-thirds of the frame, creating a calm, minimalist, and serene atmosphere.
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"X-Gemini-Service-Tier":"standard","Content-Type":"application/json; charset=UTF-8","Vary":"Origin, X-Origin, Referer","Content-Encoding":"gzip","Date":"Fri, 31 Jul 2026 06:55:24 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=11978","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000","Transfer-Encoding":"chunked"}},"candidates":[{"content":{"parts":[{"text":"**My Analysis of the Image**\n\nOkay, here's what I'm seeing: The user wants a description of this image, and it's pretty clear what's going on. First, I need to break down the image itself. Right away, my expert eye goes to the **main subject**: a stunning, bright white Buddhist stupa. It looks like a Peace Pagoda or Shanti Stupa.\n\nNow, let's zoom in on the **structure details**. I see that classic hemispherical white dome, but what really catches the eye is that gilded, golden spire—that *harmika* and *chhatra* on top are quite elegant. And, there's a lovely golden Buddha statue nestled in an alcove near the front of the dome. The base has those multiple tiered white platforms or terraces, and I see some small figures—people—on the walkway, which immediately gives me a sense of scale.\n\nNow, the fun part: **location!** Based on the general style, it's *probably* the Vishwa Shanti Stupa in Rajgir, Bihar, India, but it *could* be the World Peace Pagoda in Vaishali, Bihar, or possibly the Dhauli Shanti Stupa in Odisha, or even the New Delhi Vishwa Shanti Stupa. Right, let's look at the details. We've got the white dome, golden finial, golden Buddha alcove, and dense green trees. The sky is a clear, light blue, or pale. Rajgir's Stupa has a cable car and hill setting, but Vaishali is flat with trees, the New Delhi one is in Millennium Park. Either way, it's definitely a Nipponzan-Myōhōji Peace Pagoda.\n\nOkay, regardless of the exact location, it's a prominent White Peace Pagoda (Shanti Stupa). Now for the **composition**. The sky is dominant—it fills up the upper two-thirds of the frame. It's a clear, pale blue, no clouds. The dense, dark green trees are flanking the bottom left and right, framing the central focus. And there it is: the magnificent white stupa sitting elegantly between the trees, against that vast, open sky. Very peaceful.\n\nNow, to **draft the description**. Let's keep it concise:\n\n**Overview:** Clear, vertical photograph featuring a white Buddhist stupa (Peace Pagoda / Shanti Stupa) centered at the bottom of the image against a vast pale blue sky.\n\n**Key Elements:**\n*   *Stupa/Pagoda:* Bright white hemispherical dome topped with a gold-colored spire (finial). A golden Buddha statue is inset in an alcove near the upper middle of the dome. People are visible walking on the elevated white platform encircling the base.\n*   *Trees:* Flanked on both left and right sides by dark, dense green foliage/trees that frame the monument.\n*   *Sky:* The upper half to two-thirds of the image consists of a clear, soft pale blue sky without clouds, creating a peaceful and serene atmosphere.\n\n**Tone/Mood:** Peaceful, serene, airy, majestic.\n\nThat should be it, with the key details.\n\n\n","thought":true},{"text":"This image features a majestic **white Buddhist stupa (Peace Pagoda / Shanti Stupa)** set against a vast, clear sky.\n\nHere are the key details of the scene:\n\n* **The Stupa:** Centered in the lower third of the image, the stupa consists of a large, smooth white hemispherical dome topped with a golden spire (*chhatra*). A golden Buddha statue is visible sitting inside a recessed niche near the top of the dome. \n* **The Base & Visitors:** The stupa stands on multi-tiered white terraces. Tiny figures of visitors can be seen walking around the terrace, giving a sense of the monument's large scale.\n* **Framing:** Dense, dark green trees flank both the bottom-left and bottom-right edges of the photo, beautifully framing the brilliant white structure.\n* **The Sky:** A clear, pale blue sky fills the upper two-thirds of the frame, creating a calm, minimalist, and serene atmosphere.","thought_signature":"EosVCogVARFNMg__Tsg6gh7TC6l4hmK8Y3UdWLDYy7spoiCFLUs4XRCmeFvn1ERFB8OXVXGrgPDLp1t9amSocY8yQTOlSjAsRxIH7qXTdmDUR5RzZAHd-Kr1ykopPWNB_a7208JrWm25ALOP5eDztCRGZuDUBymzOZT1-r68RDRb5U5T6vQi7jp6CTyrGibLsBrAc_8_9k1k5CQVmrrHTzwQXYbVIYzACLf6Wy-zxY6Xhnuqpzd9cqS0ONKVtwyszwnlJIMepQXJarXKslyHYCy7dE0shy34BMJzdacgXfj9ahLL1iIXjAIGeVTEGn87-5gTFxndFQRB1o0vuBk8tWfl6wzPeR9kTFKdt4ZAkJtCw-sWKId80tbEhurgUUOgkYvBNW0Letg1mSMYi2Eowqq9UZAU81iZsXrJtoIWGuF7fQThUgCJr0Od3Ni-Oe7HElHWgVsqwe4EXC_qKecJ2MsV-9Z6gSjQUfyIb58ZHarcYm2-Ibj0KJVf4QG754ZTvwLxrmD3SdIV8jr03cOEZdpUqzJiu88528X19rGoGYMfbS2aU1V6K9UI0YoYKRiNvuldH4D8h7Hne5CFiBpZ-jNcggoqc-94YhXln14FJIYDQtcROSsi_EWXZvcXZv7ck3ti2Me170D9KbEZuH278P48EBhMt_zBy9iIJlhx8CsfzziSTdK7-mRyu4-Xvswz6PmwJQkOzvRAMlSau1MY7r6-xJHcKLrCZlb3OdmXZZFg4SX75fVriEG8nVRg49Rp3xsd55sEaUGEgdSTtMCHTAMrFLqgyqryJrO9QcxF4Jmy5xAlaD7i_57qPqM8js9EAvxesGnybZ0HlmhShWe6h1w-RI-pmzQNRdF-aLCtH2-Hk7bwpavwOjCAoLn7IampK3gjqQFj1mTLbb741uDslbs7Rmx8dnUV_GuEjOpcMF4FhHxzevBhUV_pgYzsFDsNZ_1C1g98vKOVFgW7qB2P0Z6wYg4_1jZsnlFTl3ARaLkX8NY87NWw0GGEMxPUb9fglLghIZh5XbZuctvu0EsFNzg_HJMzbuNklsyaTorohMD-RdjxRwk6K3LyP6685Qer0GPUHex0PRKCAYFZPpldMRxPYQ1EiIAiL5BgtXYNs7-_8eVWGx0zrhjXSYjIbAA7lz7iUOQGS6zWkO9nIWYncfj3ko_G0s6q7fEoKnrRUiCXLYed2xoUMlQs3ahoaj-vlBZF5vrk0_7rCnbTHkZ0P1ja15uuYn5mQ9VzDiulG0x7RUOFIhKymsaez9TPJ_P_F13Y04v5ix0Vs0tx4B6fmJ25qzovhPEasv-mHBKYf0bIR5LPTdL56aiBQUnMtBOoS4xa0e9jqqpWw958Yu_IOFlqXkxhcp4WlzvneOtmI5DGYd_qSqrlHYZhcsNb1H1jPbMXIq_c2Gq9hzodmQUPZzKvKYM12yFYTkhrJs2p2yLSQsYc7j_YrG0iI3IAm6l6kSvHU7tlE5r1WZSIBD_DJI3aauc8urFd8nawOYQQzCHKxtlWVNU60109VIBPuCbBKnRlhuIWwIJ8wO7n3Hlbj44PXJCX6DTI8YGin9DuwHXW2y9NFKbWvJg9_y_UE2pwtPO6n4vOXU3TTy9U5fPfoolrWF7LREUVm7BnIhcuMQy_nxdfo4nezPYulbBdq-dbPVAygGcuwNTngCoFxzPKBGg-Lk2prpx-dIWw_v3aPA5-7pquKY5oE1ufzDPiGaflj-_U1zlX1BYMMNezmkHgnHKwCiEdtkHj3C52omXPfw8WiOJXATxWZef5ugkTJ8pnsCYsIpPicEqELRe9cfo_4q4BX6c126GygxA4J36DvixbhKSeJIpCPSsIjCLJxRc0otQG367USqKhzW5OYJ_YBPvY2yIngoZ5Yr86HOsnomqOY3hoXmz-cpL18WKzT3dS1E-kHutecbiIVkhplTmi11hLsJfk-7HkRAAutiUE_uEU7G7fyCiQWIv6KyMGapmtF5GOr7CB5bKQ3ZydussELrGfLsJ3VpwDgSC5gB0I0xP2HJ3pEtVGXkofk6AJEfF81Nu5OJ2JgCXQa0pSe5r2jJkJZXl7pGc30Fm64PHR9NROf0nCqOxhnCuyW3BXm2kMhGLdn8ERCbvRQElY8VWZUG0VswRJ0uHizP_jk_LfOArVvuMPO09Pomjse7x9ZKULKxHMpqWPJymaYCWDxkyJ_rSbZTiusaAZyYeUa0UiHbf5Dru5tiMNLsSKCWkwRL5mqLTEnJ2GSG0gs3K5z8yqC_9_mgzEJdnglxGDaUGHS_P0fw2EOz9SkujybpW9HtThtswt2LVy5VSHmvAWsaYH2-QLnNFXZx7WvXGmRP20gFMxDcxov_3QRHhjZHlXLngCOvLZKiq0ock8NMT-Xy5zI8asxsFLt_dNEuTg4n_vhploqfL_UwjouWrvAPRvwxXTni-DvzE38QapecnG8b41_qIRD1K-ULQhNTMuuKwFtQU8z4exaccH70uY8mutyAUJ0P-QbKS2xpJEW5TCY89KYf8ypVweRDyDvdrBhPQ_cG-phKz9GgDakl43QvC2xHU1OHMEnNI8fGvz2BG3COGiOxEL-qmt5e9rekoPTsOBXrLWLvFezt2MBT0WV-siHHQsGE0pNEIbrJaQ6RHmP0LTxHEIG7IkAKl5OUoSWmv4VUyvYMp64NWUcQulU9eoV2N1dddV9kHfVCBfYKUuiRTR4SzG0mQqadkI4ZqPvVP3B4lWgS_-nLMpAFfismzM6iVZooMc9DSQau53hMHM0J8Boi7XBbLbgVrTH505BZu_8LhEW-1VliGnEdV3yUtYSzUPT_uBRa5t3rpqUJJZL1fBX0cRvWZKCmBpvPPv1m-WFJiyMQnoXpVFZvoonX0soHTA8ZCiYRGPBM8lgfOIiI1YJgf5fjkn1zLrfTzalbzGkcxcGISxbLigN048mq4oTbvUQkk94BywIlSu__VkZC6cQ0v_7-KWt9M77LJ2_0-Fwl55mvWVXygTtHpHx_G8FMVhI_isxOgO7Xx-y33XmhEwZboJqUsPpWMVpMYo_ZQkGM3sKJOXhbGkTgA17664stq92Ah17wEd48DNNr1n2UorwiU-jZAAfbckG6PiNQrR_pkfUriNQKhtmuspbyRG8oHDguQJGOTXUvw8_zQ_B6COijQm02IEZjGsnBIgrWTUqCsPuMVk8yaTlJ0hF1arI57q-Si_47u_9YN02D_E98oGNHJ3tpjPTcscLeCz7mqDKlOCIF2dq7mz3-iAqIgaq2fSdG-94Zc5e6nvgQn6l-emflXw3vvUHKuU93r6kwv9SjeJQgtymLTnMtubdhk_wtmoLnsqDIs01q-qVGqDXJSs9m8NQpcyAMmHISIYa9GCmAXfptkxSw93LeOlYxDvJ6twdFQ218Mak6T8CNFamMbfbKgObnRQFSlXamXUi5EMATxWa2ggPfdN9tncvTPsPcUMGuTsDz_naRcdHUEuZotFfOeC98JUHYU0dqf0A9tpAevAW3cwPfg3p_izw8gEs39azmQ18OoVzUPozkWJau1ovlrQvA3BKcbeNN_KWgvWGRhXGBYb6uq0flTjf7mCv-S_Rl1lN3oIcTt9SyRGGoI="}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"0UZsatDxKtKojuMP0-SIiQI","usage_metadata":{"candidates_token_count":205,"prompt_token_count":1330,"prompt_tokens_details":[{"modality":"TEXT","token_count":266},{"modality":"IMAGE","token_count":1064}],"thoughts_token_count":664,"total_token_count":2199},"automatic_function_calling_history":[]}
+-----------------------------------------------------------
+
+2026-07-31 12:40:24,846 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:40:24,847 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:42:29,614 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:42:29,616 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:42:30,680 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: True
+2026-07-31 12:42:30,680 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hi"}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:42:32,627 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Hello! How can I help
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:57:32 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1629","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Hello! How can I help"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"W0dsaoPZIoqnjuMPyrKOmAY","usage_metadata":{"candidates_token_count":6,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":67,"total_token_count":113}}
+-----------------------------------------------------------
+
+2026-07-31 12:42:32,630 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ you today?
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:57:32 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1629","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" you today?"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"W0dsaoPZIoqnjuMPyrKOmAY","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":67,"total_token_count":116}}
+-----------------------------------------------------------
+
+2026-07-31 12:42:32,632 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:57:32 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=1629","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"","thought_signature":"EvcCCvQCARFNMg9_hg4L_yx4_4BYa8LGkxTEdfFs2yfHIMReGTJKFOOCohm7cqoVHQnL0MPC0lV1TH9fITy4J-CbIjdQkF6S6ql6BBuWZ1LddM0yUWP8vrSRgMizkd9H9p1C8TJu8wfDn1F_DwSk4s5dy1oN7hlf5Huyiqvnwb5dpi8xuGv5hGU4_psp15k8TXAKnhvkvJL8BeQV0a9lWX8xZN85SrNu2pRfabBjr1yJzi3h9e6tJmydprynozvcMPrZWM9LOjP4ykuFPNF6M-t7IdyTSrQKoZZdWt0GYOlgnmapeIEYLE0ChxMRma8QNAb2wrwqnQo4DnMzfdtobLT0GHcVkSTORwnBVTkp25iTvgt3_dMbkHovDwd8_DgPfBBaYJRBThu2VR0aYuI-tDhMciqgwkiXK9IzzhGGGIajqZxUTWK5Xqi0cTVm8FKekWvRDQeCcnpH5TEmxUz_p03VJ5SNDPj8Agg40UJUxh8K-hc_m94f5F8D"}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"W0dsaoPZIoqnjuMPyrKOmAY","usage_metadata":{"candidates_token_count":9,"prompt_token_count":40,"prompt_tokens_details":[{"modality":"TEXT","token_count":40}],"thoughts_token_count":67,"total_token_count":116}}
+-----------------------------------------------------------
+
+2026-07-31 12:42:32,634 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:42:32,634 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
+2026-07-31 12:43:01,888 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 started.
+2026-07-31 12:43:01,888 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop start.
+2026-07-31 12:43:01,931 - INFO - google_adk.google.adk.models.google_llm -
+Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: True
+2026-07-31 12:43:01,935 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+You are a helpful assistant.
+
+You are an agent. Your internal name is "root_agent". The description about you is "Ai agent that can answer questions and perform tasks.".
+-----------------------------------------------------------
+Config:
+{'http_options': {'headers': {'x-goog-api-client': 'google-adk/2.6.0 gl-python/3.14.0', 'user-agent': 'google-adk/2.6.0 gl-python/3.14.0'}}, 'thinking_config': {'include_thoughts': True, 'thinking_budget': -1}}
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"hi"}],"role":"user"}
+{"parts":[{"text":"Hello! How can I help you today?"},{"text":"","thought_signature":"EvcCCvQCARFNMg9_hg4L_yx4_4BYa8LGkxTEdfFs2yfHIMReGTJKFOOCohm7cqoVHQnL0MPC0lV1TH9fITy4J-CbIjdQkF6S6ql6BBuWZ1LddM0yUWP8vrSRgMizkd9H9p1C8TJu8wfDn1F_DwSk4s5dy1oN7hlf5Huyiqvnwb5dpi8xuGv5hGU4_psp15k8TXAKnhvkvJL8BeQV0a9lWX8xZN85SrNu2pRfabBjr1yJzi3h9e6tJmydprynozvcMPrZWM9LOjP4ykuFPNF6M-t7IdyTSrQKoZZdWt0GYOlgnmapeIEYLE0ChxMRma8QNAb2wrwqnQo4DnMzfdtobLT0GHcVkSTORwnBVTkp25iTvgt3_dMbkHovDwd8_DgPfBBaYJRBThu2VR0aYuI-tDhMciqgwkiXK9IzzhGGGIajqZxUTWK5Xqi0cTVm8FKekWvRDQeCcnpH5TEmxUz_p03VJ5SNDPj8Agg40UJUxh8K-hc_m94f5F8D"}],"role":"model"}
+{"parts":[{"text":"There are a lot of stuffs in my image , describe everything for me"},{"inline_data":{"mime_type":"image/jpeg"}}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+
+-----------------------------------------------------------
+
+2026-07-31 12:43:09,796 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"**Defining the Image's Scope**\n\nI'm focusing now on precisely what constitutes a \"thorough description.\" It seems the user wants detail on all visible items and the floral backdrop. The current stage is determining the level of detail necessary. What level of granularity is required for each object, and how detailed should the floral pattern analysis be? I'm evaluating the scope of the task.\n\n\n","thought":true}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"total_token_count":65}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:11,496 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"**Detailing the Objects**\n\nI've moved on to a detailed object inventory. I see an extended right hand in a light blue sleeve, light pants below. A closed laptop is positioned on the left. In the midground, a flash drive/eraser-like object is next to a flat smartphone and a pink tube. I also identified a USB-C hub and a colorful floral backdrop of red, orange, and yellow flowers on a pink and cream sheet.\n\n\n","thought":true}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"total_token_count":65}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:12,219 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Here is a detailed breakdown of everything in
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Here is a detailed breakdown of everything in"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":8,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":698}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:12,381 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ your image:
+
+### **Main Foreground & Person**
+* **Hand:** An open right hand placed flat towards the center of the image
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" your image:\n\n### **Main Foreground & Person**\n* **Hand:** An open right hand placed flat towards the center of the image"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":36,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":726}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:12,512 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+.
+* **Clothing:** A light blue fleece/sweater sleeve on the wrist and light grey or white pants visible
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":".\n* **Clothing:** A light blue fleece/sweater sleeve on the wrist and light grey or white pants visible"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":60,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":750}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:12,636 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ around the lower portion of the frame.
+
+### **Tech & Electronics**
+* **Laptop:** A dark space-
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" around the lower portion of the frame.\n\n### **Tech & Electronics**\n* **Laptop:** A dark space-"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":84,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":774}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:12,765 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+grey MacBook (with the visible Apple logo) resting on the left side of the bed.
+* **Smartphone:** A black
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"grey MacBook (with the visible Apple logo) resting on the left side of the bed.\n* **Smartphone:** A black"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":109,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":799}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:12,940 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ smartphone lying flat near the top center.
+* **USB-C Hub / Adapter:** A silver rectangular multi-port hub with
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" smartphone lying flat near the top center.\n* **USB-C Hub / Adapter:** A silver rectangular multi-port hub with"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":135,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":825}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:12,972 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ a short black cable near the phone.
+* **Small Blue Object:** A small blue-and-white object (looks
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" a short black cable near the phone.\n* **Small Blue Object:** A small blue-and-white object (looks"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":160,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":850}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,143 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ like a USB flash drive or small stationery item) placed near the smartphone.
+
+### **Personal Care Items**
+* **
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" like a USB flash drive or small stationery item) placed near the smartphone.\n\n### **Personal Care Items**\n* **"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":185,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":875}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,237 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Pink Tube:** A small white and pink tube (likely lip balm, hand cream, or ointment) lying near the center,
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Pink Tube:** A small white and pink tube (likely lip balm, hand cream, or ointment) lying near the center,"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":210,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":900}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,363 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ right under the fingers.
+
+### **Bedding & Lighting**
+* **Bedsheet / Cover:** A bright pink bed
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" right under the fingers.\n\n### **Bedding & Lighting**\n* **Bedsheet / Cover:** A bright pink bed"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":236,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":926}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,551 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+sheet featuring a grid pattern with cream squares containing red, orange, and yellow floral motifs.
+* **Lighting:** Bright,
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"sheet featuring a grid pattern with cream squares containing red, orange, and yellow floral motifs.\n* **Lighting:** Bright,"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":261,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":951}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,653 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+ direct sunlight coming in from the side, casting diagonal light beams and shadows across the bed and objects.
+
+### **Background (Top-
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":" direct sunlight coming in from the side, casting diagonal light beams and shadows across the bed and objects.\n\n### **Background (Top-"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":288,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":978}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,782 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+Left)**
+* **Musical Instrument:** A wooden harmonium (or small reed organ/keyboard) showing black and white keys in the upper
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"Left)**\n* **Musical Instrument:** A wooden harmonium (or small reed organ/keyboard) showing black and white keys in the upper"}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":316,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":1006}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,863 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+-left corner.
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"-left corner."}],"role":"model"},"index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":320,"prompt_token_count":65,"prompt_tokens_details":[{"modality":"TEXT","token_count":65}],"thoughts_token_count":625,"total_token_count":1010}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,866 - DEBUG - google_adk.google.adk.models.google_llm -
+
+LLM Response:
+-----------------------------------------------------------
+Text:
+
+-----------------------------------------------------------
+Function calls:
+
+-----------------------------------------------------------
+Raw response:
+{"sdk_http_response":{"headers":{"Content-Type":"text/event-stream","Content-Disposition":"attachment","Vary":"Origin, X-Origin, Referer","Transfer-Encoding":"chunked","Date":"Fri, 31 Jul 2026 06:58:09 GMT","Server":"scaffolding on HTTPServer2","X-XSS-Protection":"0","X-Frame-Options":"SAMEORIGIN","X-Content-Type-Options":"nosniff","Server-Timing":"gfet4t7; dur=7521","Alt-Svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"}},"candidates":[{"content":{"parts":[{"text":"","thought_signature":"Eo0YCooYARFNMg9J9QpdevPziA6F0YqzFMU9ALzaZD1ahLY4X4A-J9eQu6P6uOH1O8FZaFXOBDCirwN6lOKb96-6GYX14GgeTSLjWx4mfgQD4rqMiR_scM1GDfvV4te1JIDFGZwqwOtrBnv9CDYfUJ0lZUzJlVmSuxi5k1jYo21ayWBQ_tl7paFzU1tFKQiZx62jp4IOkWyrNnhG7pMI9XRgnuUVng83mKPcZABbK7KKM-n7K6ub-TvQEHDL3yMjx6bsmJdSnn8IzLXRuaKa_dJHFGkFVFka6w2pateegpJdbh-Rej2mAt-E5wU9B857_XvQkQypsoynCXNekfmgnsxoqaP3J130qkpX01oP5SlQ3vFntdeVZiYtN4u1XGZJ28n6IoTGpveBGdY6Y8f9trOizbCcMheUXo7Hcy95YF8YVLI8NOn4IibNhHgMnocZqyPiPuO30o8HsLFDEhWqNm63E6HKQo7Vyd_DyCsyN3leO4_3IQMI51lcR67DZYzix2V46vXorbLZ5EusWLojNtC5buK6ABbobYAbQXLo0iQfnOTSIIxGMYDeiBKmv20rY5E9dCSxROUYKYML-lEr9QdHvfew-c7v2fgXjoJuvfHdJZm4WqkCzUht6RL2qCbjtfUh-bxVISu2NxmEsxmWORE-BI8GiG949YIpsBe5LhB_URAKfZUNvzPsoX_j9AGdFyyZJP0n0_IhNZpnD9H5qNSmTFdOQLhWdor0iSCYY4HAbda42Bo_LtmUXgqSIdORcrV7us8mg_vHLDhF6HkbZaJ7QocoQGnxOBBbWnQ-fs1hktHBWsvniz2P6scr2CxdZBqPbPuibRe2GSWsnK5TXt1pRINuN4UXSYXYURidDjFoh0m0nOSaMzg6OUS4bJqzob1PSjP6LzPP9CgM8ePQr8EjIv1os8Sf682TPLhYBunQebpizUD1IdGrslQFmYLlh4aGM9DZE_1nexOej-0UDRXZchU8fC7hBUXgUbdHkH7ZJCPizn9vTtfQcqG8BSg1V1Sb3yU91_1nSuXAnO9KW6cVBOMnaFFniyyOcgYJ9Uqj6dpoXAp3G6RlcctnhmlmnMQ6n1gML-QIdMhX7mLzLo_96KNiH2zePLMounjQ1lObjFDHqmFAFnQrhVUvuQLQPIXvSqw8wYGqscSzfcBbKHeq3VhQQfPKSeCogH7A6YLrOZzIDWTkz1Zkn7hxLpIXtJOhYwRofTNVsO-UI3PAY9EdT0M6BnoFsF4jVeExiHlou-rIAMK1GJbi2rNW1-A-yia9ArxB8DZcIzDb79xC-UGxyNnAn5b1zBKoKwtHkOZFs8n1-d2R4A0U4AgCgVOlMUn9gjqIZr7xhn8hh1ByMQm_rjXKBlDp8GXzXg3DSrg-1IBkONZVt1Vfo8mpjnLcL3iwov9iDLU4qkrx8vY5lTdQ7T1TKpK6a-1bqWlQDMQ0US1-5RGVtJRyA_3h_-QGQan9uowxCBX_gmj1V_DAsMN8q1XdGlRx_M8eM8vqLWnkL8I00vRCaQ41Ai4Ak1hUMmZJDGJbZDie_W89gP3djI0_duYl12vRytGi1pexcth353iSRtoi1ybyyt5mbVxDl21wEFvq9Z0GiPERywZ9wImLBsEUF_o5CWpeP3j93EHPDdBerSfoxZf2-klZ7o99ZXl18TsSBJu1zcEpsToSis8Z11cGGOX7Al_4gEGMDK1FA5fdfC21f9Cnw8mv4oDiVO9fs0QzdZE4IQ1G_AHQQR2suORqDAVhKZ3-A8KZyH5BAKuEc6Ct9QUGcxFgrQ4iLP1F87W_kZ7Hkwc_Qb-zNjN8jndnYGLDbY82q-XV2ITEeBiOTAA9kWkK9L4MjVjtdreMxphdR4Pl7kzx4zYazC1qPaDDIFYLmAtazcaOybbZLXc0x03WqYpJ_9U7oXlQ1y4_c-N6iyJ6hldEgL_1pOXvKTSaQRrryWl-VMNCkdkO2GBkCGYfHhsi2DVcDmaAW0QQziNBsS8AsxZXHfoj66knsDgAKAiZGp4XbFCRQlHuDGiY1A7wudSDaOxXhq3__BLu7Xd3V3vW0PW3aKuK3kL0Wt8jVIQroYasXoCmAkY8iDQYLmN6Po8govLrSiKJrFxI9umNYWqElZQFMS6_ijkyryLtOPL8m7iHVUwJw7JPXinSGi6Y54yeR3iNZs0raTznxFiTWtfIEkh-QtgjR9wPGO33FmsKVupxxL6SauUI14O35AcpPJ6q9MYQ3r0TZujX9JeZL12t6dScCEbji9AmyqE6mWd9nDt8Nx6qdGeLiNErF1rpOLb8b3st9RFbxUGOe7BYoCCJWkNTBJyOwdq3muodQxrN70KBvDseJPiVus72LVgFZk96DhG7_HaUfCsU-hJ9F6uV4cEyI8mpg-N0eQkQAnwkluWdKrM9EXFq9z27J_0T3VwMUBhd3-yN3QOEWMQfsFnw-F8yBalOpP9j-4V1J6zChyfVP-Gbw8XSt1X5RKf7sSzTKav_-qbYboB5KZk2HcqjUN0KTF8kSI0G9VV5KGERBFmFI7cNEWfX626MGnULkvuHaySRXutqs6vxDf6MJWbhmQKmRkaktjJGc6mKI06by718zKBx-_HciNjsm39fN7aXR1rjX4rfbf3FdsNCXeauUDhEhhBeEdWRreztO6p4wgnVnUVH6A-gjtIMZXVmfYduEYemL0kD2zIj8KH6ayCP6ncqzw4lGbc2n1s_wNYg9nblPax9D8Ii9zX2npfMbucnNCVmDUN1lD74PzUNHlbjv1a6IQCyveBzyiJ1NwAk0qyfyoMcgY_lDZknMk566ljzovSu0qM3uJocjyu9BvCc9_PG19ya_UVZOXI9nYyaiGtX9hRcqyNFDXNtIJJBBc70Ry88YtaSuA-PUwM3bsp9Dagw9kP9KmXKbSVcLsc1b3CydFUQ_K4ceJKAZmomjNgUOr2NSzjZr10uAoRjuMO46ix3miUi6YBia8-nwRAEFP1i7i5nTdPl7uQjUbUi8DDCLXKX8eTsME1ZD-Vn_SNu2KgG9NK_J-26qIfZoEhSpgtLQsRcj3hrFLcPaUTaI5Ao4LTacJOJ0TZ2R6zJzZb5SyoM2_FHp3Ukr04uUu4D-CdejejmoJuC0dqLoG-PbeC-SCIDz0aguxCmyIycYoIzDPg59a42nt94Yh5JFtCp5TIEcEOf-LhrKQpULLhw1YDdTdDhDHhpV64hJdblr89YzrP1ot5Tr5qn3nFjaQ_2FC8cDJDKpJ1z6bYtZh3OyJPNwRdBg9fmksUmH8bjgV7qpCu0j4n7gV3GucKOrYydn4s7Ci2RtrMi3JXHPFXqMzHOTQ40cg-PYQ3iTj1acdZ3QG6BsjlQEP6cga_rO9_JtxRjbHCVnjsAZek4FWkekAr0jqDMPi4gb_iNKLgpqgi_czzFOhvWBpa2n9934J0CAXU8EsnCyjozXk5eSi8xa3Co8yp-dFiAzm_dPW5O0OMGfAaUoMrdP2_YuyylS2r4jIDgIgwlu55EE26tRfJrp4j_bZprFL_zdAWpbtxUjeYwfaF3wAhaq18And6f3F6ZhPsjYYkSreyXpaPpFYs_zEPh2WtyoWocBLtrb2dgFnXO3XYF-77pS69f1idtv74n_WTl5HZGpsWMftf_ZkVsW4LqKyfT3rQ13O9liGPpxS-FwOnjcABbdi2pas86omZd1LtdWYrxsP2zQMLowJuJUdFX2E6XU5ZokastmnUdancB-6k2OmC3sHxSQiLHrNL6WxjR5RBatNN8-mFIBIEp6yZY_H1aNcaL4JF1gmGC1YKQLIuskq49CiedrSDeOrMtnEzGD_M5TqA2XPvI6l5JAvVzsSVKbNTbBJTgUAi1O-Z3H5jkkd8SbgZDpaGhfPQu0VkN-08M37Cr7B2FQE6WI5PRmSykJeyfWerKNJ7MnSr6piFEBgDFO10Y3V33pqQ56CpYrt2xsheok1PapSZheCbF1fccKeZRqy8Fl5y8g0mTiccU6AW9pPWIE4UPYqMumynoJFVXW2x3ySShkIOuLGakYNJoU-HvWHiPpI_0aQ-UbNaaFBEcG5b1j_fQ5zw9dMdvHa36VoVNa_ojtdglsA76eC7VAolZWMiQjbgkEAFVd7Ul7nQ7yg=="}],"role":"model"},"finish_reason":"STOP","index":0}],"model_version":"gemini-3.6-flash","response_id":"fEdsarfqJ_6xjuMPxLa_sAM","usage_metadata":{"candidates_token_count":320,"prompt_token_count":1196,"prompt_tokens_details":[{"modality":"IMAGE","token_count":1064},{"modality":"TEXT","token_count":132}],"thoughts_token_count":625,"total_token_count":2141}}
+-----------------------------------------------------------
+
+2026-07-31 12:43:13,870 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 execute loop end.
+2026-07-31 12:43:13,870 - DEBUG - google_adk.google.adk.workflow._node_runner -
+node root_agent@1 end.
