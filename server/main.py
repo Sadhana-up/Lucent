@@ -20,8 +20,12 @@ from google.adk.models.llm_request import LlmRequest
 from google.adk.models.llm_response import LlmResponse
 from google.adk.runners import InMemoryRunner
 from google.adk.skills import load_skill_from_dir
+from google.adk.tools.function_tool import FunctionTool
 from google.adk.tools.skill_toolset import SkillToolset
 from google.genai import types
+
+# Import the product search tool
+from tools import search_products
 
 load_dotenv()
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
@@ -122,7 +126,7 @@ async def before_model_callback(
 # ---------------------------------------------------------------------------
 # Agent
 # ---------------------------------------------------------------------------
-MODEL_NAME = "gemini-flash-latest"
+MODEL_NAME = "gemini-3.1-flash-lite"
 APP_NAME = "web_chat"
 USER_ID = "web-client"  # single-tenant demo; swap for a real user id if you add auth
 
@@ -158,7 +162,7 @@ root_agent = Agent(
     name="root_agent",
     description="Ai agent that can answer questions and perform tasks.",
     instruction=INSTRUCTION,
-    tools=[skill_toolset],
+    tools=[skill_toolset, FunctionTool(func=search_products)],
     before_model_callback=before_model_callback,
     generate_content_config=types.GenerateContentConfig(
         thinking_config=types.ThinkingConfig(
