@@ -134,6 +134,11 @@ export const auth = betterAuth({
         required: false,
         defaultValue: "user",
       },
+      initialRole: {
+        type: "string",
+        required: false,
+        defaultValue: "user",
+      },
       skinType: {
         type: "string", // oily, dry, combination, sensitive, normal
         required: false,
@@ -158,6 +163,22 @@ export const auth = betterAuth({
         void promise.catch((e: unknown) =>
           console.error("[Better Auth] Background task failed:", e),
         );
+      },
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          after: async (user: { id: string; [key: string]: unknown }) => {
+            // Map initialRole to role during sign-up
+            const initialRole = user.initialRole;
+            if (initialRole && typeof initialRole === "string" && initialRole !== "user") {
+              await db.user.update({
+                where: { id: user.id },
+                data: { role: initialRole },
+              });
+            }
+          },
+        },
       },
     },
   },
