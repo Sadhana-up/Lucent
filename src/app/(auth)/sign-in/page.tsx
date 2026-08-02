@@ -124,13 +124,22 @@ function SignInFormContent() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label
-                className="text-sm font-medium"
-                style={{ color: C.primary }}
-                htmlFor="password"
-              >
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label
+                  className="text-sm font-medium"
+                  style={{ color: C.primary }}
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs font-medium"
+                  style={{ color: C.primary }}
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 id="password"
                 type="password"
