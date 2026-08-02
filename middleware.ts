@@ -27,7 +27,12 @@ export function middleware(request: NextRequest) {
   }
 
   // Redirect authenticated users away from Auth pages
-  if (pathname === "/sign-in" || pathname === "/sign-up") {
+  if (
+    pathname === "/sign-in" ||
+    pathname === "/sign-up" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password"
+  ) {
     if (sessionToken) {
       return NextResponse.redirect(new URL("/", request.url));
     }
@@ -42,5 +47,7 @@ export const config = {
     "/admin/:path*",
     "/sign-in",
     "/sign-up",
+    "/forgot-password",
+    "/reset-password",
   ],
 };

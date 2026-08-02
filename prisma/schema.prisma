@@ -35,6 +35,9 @@ model User {
 
   initialRole String? @default("user")
 
+  skinType            String?
+  onboardingCompleted Boolean? @default(false)
+
   @@index([email])
   @@index([role])
   @@map("user")
