@@ -1,0 +1,14 @@
+# secrets - use env vars from docker-compose instead
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__
+*.pyc
+.venv
+adk_debug.log
+
+# docker
+Dockerfile
+.dockerignore

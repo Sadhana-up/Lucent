@@ -1,0 +1,60 @@
+# dependencies
+node_modules
+.pnp
+.pnp.*
+.yarn
+
+# next.js
+.next
+out
+build
+
+# python
+server/.venv
+server/__pycache__
+server/**/*.pyc
+server/adk_debug.log
+
+# env files (secrets never in build context)
+.env
+.env.*
+!.env.example
+!.env.docker.example
+
+server/.env
+server/.env.*
+!server/.env.example
+
+# misc
+.git
+.gitignore
+.next
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+uploads
+
+# docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+**/Dockerfile
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# prisma migrations (run at startup, not baked in)
+prisma/migrations
+
+# jupyter notebooks
+*.ipynb
+
+# seed data (regenerated at startup)
+public/seed/*

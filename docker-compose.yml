@@ -1,0 +1,80 @@
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: lucent-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lucent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lucent_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-lucent_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lucent -d lucent_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── FastAPI Backend ────────────────────────────────────────
+  fastapi:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: lucent-fastapi
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - RATE_LIMIT_WINDOW=${RATE_LIMIT_WINDOW:-60}
+      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-30}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Next.js Frontend ───────────────────────────────────────
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+        - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+        - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
+        - CHAT_BACKEND_URL=http://fastapi:8000
+        - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+        - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+        - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+        - RESEND_API_KEY=${RESEND_API_KEY}
+        - EMAIL_FROM=${EMAIL_FROM}
+        - DEV_EMAIL_OVERRIDE=${DEV_EMAIL_OVERRIDE}
+    container_name: lucent-nextjs
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - CHAT_BACKEND_URL=http://fastapi:8000
+      - NEXT_PUBLIC_CHAT_API_BASE=/api/chat
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - DEV_EMAIL_OVERRIDE=${DEV_EMAIL_OVERRIDE}
+      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS}
+    depends_on:
+      db:
+        condition: service_healthy
+      fastapi:
+        condition: service_started
+
+volumes:
+  postgres_data:
