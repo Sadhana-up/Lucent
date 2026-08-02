@@ -18,6 +18,7 @@ type Message = {
   reasoningActive: boolean;
   thinkingStartedAt: number | null;
   thinkingEndedAt: number | null;
+  images?: UploadedImage[];
 };
 
 type UploadedImage = {
@@ -289,30 +290,69 @@ function AssistantMessage({
 }
 
 function UserMessage({ content, images }: { content: string; images?: UploadedImage[] }) {
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ type: "spring", stiffness: 350, damping: 30 }}
-      className="flex w-full justify-end pl-10"
-    >
-      <div className="flex flex-col items-end gap-1.5">
-        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#E5C483]/60">You</span>
-        {images && images.length > 0 && (
-          <div className="flex gap-2 mb-2">
-            {images.map((img, idx) => (
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+        className="flex w-full justify-end pl-10"
+      >
+        <div className="flex flex-col items-end gap-1.5">
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#E5C483]/60">You</span>
+          {images && images.length > 0 && (
+            <div className="flex gap-2 mb-2">
+              {images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img.preview}
+                  alt={`Upload ${idx + 1}`}
+                  className="h-20 w-20 rounded-md object-cover border border-white/[0.08] cursor-pointer transition-transform hover:scale-105"
+                  onClick={() => setExpandedImage(img.preview)}
+                />
+              ))}
+            </div>
+          )}
+          <div className="max-w-full whitespace-pre-wrap text-right text-[13.5px] font-light leading-relaxed text-[#FAF9F6]">{content}</div>
+        </div>
+      </motion.div>
+
+      {/* Image Lightbox Modal */}
+      <AnimatePresence>
+        {expandedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            onClick={() => setExpandedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="relative max-w-[90vw] max-h-[90vw]"
+              onClick={(e) => e.stopPropagation()}
+            >
               <img
-                key={idx}
-                src={img.preview}
-                alt={`Upload ${idx + 1}`}
-                className="h-20 w-20 rounded-md object-cover border border-white/[0.08]"
+                src={expandedImage}
+                alt="Expanded upload"
+                className="max-w-full max-h-[85vh] rounded-lg object-contain shadow-2xl"
               />
-            ))}
-          </div>
+              <button
+                onClick={() => setExpandedImage(null)}
+                className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#0c0c0e] border border-white/[0.1] text-white shadow-xl transition-colors hover:text-[#E5C483]"
+              >
+                <X size={16} />
+              </button>
+            </motion.div>
+          </motion.div>
         )}
-        <div className="max-w-full whitespace-pre-wrap text-right text-[13.5px] font-light leading-relaxed text-[#FAF9F6]">{content}</div>
-      </div>
-    </motion.div>
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -453,7 +493,7 @@ export default function ChatPage() {
     } as const;
     const next: Message[] = [
       ...messages,
-      { role: "user", content: text || "(Image upload)", ...blank },
+      { role: "user", content: text || "(Image upload)", ...blank, images: uploadedImages.length > 0 ? [...uploadedImages] : undefined },
       { role: "assistant", content: "", ...blank, streaming: true },
     ];
     setMessages(next);
@@ -636,7 +676,7 @@ export default function ChatPage() {
             <AnimatePresence initial={false}>
               {messages.map((m, i) =>
                 m.role === "user" ? (
-                  <UserMessage key={i} content={m.content} />
+                  <UserMessage key={i} content={m.content} images={m.images} />
                 ) : (
                   <div key={i} className="group/msg relative">
                     <AssistantMessage
