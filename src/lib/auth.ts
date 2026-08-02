@@ -91,6 +91,7 @@ export const auth = betterAuth({
     enabled: true,
     window: 60,
     max: 20,
+    storage: "database",  // persistent across restarts, no Redis needed
     customRules: {
       "/sign-in/email": { window: 60, max: 5 },
       "/sign-up/email": { window: 60, max: 3 },
@@ -156,7 +157,8 @@ export const auth = betterAuth({
     useSecureCookies: process.env.NODE_ENV === "production",
     ipAddress: {
       disableIpTracking: false,
-      ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
+      ipAddressHeaders: ["x-forwarded-for", "x-real-ip", "x-client-ip"],
+      ipv6Subnet: 64,  // group IPv6 addresses by /64 subnet
     },
     backgroundTasks: {
       handler: (promise) => {

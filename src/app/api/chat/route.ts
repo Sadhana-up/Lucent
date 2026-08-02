@@ -1,10 +1,49 @@
 import { NextRequest } from "next/server";
+import { auth } from "@/lib/auth";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 const BACKEND_URL = process.env.CHAT_BACKEND_URL ?? "http://localhost:8000";
+const INTERNAL_API_KEY = process.env.INTERNAL_API_KEY ?? "";
 
 export async function POST(req: NextRequest) {
+  // 1. Rate limit per client IP
+  const ip = getClientIp(req);
+  const { allowed, remaining, retryAfterMs } = rateLimit(`chat:${ip}`);
+  if (!allowed) {
+    return new Response(
+      JSON.stringify({ error: "Rate limit exceeded. Try again later." }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+          "Retry-After": String(Math.ceil(retryAfterMs / 1000)),
+          "X-RateLimit-Limit": "15",
+          "X-RateLimit-Remaining": "0",
+        },
+      },
+    );
+  }
+
+  // 2. Validate session - must be authenticated
+  let session;
+  try {
+    session = await auth.api.getSession({ headers: req.headers });
+  } catch {
+    return new Response(JSON.stringify({ error: "Invalid session" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (!session?.user) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   let body: { session_id?: string | null; message?: string; images?: { mime_type: string; data: string }[] };
   try {
     body = await req.json();
@@ -33,7 +72,10 @@ export async function POST(req: NextRequest) {
   try {
     backendRes = await fetch(`${BACKEND_URL}/chat/stream`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(INTERNAL_API_KEY ? { "X-API-Key": INTERNAL_API_KEY } : {}),
+      },
       body: JSON.stringify({
         session_id: body.session_id ?? null,
         message: body.message,
@@ -67,6 +109,8 @@ export async function POST(req: NextRequest) {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
+      "X-RateLimit-Limit": "15",
+      "X-RateLimit-Remaining": String(remaining),
     },
   });
 }

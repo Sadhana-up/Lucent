@@ -3,14 +3,17 @@ from system_instruction import INSTRUCTION
 import base64
 import json
 import logging
+import os
 import pathlib
+import time
 import warnings
+from collections import defaultdict
 from typing import AsyncIterator, Optional
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 
 from google.adk.agents.llm_agent import Agent
@@ -29,6 +32,57 @@ from tools import search_products
 
 load_dotenv()
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
+
+# ---------------------------------------------------------------------------
+# Rate Limiter (in-memory, sliding window – no Redis required)
+# ---------------------------------------------------------------------------
+RATE_LIMIT_WINDOW = int(os.getenv("RATE_LIMIT_WINDOW", "60"))  # seconds
+RATE_LIMIT_MAX = int(os.getenv("RATE_LIMIT_MAX", "30"))        # requests per window
+INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "")
+
+class InMemoryRateLimiter:
+    """Simple sliding-window rate limiter backed by a dict."""
+
+    def __init__(self) -> None:
+        self._hits: dict[str, list[float]] = defaultdict(list)
+
+    def is_allowed(self, key: str, window: int, max_requests: int) -> bool:
+        now = time.time()
+        cutoff = now - window
+        self._hits[key] = [t for t in self._hits[key] if t > cutoff]
+        if len(self._hits[key]) >= max_requests:
+            return False
+        self._hits[key].append(now)
+        return True
+
+    def remaining(self, key: str, window: int, max_requests: int) -> int:
+        now = time.time()
+        cutoff = now - window
+        self._hits[key] = [t for t in self._hits[key] if t > cutoff]
+        return max(0, max_requests - len(self._hits[key]))
+
+    def retry_after(self, key: str, window: int) -> float:
+        if self._hits[key]:
+            return max(0, window - (time.time() - self._hits[key][0]))
+        return 0
+
+_limiter = InMemoryRateLimiter()
+
+
+def _client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def _verify_api_key(request: Request) -> None:
+    """Reject requests without a valid INTERNAL_API_KEY header."""
+    if not INTERNAL_API_KEY:
+        return  # key auth disabled when env var is unset
+    provided = request.headers.get("x-api-key", "")
+    if provided != INTERNAL_API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
 
 # ---------------------------------------------------------------------------
 # Logging (same debug-log-to-file setup as the CLI version)
@@ -284,7 +338,24 @@ async def stream_reply(session_id: str, message: str, images: Optional[list[Imag
 
 
 @app.post("/chat/stream")
-async def chat_stream(req: ChatRequest):
+async def chat_stream(req: ChatRequest, request: Request):
+    # 1. Verify internal API key
+    _verify_api_key(request)
+
+    # 2. Rate limit per client IP
+    ip = _client_ip(request)
+    if not _limiter.is_allowed(ip, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX):
+        retry = _limiter.retry_after(ip, RATE_LIMIT_WINDOW)
+        return JSONResponse(
+            status_code=429,
+            content={"error": "Rate limit exceeded. Try again later."},
+            headers={
+                "Retry-After": str(int(retry) + 1),
+                "X-RateLimit-Limit": str(RATE_LIMIT_MAX),
+                "X-RateLimit-Remaining": "0",
+            },
+        )
+
     print(f"[chat_stream] Request: session_id={req.session_id}, message={req.message[:80]}, images={len(req.images) if req.images else 0}")
     session_id = req.session_id
     if not session_id:
@@ -294,12 +365,15 @@ async def chat_stream(req: ChatRequest):
         session_id = session.id
         print(f"[chat_stream] Created new session: {session_id}")
 
+    remaining = _limiter.remaining(ip, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX)
     return StreamingResponse(
         stream_reply(session_id, req.message, req.images),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache, no-transform",
-            "X-Accel-Buffering": "no",  # disable nginx buffering if you sit behind one
+            "X-Accel-Buffering": "no",
+            "X-RateLimit-Limit": str(RATE_LIMIT_MAX),
+            "X-RateLimit-Remaining": str(remaining),
         },
     )
 

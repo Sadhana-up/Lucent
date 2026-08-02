@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ChevronDown, Sparkles, ArrowDown, Copy, Check, Send, ImagePlus, X } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 const API_BASE = process.env.NEXT_PUBLIC_CHAT_API_BASE ?? "/api/chat";
 
@@ -367,6 +369,8 @@ const SUGGESTIONS = [
 /* ----------------------------------------------------------------------- */
 
 export default function ChatPage() {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -415,6 +419,12 @@ export default function ChatPage() {
       ta.style.height = `${Math.min(ta.scrollHeight, 160)}px`;
     }
   }, [input]);
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.replace("/sign-in?callbackUrl=/chat");
+    }
+  }, [session, isPending, router]);
 
   const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -474,6 +484,12 @@ export default function ChatPage() {
   const send = useCallback(async () => {
     const text = input.trim();
     if ((!text && uploadedImages.length === 0) || busy) return;
+
+    // Re-check session before sending
+    if (!session) {
+      router.replace("/sign-in?callbackUrl=/chat");
+      return;
+    }
 
     const imagesToSend = uploadedImages.length > 0
       ? uploadedImages.map((img) => ({
@@ -591,7 +607,7 @@ export default function ChatPage() {
       );
       setBusy(false);
     }
-  }, [input, busy, messages, uploadedImages]);
+  }, [input, busy, messages, uploadedImages, session, router]);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -623,13 +639,24 @@ export default function ChatPage() {
         ::selection { background: rgba(229,196,131,0.15); color: #FAF9F6; }
       `}</style>
 
-      <div className="flex items-center justify-between border-b border-white/[0.04] bg-[#050505]/95 px-4 py-3 backdrop-blur-md sm:px-6 sm:py-[18px]">
-        <div className="flex items-center gap-3">
-          <span className="font-serif text-[11px] font-bold uppercase tracking-[0.4em] text-[#E5C483]">Chat</span>
-          <span className="h-[3px] w-[3px] rounded-full bg-[#E5C483]/60" />
-          <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#8E8E93]/70">AGENTIC ASSISTANT</span>
+      {isPending && (
+        <div className="flex h-full items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E5C483]/30 border-t-[#E5C483]" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8E8E93]/70">Verifying session...</span>
+          </div>
         </div>
-      </div>
+      )}
+
+      {!isPending && session && (
+        <>
+          <div className="flex items-center justify-between border-b border-white/[0.04] bg-[#050505]/95 px-4 py-3 backdrop-blur-md sm:px-6 sm:py-[18px]">
+            <div className="flex items-center gap-3">
+              <span className="font-serif text-[11px] font-bold uppercase tracking-[0.4em] text-[#E5C483]">Chat</span>
+              <span className="h-[3px] w-[3px] rounded-full bg-[#E5C483]/60" />
+              <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#8E8E93]/70">AGENTIC ASSISTANT</span>
+            </div>
+          </div>
 
       <div className="relative flex min-h-0 flex-1 flex-col">
         <div ref={scrollRef} className="custom-scroll flex-1 overflow-y-auto overscroll-contain">
@@ -799,6 +826,8 @@ export default function ChatPage() {
           <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#E5C483]/70">{busy ? "Contemplating" : "system idle"}</span>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

@@ -17,6 +17,15 @@ export function middleware(request: NextRequest) {
     request.cookies.get("better-auth.session_token")?.value ||
     request.cookies.get("__Secure-better-auth.session_token")?.value;
 
+  // Protect Chat routes - must be authenticated
+  if (pathname === "/chat" || pathname.startsWith("/chat/")) {
+    if (!sessionToken) {
+      const signInUrl = new URL("/sign-in", request.url);
+      signInUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(signInUrl);
+    }
+  }
+
   // Protect Seller and Admin routes
   if (pathname.startsWith("/seller") || pathname.startsWith("/admin")) {
     if (!sessionToken) {
@@ -45,6 +54,7 @@ export const config = {
   matcher: [
     "/seller/:path*",
     "/admin/:path*",
+    "/chat/:path*",
     "/sign-in",
     "/sign-up",
     "/forgot-password",

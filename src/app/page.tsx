@@ -29,7 +29,8 @@ import {
   Sliders,
   Calendar,
   Activity,
-  Layers
+  Layers,
+  Bot
 } from "lucide-react";
 
 /* ─── Design tokens ─── */
@@ -138,7 +139,7 @@ export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [analysisModalOpen, setAnalysisModalOpen] = useState(false);
-  const [activeInteractiveTab, setActiveInteractiveTab] = useState<"analyzer" | "builder" | "matrix" | "journey" | "checklist">("analyzer");
+  const [activeInteractiveTab, setActiveInteractiveTab] = useState<"analyzer" | "builder" | "matrix" | "journey" | "checklist" | "chat">("analyzer");
   const { data: session } = authClient.useSession();
 
   useEffect(() => {
@@ -288,6 +289,16 @@ export default function LandingPage() {
                 Start Interactive Skin Diagnostic
                 <ArrowRight size={16} className="ml-2" />
               </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-sm font-medium h-12 px-8 rounded-xl"
+                style={{ borderColor: C.accent, color: C.accent, background: "#fff" }}
+                onClick={() => router.push("/chat")}
+              >
+                <Bot size={16} className="mr-2" />
+                Chat with AI
+              </Button>
               <a href="#interactive-suite">
                 <Button
                   size="lg"
@@ -398,6 +409,7 @@ export default function LandingPage() {
               { id: "matrix", label: "Clinical Ingredients Matrix", icon: Layers },
               { id: "journey", label: "4-Week Transformation", icon: Activity },
               { id: "checklist", label: "Daily Companion Checklist", icon: Calendar },
+              { id: "chat", label: "Chat with AI", icon: Bot },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeInteractiveTab === tab.id;
@@ -408,6 +420,8 @@ export default function LandingPage() {
                     setActiveInteractiveTab(tab.id as typeof activeInteractiveTab);
                     if (tab.id === "analyzer") {
                       setAnalysisModalOpen(true);
+                    } else if (tab.id === "chat") {
+                      router.push("/chat");
                     }
                   }}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
@@ -432,6 +446,27 @@ export default function LandingPage() {
             {activeInteractiveTab === "matrix" && <ConcernsMatrix />}
             {activeInteractiveTab === "journey" && <SkinJourneySlider />}
             {activeInteractiveTab === "checklist" && <DailyChecklist />}
+            {activeInteractiveTab === "chat" && (
+              <div className="p-8 rounded-3xl text-center border max-w-3xl mx-auto" style={{ background: C.mist, borderColor: C.petal }}>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: C.accent }}>
+                  <Bot size={28} className="text-white" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-2" style={{ color: C.accent }}>
+                  AI Skincare Advisor
+                </h3>
+                <p className="text-sm max-w-md mx-auto mb-6" style={{ color: C.smoke }}>
+                  Have a conversation with our AI skincare expert. Ask about ingredients, routines, concerns, or get personalized recommendations.
+                </p>
+                <Button
+                  size="lg"
+                  className="text-sm font-semibold text-white px-8 rounded-xl"
+                  style={{ background: C.accent }}
+                  onClick={() => router.push("/chat")}
+                >
+                  Start Chat <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </div>
+            )}
             {activeInteractiveTab === "analyzer" && (
               <div className="p-8 rounded-3xl text-center border max-w-3xl mx-auto" style={{ background: C.mist, borderColor: C.petal }}>
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: C.primary }}>
@@ -567,15 +602,27 @@ export default function LandingPage() {
         <p className="text-base sm:text-lg mb-8 max-w-lg mx-auto" style={{ color: C.smoke }}>
           Take 3 minutes to complete your AI skin diagnostic and audit your current skincare products.
         </p>
-        <Button
-          size="lg"
-          className="text-sm font-semibold text-white px-10 h-12 rounded-xl shadow-md transition-transform hover:scale-105"
-          style={{ background: C.primary }}
-          onClick={() => setAnalysisModalOpen(true)}
-        >
-          Launch Free AI Skin Analysis
-          <ArrowRight size={16} className="ml-2" />
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button
+            size="lg"
+            className="text-sm font-semibold text-white px-10 h-12 rounded-xl shadow-md transition-transform hover:scale-105"
+            style={{ background: C.primary }}
+            onClick={() => setAnalysisModalOpen(true)}
+          >
+            Launch Free AI Skin Analysis
+            <ArrowRight size={16} className="ml-2" />
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="text-sm font-medium h-12 px-10 rounded-xl"
+            style={{ borderColor: C.accent, color: C.accent, background: "#fff" }}
+            onClick={() => router.push("/chat")}
+          >
+            <Bot size={16} className="mr-2" />
+            Chat with AI Advisor
+          </Button>
+        </div>
       </section>
 
       {/* ── Footer ── */}
