@@ -6,16 +6,25 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
 const C = {
-  primary: "#831843",
-  active: "#BE185D",
-  blush: "#EC4899",
-  petal: "#FBCFE8",
-  mist: "#FDF2F8",
-  ink: "#1C1917",
-  smoke: "#44403C",
-  accent: "#4C1D95",
-  successFg: "#14532D",
-  warnFg: "#78350F",
+  primary: "#4a6741",
+  primaryLight: "#6b8c62",
+  primaryDark: "#3a5233",
+  primaryGhost: "rgba(74, 103, 65, 0.08)",
+  primaryGlow: "rgba(74, 103, 65, 0.15)",
+  accent: "#c4956a",
+  accentLight: "#d4b08f",
+  accentGhost: "rgba(196, 149, 106, 0.10)",
+  bg: "#faf8f5",
+  bgWarm: "#f5f0eb",
+  bgCard: "#ffffff",
+  text: "#2d2a26",
+  textLight: "#6b6560",
+  textMuted: "#9c9590",
+  border: "#e8e4df",
+  borderLight: "#f0ece7",
+  successFg: "#3a5233",
+  successBg: "#e8f0e6",
+  warnFg: "#78350f",
   warnBg: "#FEF3C7",
 };
 
@@ -143,34 +152,36 @@ export function ConcernsMatrix() {
   const detail = CONCERNS_DATA[selectedConcern] || CONCERNS_DATA["Acne & breakouts"];
 
   return (
-    <div className="w-full rounded-3xl p-6 sm:p-8 border" style={{ background: "#fff", borderColor: C.petal }}>
+    <div className="w-full glass-card rounded-3xl p-6 sm:p-8 animate-fade-in-up">
       <div className="text-center max-w-xl mx-auto mb-8">
-        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-medium" style={{ background: C.petal, color: C.primary }}>
+        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-medium" style={{ background: C.primaryGhost, color: C.primary }}>
           Clinical Ingredient Explorer
         </Badge>
         <h3 className="text-2xl sm:text-3xl font-medium tracking-tight mb-2" style={{ color: C.primary }}>
           Select a skin concern to reveal the science
         </h3>
-        <p className="text-sm" style={{ color: C.smoke }}>
+        <p className="text-sm" style={{ color: C.textLight }}>
           Click any concern chip below to see dermatologically proven active ingredients, routine advice, and ingredients to avoid.
         </p>
       </div>
 
       {/* Interactive Concern Chips */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-        {CONCERN_KEYS.map((concern) => {
+        {CONCERN_KEYS.map((concern, idx) => {
           const isActive = selectedConcern === concern;
           return (
             <button
               key={concern}
               onClick={() => setSelectedConcern(concern)}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer ${
-                isActive ? "shadow-md scale-105" : "hover:bg-pink-100"
-              }`}
+              className="magnetic-btn px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer animate-fade-in-up"
               style={{
-                background: isActive ? C.primary : C.mist,
+                background: isActive ? `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})` : C.primaryGhost,
                 color: isActive ? "#fff" : C.primary,
-                border: `1px solid ${isActive ? C.primary : C.petal}`,
+                border: `1px solid ${isActive ? C.primary : C.border}`,
+                opacity: 0,
+                animationFillMode: "forwards",
+                animationDelay: `${0.1 + idx * 0.04}s`,
+                boxShadow: isActive ? `0 4px 12px ${C.primaryGlow}` : "none",
               }}
             >
               {concern}
@@ -180,36 +191,45 @@ export function ConcernsMatrix() {
       </div>
 
       {/* Selected Concern Deep-Dive Panel */}
-      <div className="grid lg:grid-cols-12 gap-6 p-6 rounded-2xl border" style={{ background: C.mist, borderColor: C.petal }}>
+      <div className="grid lg:grid-cols-12 gap-6 p-6 rounded-2xl border animate-fade-in-up stagger-5" style={{ background: C.primaryGhost, borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
         {/* Left Column: Hero Actives (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-pink-700">Targeted Protocol</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: C.primary }}>Targeted Protocol</span>
             <h4 className="text-xl font-medium mt-0.5" style={{ color: C.primary }}>
               {detail.title}
             </h4>
-            <p className="text-xs mt-1 leading-relaxed" style={{ color: C.smoke }}>
+            <p className="text-xs mt-1 leading-relaxed" style={{ color: C.textLight }}>
               {detail.description}
             </p>
           </div>
 
           <h5 className="text-xs font-medium uppercase tracking-wider pt-2" style={{ color: C.primary }}>
-            🔬 Science-Backed Key Actives:
+            Science-Backed Key Actives:
           </h5>
 
           <div className="space-y-3">
             {detail.heroActives.map((active, idx) => (
-              <div key={idx} className="p-3.5 rounded-xl border" style={{ background: "#fff", borderColor: C.petal }}>
+              <div
+                key={idx}
+                className="glass-card hover-lift p-3.5 rounded-xl border animate-fade-in-up"
+                style={{
+                  borderColor: C.border,
+                  opacity: 0,
+                  animationFillMode: "forwards",
+                  animationDelay: `${0.3 + idx * 0.08}s`,
+                }}
+              >
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="font-medium text-xs text-pink-950 flex items-center gap-1.5">
-                    <Sparkles size={13} className="text-pink-600" />
+                  <span className="font-medium text-xs flex items-center gap-1.5" style={{ color: C.text }}>
+                    <Sparkles size={13} style={{ color: C.primary }} />
                     {active.name}
                   </span>
-                  <Badge className="border-0 text-[10px] px-2 py-0.5 rounded-md" style={{ background: C.petal, color: C.primary }}>
+                  <Badge className="border-0 text-[10px] px-2 py-0.5 rounded-md" style={{ background: C.primaryGhost, color: C.primary }}>
                     {active.scienceRating}
                   </Badge>
                 </div>
-                <p className="text-xs" style={{ color: C.smoke }}>
+                <p className="text-xs" style={{ color: C.textLight }}>
                   {active.description}
                 </p>
               </div>
@@ -219,18 +239,18 @@ export function ConcernsMatrix() {
 
         {/* Right Column: Routine Strategy & Avoid List (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <Card className="border" style={{ borderColor: C.petal, background: "#fff" }}>
+          <Card className="glass-card border" style={{ borderColor: C.border }}>
             <CardContent className="p-4 space-y-3 text-xs">
               <span className="font-medium uppercase tracking-wider text-[11px] block" style={{ color: C.primary }}>
-                ☀️ AM Routine Strategy
+                AM Routine Strategy
               </span>
-              <p style={{ color: C.smoke }}>{detail.amTip}</p>
+              <p style={{ color: C.textLight }}>{detail.amTip}</p>
 
-              <div className="border-t pt-3" style={{ borderColor: C.petal }}>
+              <div className="border-t pt-3" style={{ borderColor: C.border }}>
                 <span className="font-medium uppercase tracking-wider text-[11px] block" style={{ color: C.primary }}>
-                  🌙 PM Routine Strategy
+                  PM Routine Strategy
                 </span>
-                <p style={{ color: C.smoke }}>{detail.pmTip}</p>
+                <p style={{ color: C.textLight }}>{detail.pmTip}</p>
               </div>
             </CardContent>
           </Card>

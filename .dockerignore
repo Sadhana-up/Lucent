@@ -6,8 +6,10 @@ node_modules
 
 # next.js
 .next
+.next/types
 out
 build
+.turbo
 
 # python
 server/.venv
@@ -28,11 +30,11 @@ server/.env.*
 # misc
 .git
 .gitignore
-.next
 .vercel
 *.tsbuildinfo
 next-env.d.ts
 uploads
+uploads/**
 
 # docker
 Dockerfile

@@ -28,9 +28,9 @@ export default async function SellerLayout({
   });
 
   return (
-    <div className="flex min-h-screen bg-stone-50/50">
+    <div className="flex min-h-screen" style={{ background: "#faf8f5" }}>
       <SellerSidebar storeName={sellerProfile?.storeName} />
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto">{children}</div>
       </main>
     </div>

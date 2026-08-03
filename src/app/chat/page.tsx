@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ChevronDown, Sparkles, ArrowDown, Copy, Check, Send, ImagePlus, X } from "lucide-react";
+import { ChevronDown, Sparkles, ArrowDown, Copy, Check, Send, ImagePlus, X, Leaf } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 const API_BASE = process.env.NEXT_PUBLIC_CHAT_API_BASE ?? "/api/chat";
@@ -30,6 +30,27 @@ type UploadedImage = {
   mimeType: string;
 };
 
+/* ─── Design tokens ─── */
+const C = {
+  primary: "#4a6741",
+  primaryLight: "#6b8c62",
+  primaryDark: "#3a5233",
+  primaryGhost: "rgba(74, 103, 65, 0.08)",
+  primaryGlow: "rgba(74, 103, 65, 0.15)",
+  accent: "#c4956a",
+  accentLight: "#d4b08f",
+  bg: "#faf8f5",
+  bgWarm: "#f5f0eb",
+  bgCard: "#ffffff",
+  text: "#2d2a26",
+  textLight: "#6b6560",
+  textMuted: "#9c9590",
+  border: "#e8e4df",
+  borderLight: "#f0ece7",
+  successBg: "#e8f0e6",
+  successFg: "#3a5233",
+};
+
 function parseSSE(buffer: string): { events: any[]; rest: string } {
   const parts = buffer.split("\n\n");
   const rest = parts.pop() ?? "";
@@ -48,17 +69,14 @@ function parseSSE(buffer: string): { events: any[]; rest: string } {
   return { events, rest };
 }
 
-/* ----------------------------------------------------------------------- */
-/* Bouncing dot loader                                                      */
-/* ----------------------------------------------------------------------- */
-
-export function MessageLoading({ className = "text-[#E07A5F]" }: { className?: string }) {
+/* ─── Bouncing dot loader ─── */
+export function MessageLoading({ className = "text-[#4a6741]", style }: { className?: string; style?: React.CSSProperties }) {
   const uid = useId();
   const idA = `spinnerA-${uid}`;
   const idB = `spinnerB-${uid}`;
 
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className} style={style}>
       <circle cx="4" cy="12" r="2" fill="currentColor">
         <animate id={idA} begin={`0;${idB}.end+0.25s`} attributeName="cy" calcMode="spline" dur="0.6s" values="12;6;12" keySplines=".33,.66,.66,1;.33,0,.66,.33" />
       </circle>
@@ -72,10 +90,7 @@ export function MessageLoading({ className = "text-[#E07A5F]" }: { className?: s
   );
 }
 
-/* ----------------------------------------------------------------------- */
-/* Markdown                                                                 */
-/* ----------------------------------------------------------------------- */
-
+/* ─── Markdown ─── */
 function CodeBlock({ code, language }: { code: string; language?: string }) {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
@@ -84,24 +99,24 @@ function CodeBlock({ code, language }: { code: string; language?: string }) {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <div className="overflow-hidden rounded-lg border border-white/[0.04] bg-[#0c0c0e] shadow-lg">
-      <div className="flex items-center justify-between border-b border-white/[0.03] bg-white/[0.01] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-[#8E8E93]">
+    <div className="overflow-hidden rounded-xl border shadow-sm" style={{ borderColor: C.border, background: C.bgWarm }}>
+      <div className="flex items-center justify-between border-b px-4 py-2 font-mono text-[10px] uppercase tracking-widest" style={{ borderColor: C.border, color: C.textMuted }}>
         <span>{language || "source"}</span>
-        <button onClick={handleCopy} className="flex items-center gap-1.5 transition-colors hover:text-[#E5C483]">
+        <button onClick={handleCopy} className="flex items-center gap-1.5 transition-colors duration-200 hover:opacity-70" style={{ color: C.textMuted }}>
           {copied ? (
             <>
-              <Check size={10} className="text-[#E5C483]" />
-              <span className="text-[#E5C483]">Copied</span>
+              <Check size={10} style={{ color: C.primary }} />
+              <span style={{ color: C.primary }}>Copied</span>
             </>
           ) : (
             <>
               <Copy size={10} />
-              <span>Copy Code</span>
+              <span>Copy</span>
             </>
           )}
         </button>
       </div>
-      <pre className="custom-scroll overflow-x-auto p-4 font-mono text-[11.5px] leading-relaxed text-[#FAF9F6]/80">
+      <pre className="custom-scroll overflow-x-auto p-4 font-mono text-[11.5px] leading-relaxed" style={{ color: C.text }}>
         <code>{code}</code>
       </pre>
     </div>
@@ -117,37 +132,37 @@ function Markdown({ content }: { content: string }) {
         components={{
           p: ({ children }) => <p className="leading-relaxed">{children}</p>,
           a: ({ children, href }) => (
-            <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#E5C483] underline decoration-[#E5C483]/30 underline-offset-2 transition-colors hover:decoration-[#E5C483]/70">
+            <a href={href} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
               {children}
             </a>
           ),
-          strong: ({ children }) => <strong className="font-semibold tracking-wide">{children}</strong>,
+          strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
           em: ({ children }) => <em className="italic">{children}</em>,
           del: ({ children }) => <del className="opacity-60">{children}</del>,
-          ul: ({ children }) => <ul className="ml-5 list-disc space-y-1.5 marker:text-[#E5C483]/60">{children}</ul>,
-          ol: ({ children }) => <ol className="ml-5 list-decimal space-y-1.5 marker:text-[#E5C483]/60">{children}</ol>,
+          ul: ({ children }) => <ul className="ml-5 list-disc space-y-1.5" style={{ color: C.primary }}>{children}</ul>,
+          ol: ({ children }) => <ol className="ml-5 list-decimal space-y-1.5" style={{ color: C.primary }}>{children}</ol>,
           li: ({ children }) => <li className="pl-1.5 text-[13.5px] font-light leading-relaxed">{children}</li>,
-          h1: ({ children }) => <h2 className="text-[17px] font-light uppercase tracking-wider">{children}</h2>,
+          h1: ({ children }) => <h2 className="text-[17px] font-medium tracking-wide">{children}</h2>,
           h2: ({ children }) => <h3 className="text-[15px] font-medium tracking-wide">{children}</h3>,
-          h3: ({ children }) => <h4 className="text-[13px] font-semibold uppercase tracking-wider">{children}</h4>,
-          h4: ({ children }) => <h4 className="text-[12.5px] font-semibold uppercase tracking-wider opacity-90">{children}</h4>,
-          blockquote: ({ children }) => <blockquote className="border-l border-[#E5C483]/30 pl-4 italic opacity-80">{children}</blockquote>,
-          hr: () => <hr className="border-white/[0.06]" />,
+          h3: ({ children }) => <h4 className="text-[13px] font-semibold tracking-wide">{children}</h4>,
+          h4: ({ children }) => <h4 className="text-[12.5px] font-semibold tracking-wide opacity-90">{children}</h4>,
+          blockquote: ({ children }) => <blockquote className="border-l-2 pl-4 italic opacity-80" style={{ borderColor: C.accent }}>{children}</blockquote>,
+          hr: () => <hr style={{ borderColor: C.border }} />,
           table: ({ children }) => (
-            <div className="overflow-x-auto rounded-md border border-white/[0.06]">
+            <div className="overflow-x-auto rounded-lg border" style={{ borderColor: C.border }}>
               <table className="w-full border-collapse text-[12.5px]">{children}</table>
             </div>
           ),
-          thead: ({ children }) => <thead className="bg-white/[0.02]">{children}</thead>,
-          th: ({ children }) => <th className="border-b border-white/[0.08] px-3 py-1.5 text-left font-medium text-[#E5C483]">{children}</th>,
-          td: ({ children }) => <td className="border-t border-white/[0.05] px-3 py-1.5">{children}</td>,
+          thead: ({ children }) => <thead style={{ background: C.bgWarm }}>{children}</thead>,
+          th: ({ children }) => <th className="border-b px-3 py-1.5 text-left font-medium" style={{ borderColor: C.border, color: C.primary }}>{children}</th>,
+          td: ({ children }) => <td className="border-t px-3 py-1.5" style={{ borderColor: C.borderLight }}>{children}</td>,
           pre: ({ children }) => <>{children}</>,
           code: ({ className, children }) => {
             const text = String(children).replace(/\n$/, "");
             const match = /language-(\w+)/.exec(className || "");
             const isBlock = Boolean(match) || text.includes("\n");
             if (!isBlock) {
-              return <code className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-[11px] text-[#E5C483]">{children}</code>;
+              return <code className="rounded px-1.5 py-0.5 font-mono text-[11px]" style={{ background: C.bgWarm, color: C.primary }}>{children}</code>;
             }
             return <CodeBlock code={text} language={match?.[1]} />;
           },
@@ -159,10 +174,7 @@ function Markdown({ content }: { content: string }) {
   );
 }
 
-/* ----------------------------------------------------------------------- */
-/* Thinking block                                                           */
-/* ----------------------------------------------------------------------- */
-
+/* ─── Thinking block ─── */
 function ThinkingBlock({ text, active, elapsedMs }: { text: string; active: boolean; elapsedMs: number }) {
   const [open, setOpen] = useState(active);
   const userSetRef = useRef(false);
@@ -200,33 +212,33 @@ function ThinkingBlock({ text, active, elapsedMs }: { text: string; active: bool
 
   return (
     <div className="relative pl-[26px]">
-      <div className="absolute bottom-0 left-[7px] top-[18px] w-[1px] bg-neutral-800/80" />
-      <button type="button" onClick={toggle} className="absolute left-0 top-[1px] flex h-[15px] w-[15px] items-center justify-center transition-transform active:scale-90">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3.5 w-3.5 text-[#E07A5F]">
+      <div className="absolute bottom-0 left-[7px] top-[18px] w-[1px]" style={{ background: C.border }} />
+      <button type="button" onClick={toggle} className="absolute left-0 top-[1px] flex h-[15px] w-[15px] items-center justify-center transition-transform duration-200 active:scale-90">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3.5 w-3.5" style={{ color: C.accent }}>
           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" className="opacity-30" />
           <circle cx="12" cy="12" r="4.5" fill="currentColor" />
         </svg>
       </button>
       <div className="flex flex-col">
         <div className="flex items-center gap-1.5">
-          <button onClick={toggle} className="flex items-center gap-1.5 text-left font-mono text-[11px] uppercase tracking-[0.2em] text-[#E07A5F]/90 transition-colors hover:text-[#E07A5F]">
-            <span>{active ? "Contemplating" : `Contemplated · ${seconds}s`}</span>
+          <button onClick={toggle} className="flex items-center gap-1.5 text-left font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-200 hover:opacity-70" style={{ color: C.accent }}>
+            <span>{active ? "Thinking" : `Thought for ${seconds}s`}</span>
             <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ type: "spring", stiffness: 350, damping: 25 }} className="inline-flex">
               <ChevronDown size={11} />
             </motion.span>
           </button>
           {active && !open && (
             <div className="ml-1 flex h-3.5 items-center">
-              <MessageLoading className="h-4 w-5 text-[#E07A5F]" />
+              <MessageLoading className="h-4 w-5" style={{ color: C.accent }} />
             </div>
           )}
         </div>
         <AnimatePresence initial={false}>
           {open && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
-              <div ref={scrollBoxRef} className="custom-scroll max-h-64 overflow-y-auto overscroll-contain pb-4 pr-4 pt-2.5 font-sans text-[13px] font-light leading-relaxed text-[#8E8E93]/85">
+              <div ref={scrollBoxRef} className="custom-scroll max-h-64 overflow-y-auto overscroll-contain pb-4 pr-4 pt-2.5 font-sans text-[13px] font-light leading-relaxed" style={{ color: C.textMuted }}>
                 <Markdown content={text} />
-                {active && <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-[#E5C483]" />}
+                {active && <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse" style={{ background: C.accent }} />}
               </div>
             </motion.div>
           )}
@@ -236,10 +248,7 @@ function ThinkingBlock({ text, active, elapsedMs }: { text: string; active: bool
   );
 }
 
-/* ----------------------------------------------------------------------- */
-/* Messages                                                                  */
-/* ----------------------------------------------------------------------- */
-
+/* ─── Messages ─── */
 function AssistantMessage({
   content,
   reasoning,
@@ -257,32 +266,32 @@ function AssistantMessage({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 350, damping: 30 }}
       className="w-full space-y-4 pr-10"
     >
       <ThinkingBlock text={reasoning} active={reasoningActive} elapsedMs={elapsedMs} />
 
       <div className="relative pl-[26px]">
-        {streaming && <div className="absolute bottom-0 left-[7px] top-[18px] w-[1px] bg-neutral-800/80" />}
+        {streaming && <div className="absolute bottom-0 left-[7px] top-[18px] w-[1px]" style={{ background: C.border }} />}
         <div className="absolute left-0 top-[3px] flex h-[15px] w-[15px] items-center justify-center">
-          <div className="h-1.5 w-1.5 rounded-full bg-[#E5C483] shadow-[0_0_8px_rgba(229,196,131,0.5)]" />
+          <div className="h-1.5 w-1.5 rounded-full" style={{ background: C.primary }} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#E5C483]">Assistant</span>
-          <div className="space-y-3 pr-4 pt-1 text-[14px] leading-relaxed text-[#FAF9F6]/95">
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em]" style={{ color: C.primary }}>Assistant</span>
+          <div className="space-y-3 pr-4 pt-1 text-[14px] leading-relaxed" style={{ color: C.text }}>
             {showWeaving ? (
-              <div className="flex items-center gap-2 font-mono text-xs italic text-neutral-500">
+              <div className="flex items-center gap-2 font-mono text-xs italic" style={{ color: C.textMuted }}>
                 <motion.span animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                  weaving response...
+                  Thinking...
                 </motion.span>
               </div>
             ) : content ? (
               <Markdown content={content} />
             ) : null}
             {streaming && content && (
-              <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ duration: 0.8, repeat: Infinity }} className="ml-1 inline-block h-3.5 w-1.5 bg-[#E5C483]" />
+              <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ duration: 0.8, repeat: Infinity }} className="ml-1 inline-block h-3.5 w-1.5" style={{ background: C.primary }} />
             )}
           </div>
         </div>
@@ -297,13 +306,13 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 350, damping: 30 }}
         className="flex w-full justify-end pl-10"
       >
         <div className="flex flex-col items-end gap-1.5">
-          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#E5C483]/60">You</span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>You</span>
           {images && images.length > 0 && (
             <div className="flex gap-2 mb-2">
               {images.map((img, idx) => (
@@ -311,13 +320,16 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
                   key={idx}
                   src={img.preview}
                   alt={`Upload ${idx + 1}`}
-                  className="h-20 w-20 rounded-md object-cover border border-white/[0.08] cursor-pointer transition-transform hover:scale-105"
+                  className="h-20 w-20 rounded-xl object-cover cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  style={{ border: `1px solid ${C.border}` }}
                   onClick={() => setExpandedImage(img.preview)}
                 />
               ))}
             </div>
           )}
-          <div className="max-w-full whitespace-pre-wrap text-right text-[13.5px] font-light leading-relaxed text-[#FAF9F6]">{content}</div>
+          <div className="max-w-full whitespace-pre-wrap text-right text-[13.5px] font-light leading-relaxed px-4 py-2.5 rounded-2xl" style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)", color: "#fff" }}>
+            {content}
+          </div>
         </div>
       </motion.div>
 
@@ -328,7 +340,8 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
+            style={{ background: "rgba(45, 42, 38, 0.8)" }}
             onClick={() => setExpandedImage(null)}
           >
             <motion.div
@@ -342,11 +355,12 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
               <img
                 src={expandedImage}
                 alt="Expanded upload"
-                className="max-w-full max-h-[85vh] rounded-lg object-contain shadow-2xl"
+                className="max-w-full max-h-[85vh] rounded-xl object-contain shadow-2xl"
               />
               <button
                 onClick={() => setExpandedImage(null)}
-                className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#0c0c0e] border border-white/[0.1] text-white shadow-xl transition-colors hover:text-[#E5C483]"
+                className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full shadow-xl transition-colors duration-200 glass"
+                style={{ color: C.text }}
               >
                 <X size={16} />
               </button>
@@ -360,14 +374,11 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
 
 const SUGGESTIONS = [
   "What can you help me with?",
-  "Give me a quick summary of this project",
-  "Walk me through how this works",
+  "Give me a quick skincare routine",
+  "Tell me about ingredient conflicts",
 ];
 
-/* ----------------------------------------------------------------------- */
-/* Page                                                                     */
-/* ----------------------------------------------------------------------- */
-
+/* ─── Page ─── */
 export default function ChatPage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
@@ -383,9 +394,6 @@ export default function ChatPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pinnedRef = useRef(true);
-  // Backend session id — set from the first "session" SSE event and reused
-  // on every following turn so the ADK runner keeps the conversation alive
-  // server-side instead of us resending full history each request.
   const sessionIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -433,21 +441,15 @@ export default function ChatPage() {
     const remaining = 3 - uploadedImages.length;
     const filesToProcess = Array.from(files).slice(0, remaining);
 
-    console.log("[chat] Processing", filesToProcess.length, "file(s)");
-
     const newImages: UploadedImage[] = [];
 
     for (const file of filesToProcess) {
-      if (!file.type.startsWith("image/")) {
-        console.log("[chat] Skipping non-image file:", file.name);
-        continue;
-      }
+      if (!file.type.startsWith("image/")) continue;
 
       const base64 = await new Promise<string>((resolve) => {
         const reader = new FileReader();
         reader.onload = () => {
           const result = reader.result as string;
-          // Remove the data URL prefix (e.g., "data:image/png;base64,")
           const base64Data = result.split(",")[1];
           resolve(base64Data);
         };
@@ -460,16 +462,10 @@ export default function ChatPage() {
         base64,
         mimeType: file.type,
       });
-
-      console.log("[chat] Processed image:", file.name, file.type);
     }
 
     setUploadedImages((prev) => [...prev, ...newImages]);
-
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }, [uploadedImages.length]);
 
   const removeImage = useCallback((index: number) => {
@@ -485,7 +481,6 @@ export default function ChatPage() {
     const text = input.trim();
     if ((!text && uploadedImages.length === 0) || busy) return;
 
-    // Re-check session before sending
     if (!session) {
       router.replace("/sign-in?callbackUrl=/chat");
       return;
@@ -497,8 +492,6 @@ export default function ChatPage() {
           data: img.base64,
         }))
       : undefined;
-
-    console.log("[chat] Sending message:", text.slice(0, 80), "images:", imagesToSend?.length ?? 0);
 
     const blank = {
       reasoning: "",
@@ -527,7 +520,6 @@ export default function ChatPage() {
     const idx = next.length - 1;
 
     try {
-      console.log("[chat] Fetching:", API_BASE);
       const res = await fetch(API_BASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -537,26 +529,21 @@ export default function ChatPage() {
           images: imagesToSend,
         }),
       });
-      console.log("[chat] Response status:", res.status);
       if (!res.body) throw new Error("No response body");
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
-      let eventCount = 0;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value, { stream: true });
-        console.log("[chat] Raw chunk:", chunk.slice(0, 200));
         buffer += chunk;
         const { events, rest } = parseSSE(buffer);
         buffer = rest;
 
         for (const ev of events) {
-          eventCount++;
-          console.log("[chat] Event:", ev);
           if (ev.type === "session") {
             sessionIdRef.current = ev.session_id;
           } else if (ev.type === "reasoning") {
@@ -589,9 +576,7 @@ export default function ChatPage() {
           }
         }
       }
-      console.log("[chat] Stream ended, total events:", eventCount);
     } catch (err) {
-      console.error("[chat] Error:", err);
       setMessages((prev) => prev.map((m, i) => (i === idx ? { ...m, content: m.content || `⚠ ${String(err)}` } : m)));
     } finally {
       setMessages((prev) =>
@@ -630,202 +615,217 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-[#050505]">
+    <div className="flex h-screen w-full flex-col" style={{ background: C.bg }}>
       <style>{`
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.04); border-radius: 9999px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(229,196,131,0.15); }
-        ::selection { background: rgba(229,196,131,0.15); color: #FAF9F6; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: ${C.border}; border-radius: 9999px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: ${C.textMuted}; }
       `}</style>
 
       {isPending && (
         <div className="flex h-full items-center justify-center">
-          <div className="flex flex-col items-center gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E5C483]/30 border-t-[#E5C483]" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8E8E93]/70">Verifying session...</span>
+          <div className="flex flex-col items-center gap-3 animate-fade-in">
+            <div className="h-8 w-8 animate-spin rounded-full border-2" style={{ borderColor: C.border, borderTopColor: C.primary }} />
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>Verifying session...</span>
           </div>
         </div>
       )}
 
       {!isPending && session && (
         <>
-          <div className="flex items-center justify-between border-b border-white/[0.04] bg-[#050505]/95 px-4 py-3 backdrop-blur-md sm:px-6 sm:py-[18px]">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 backdrop-blur-md sm:px-6 sm:py-[18px]" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 248, 245, 0.92)" }}>
             <div className="flex items-center gap-3">
-              <span className="font-serif text-[11px] font-bold uppercase tracking-[0.4em] text-[#E5C483]">Chat</span>
-              <span className="h-[3px] w-[3px] rounded-full bg-[#E5C483]/60" />
-              <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#8E8E93]/70">AGENTIC ASSISTANT</span>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}>
+                <Leaf size={14} className="text-white" />
+              </div>
+              <div>
+                <span className="text-sm font-medium" style={{ color: C.text }}>AI Skincare Advisor</span>
+                <span className="text-[10px] block" style={{ color: C.textMuted }}>Ask me anything about skincare</span>
+              </div>
             </div>
           </div>
 
-      <div className="relative flex min-h-0 flex-1 flex-col">
-        <div ref={scrollRef} className="custom-scroll flex-1 overflow-y-auto overscroll-contain">
-          <div ref={contentRef} className="mx-auto max-w-3xl space-y-8 px-4 py-6 sm:px-6">
-            {messages.length === 0 && (
-              <div className="flex flex-col items-center justify-center px-4 py-24 text-center">
-                <motion.div
-                  initial={{ scale: 0.95, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-[#E5C483]/15 bg-[#0a0a0c] text-[#E5C483] shadow-lg shadow-[#E5C483]/5"
-                >
-                  <Sparkles size={18} className="stroke-[1.5]" />
-                </motion.div>
-                <h3 className="mt-2 font-serif text-sm font-bold uppercase tracking-[0.2em] text-[#FAF9F6]">Start a conversation</h3>
-                <p className="mt-2 max-w-[280px] px-2 text-[12.5px] font-light leading-relaxed text-[#8E8E93]/80">
-                  Ask a question or pick a suggestion below to get going.
-                </p>
-
-                <div className="mt-12 flex w-full max-w-[360px] flex-col gap-3.5">
-                  <span className="mb-1 border-b border-white/[0.04] pb-2 text-left font-mono text-[9px] uppercase tracking-[0.3em] text-[#E5C483]/50">
-                    Suggested inquiries
-                  </span>
-                  {SUGGESTIONS.map((s, idx) => (
-                    <motion.button
-                      key={s}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.08 }}
-                      whileHover={{ x: 2 }}
-                      onClick={() => {
-                        setInput(s);
-                        textareaRef.current?.focus();
-                      }}
-                      className="group flex items-center justify-between border-b border-white/[0.03] py-2.5 text-left text-[13px] font-light text-neutral-400 transition-all duration-300 hover:border-[#E5C483]/30 hover:text-[#E5C483]"
+          <div className="relative flex min-h-0 flex-1 flex-col">
+            <div ref={scrollRef} className="custom-scroll flex-1 overflow-y-auto overscroll-contain">
+              <div ref={contentRef} className="mx-auto max-w-3xl space-y-8 px-4 py-6 sm:px-6">
+                {messages.length === 0 && (
+                  <div className="flex flex-col items-center justify-center px-4 py-24 text-center">
+                    <motion.div
+                      initial={{ scale: 0.95, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
+                      style={{ background: C.primaryGhost, border: `1px solid rgba(74, 103, 65, 0.1)` }}
                     >
-                      <span className="line-clamp-1">{s}</span>
-                      <span className="translate-x-[-4px] text-xs text-[#E5C483] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">↗</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            )}
+                      <Sparkles size={24} style={{ color: C.primary }} />
+                    </motion.div>
+                    <h3 className="mt-2 text-base font-medium" style={{ color: C.text }}>Start a conversation</h3>
+                    <p className="mt-2 max-w-[280px] px-2 text-[13px] leading-relaxed" style={{ color: C.textMuted }}>
+                      Ask a question or pick a suggestion below to get started.
+                    </p>
 
-            <AnimatePresence initial={false}>
-              {messages.map((m, i) =>
-                m.role === "user" ? (
-                  <UserMessage key={i} content={m.content} images={m.images} />
-                ) : (
-                  <div key={i} className="group/msg relative">
-                    <AssistantMessage
-                      content={m.content}
-                      reasoning={m.reasoning}
-                      streaming={m.streaming}
-                      reasoningActive={m.reasoningActive}
-                      elapsedMs={m.thinkingStartedAt ? (m.thinkingEndedAt ?? Date.now()) - m.thinkingStartedAt : 0}
-                    />
-                    {!m.streaming && m.content && (
-                      <button
-                        onClick={() => copyMessage(i, m.content)}
-                        className="absolute right-0 top-0 rounded p-1.5 text-[#8E8E93]/60 opacity-0 transition-opacity hover:text-[#E5C483] group-hover/msg:opacity-100"
-                        title="Copy reply"
-                      >
-                        {copiedIdx === i ? <Check size={12} className="text-[#E5C483]" /> : <Copy size={12} />}
-                      </button>
-                    )}
+                    <div className="mt-10 flex w-full max-w-[360px] flex-col gap-3">
+                      <span className="mb-1 pb-2 text-left text-[10px] uppercase tracking-widest font-medium" style={{ color: C.textMuted }}>
+                        Suggested questions
+                      </span>
+                      {SUGGESTIONS.map((s, idx) => (
+                        <motion.button
+                          key={s}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.08 }}
+                          whileHover={{ x: 2 }}
+                          onClick={() => {
+                            setInput(s);
+                            textareaRef.current?.focus();
+                          }}
+                          className="group flex items-center justify-between py-2.5 text-left text-[13px] font-light transition-all duration-200"
+                          style={{ color: C.textLight }}
+                        >
+                          <span className="line-clamp-1">{s}</span>
+                          <span className="translate-x-[-4px] text-xs opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" style={{ color: C.primary }}>↗</span>
+                        </motion.button>
+                      ))}
+                    </div>
                   </div>
-                )
+                )}
+
+                <AnimatePresence initial={false}>
+                  {messages.map((m, i) =>
+                    m.role === "user" ? (
+                      <UserMessage key={i} content={m.content} images={m.images} />
+                    ) : (
+                      <div key={i} className="group/msg relative">
+                        <AssistantMessage
+                          content={m.content}
+                          reasoning={m.reasoning}
+                          streaming={m.streaming}
+                          reasoningActive={m.reasoningActive}
+                          elapsedMs={m.thinkingStartedAt ? (m.thinkingEndedAt ?? Date.now()) - m.thinkingStartedAt : 0}
+                        />
+                        {!m.streaming && m.content && (
+                          <button
+                            onClick={() => copyMessage(i, m.content)}
+                            className="absolute right-0 top-0 rounded p-1.5 opacity-0 transition-opacity duration-200 hover:opacity-100 group-hover/msg:opacity-100"
+                            style={{ color: C.textMuted }}
+                            title="Copy reply"
+                          >
+                            {copiedIdx === i ? <Check size={12} style={{ color: C.primary }} /> : <Copy size={12} />}
+                          </button>
+                        )}
+                      </div>
+                    )
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            <AnimatePresence>
+              {showScrollBottom && (
+                <motion.button
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                  onClick={jumpToBottom}
+                  className="absolute bottom-5 right-4 z-30 flex h-8 w-8 items-center justify-center rounded-full shadow-lg glass backdrop-blur-md transition-all duration-300 sm:right-6"
+                  style={{ color: C.text }}
+                >
+                  <ArrowDown size={13} />
+                </motion.button>
               )}
             </AnimatePresence>
           </div>
-        </div>
 
-        <AnimatePresence>
-          {showScrollBottom && (
-            <motion.button
-              initial={{ opacity: 0, y: 10, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.9 }}
-              onClick={jumpToBottom}
-              className="absolute bottom-5 right-4 z-30 flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.08] bg-[#0c0c0e]/90 text-white shadow-xl backdrop-blur-md transition-all hover:border-[#E5C483]/30 hover:text-[#E5C483] sm:right-6"
-            >
-              <ArrowDown size={13} />
-            </motion.button>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Image preview area */}
-      <AnimatePresence>
-        {uploadedImages.length > 0 && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="border-t border-white/[0.04] bg-[#0a0a0c] px-4 py-3 sm:px-6"
-          >
-            <div className="mx-auto flex max-w-3xl gap-3">
-              {uploadedImages.map((img, idx) => (
-                <div key={idx} className="relative group">
-                  <img
-                    src={img.preview}
-                    alt={`Upload ${idx + 1}`}
-                    className="h-20 w-20 rounded-md object-cover border border-white/[0.08]"
-                  />
-                  <button
-                    onClick={() => removeImage(idx)}
-                    className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#050505] border border-white/[0.1] text-[#8E8E93] opacity-0 group-hover:opacity-100 transition-opacity hover:text-[#E5C483]"
-                  >
-                    <X size={10} />
-                  </button>
+          {/* Image preview area */}
+          <AnimatePresence>
+            {uploadedImages.length > 0 && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="px-4 py-3 sm:px-6"
+                style={{ borderTop: `1px solid ${C.border}`, background: C.bgWarm }}
+              >
+                <div className="mx-auto flex max-w-3xl gap-3">
+                  {uploadedImages.map((img, idx) => (
+                    <div key={idx} className="relative group">
+                      <img
+                        src={img.preview}
+                        alt={`Upload ${idx + 1}`}
+                        className="h-20 w-20 rounded-xl object-cover"
+                        style={{ border: `1px solid ${C.border}` }}
+                      />
+                      <button
+                        onClick={() => removeImage(idx)}
+                        className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 glass"
+                        style={{ color: C.textMuted }}
+                      >
+                        <X size={10} />
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Input area */}
+          <div className="px-4 py-4 sm:px-6 sm:py-[22px]" style={{ borderTop: `1px solid ${C.border}`, background: "rgba(255, 255, 255, 0.9)" }}>
+            <div className="mx-auto flex max-w-3xl items-end gap-3 pb-2.5 transition-all" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
+              {/* Image upload button */}
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={busy || uploadedImages.length >= 3}
+                className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-20 hover:bg-[rgba(74,103,65,0.06)]"
+                style={{ border: `1px solid ${C.border}`, color: C.textMuted }}
+                title="Upload image (max 3)"
+              >
+                <ImagePlus size={14} />
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={onKeyDown}
+                rows={1}
+                placeholder={busy ? "Thinking..." : uploadedImages.length > 0 ? "Add a message about the images..." : "Type your message..."}
+                disabled={busy}
+                className="max-h-[160px] min-h-[34px] flex-1 resize-none bg-transparent py-1.5 text-[13.5px] font-light leading-relaxed focus:outline-none disabled:opacity-50"
+                style={{ color: C.text }}
+              />
+              <button
+                onClick={send}
+                disabled={busy || (!input.trim() && uploadedImages.length === 0)}
+                className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full shadow-sm transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-20 magnetic-btn"
+                style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)", color: "#fff" }}
+                title="Send"
+              >
+                <motion.span
+                  animate={busy ? { rotate: 360 } : { rotate: 0 }}
+                  transition={busy ? { duration: 1.2, repeat: Infinity, ease: "linear" } : { duration: 0.25 }}
+                  className="flex items-center justify-center"
+                >
+                  {busy ? <span className="block h-3.5 w-3.5 rounded-full border-2 border-white/40 border-t-white" /> : <Send size={11} className="ml-0.5" />}
+                </motion.span>
+              </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="border-t border-white/[0.04] bg-[#050505] px-4 py-4 sm:px-6 sm:py-[22px]">
-        <div className="mx-auto flex max-w-3xl items-end gap-3 border-b border-white/[0.06] bg-transparent pb-2.5 transition-all focus-within:border-[#E5C483]/50 focus-within:shadow-[0_4px_20px_-10px_rgba(229,196,131,0.08)]">
-          {/* Image upload button */}
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={busy || uploadedImages.length >= 3}
-            className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full border border-white/[0.08] text-[#8E8E93] transition-all duration-300 hover:border-[#E5C483]/30 hover:text-[#E5C483] disabled:cursor-not-allowed disabled:opacity-20"
-            title="Upload image (max 3)"
-          >
-            <ImagePlus size={14} />
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-
-          <textarea
-            ref={textareaRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={onKeyDown}
-            rows={1}
-            placeholder={busy ? "Contemplating stream active..." : uploadedImages.length > 0 ? "Add a message about the images..." : "Type your message..."}
-            disabled={busy}
-            className="max-h-[160px] min-h-[34px] flex-1 resize-none bg-transparent py-1.5 text-[13.5px] font-light leading-relaxed text-[#FAF9F6] placeholder:text-neutral-500/80 focus:outline-none disabled:opacity-50"
-          />
-          <button
-            onClick={send}
-            disabled={busy || (!input.trim() && uploadedImages.length === 0)}
-            className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-gradient-to-tr from-[#E5C483] to-[#C29F5D] text-[#050505] shadow-md shadow-[#E5C483]/10 transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-20"
-            title="Send"
-          >
-            <motion.span
-              animate={busy ? { rotate: 360 } : { rotate: 0 }}
-              transition={busy ? { duration: 1.2, repeat: Infinity, ease: "linear" } : { duration: 0.25 }}
-              className="flex items-center justify-center"
-            >
-              {busy ? <span className="block h-3.5 w-3.5 rounded-full border-2 border-[#050505]/40 border-t-[#050505]" /> : <Send size={11} className="ml-0.5" />}
-            </motion.span>
-          </button>
-        </div>
-        <div className="mx-auto mt-3.5 flex max-w-3xl justify-between px-1">
-          <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#8E8E93]/40">
-            {uploadedImages.length > 0 ? `${uploadedImages.length}/3 images attached` : "SHIFT+ENTER FOR NEW LINE"}
-          </span>
-          <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#E5C483]/70">{busy ? "Contemplating" : "system idle"}</span>
-        </div>
-      </div>
+            <div className="mx-auto mt-3 flex max-w-3xl justify-between px-1">
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: C.textMuted }}>
+                {uploadedImages.length > 0 ? `${uploadedImages.length}/3 images attached` : "Shift+Enter for new line"}
+              </span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: C.primary }}>{busy ? "Thinking" : "Ready"}</span>
+            </div>
+          </div>
         </>
       )}
     </div>

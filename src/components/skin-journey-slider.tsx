@@ -5,15 +5,26 @@ import { Sparkles, ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, RefreshCw 
 import { Badge } from "@/components/ui/badge";
 
 const C = {
-  primary: "#831843",
-  active: "#BE185D",
-  blush: "#EC4899",
-  petal: "#FBCFE8",
-  mist: "#FDF2F8",
-  ink: "#1C1917",
-  smoke: "#44403C",
-  accent: "#4C1D95",
-  successFg: "#14532D",
+  primary: "#4a6741",
+  primaryLight: "#6b8c62",
+  primaryDark: "#3a5233",
+  primaryGhost: "rgba(74, 103, 65, 0.08)",
+  primaryGlow: "rgba(74, 103, 65, 0.15)",
+  accent: "#c4956a",
+  accentLight: "#d4b08f",
+  accentGhost: "rgba(196, 149, 106, 0.10)",
+  bg: "#faf8f5",
+  bgWarm: "#f5f0eb",
+  bgCard: "#ffffff",
+  text: "#2d2a26",
+  textLight: "#6b6560",
+  textMuted: "#9c9590",
+  border: "#e8e4df",
+  borderLight: "#f0ece7",
+  successFg: "#3a5233",
+  successBg: "#e8f0e6",
+  warnFg: "#78350f",
+  warnBg: "#FEF3C7",
 };
 
 interface WeekMilestone {
@@ -87,34 +98,36 @@ export function SkinJourneySlider() {
   const milestone = MILESTONES.find(m => m.week === selectedWeek) || MILESTONES[2];
 
   return (
-    <div className="w-full rounded-3xl p-6 sm:p-8 border" style={{ background: "#fff", borderColor: C.petal }}>
+    <div className="w-full glass-card rounded-3xl p-6 sm:p-8 animate-fade-in-up">
       <div className="text-center max-w-xl mx-auto mb-8">
-        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-medium" style={{ background: C.petal, color: C.primary }}>
+        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-medium" style={{ background: C.primaryGhost, color: C.primary }}>
           Clinical Progress Simulator
         </Badge>
         <h3 className="text-2xl sm:text-3xl font-medium tracking-tight mb-2" style={{ color: C.primary }}>
           Interactive 4-Week Skin Transformation
         </h3>
-        <p className="text-sm" style={{ color: C.smoke }}>
+        <p className="text-sm" style={{ color: C.textLight }}>
           Select a week milestone to simulate the clinical skin regeneration timeline guided by Lucent routine protocols.
         </p>
       </div>
 
       {/* Week Milestone Selector Tabs */}
       <div className="flex justify-center gap-2 sm:gap-3 mb-8">
-        {MILESTONES.map((m) => {
+        {MILESTONES.map((m, idx) => {
           const isActive = selectedWeek === m.week;
           return (
             <button
               key={m.week}
               onClick={() => setSelectedWeek(m.week)}
-              className={`px-4 sm:px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
-                isActive ? "shadow-md scale-105" : "hover:bg-pink-100"
-              }`}
+              className="magnetic-btn px-4 sm:px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer animate-fade-in-up"
               style={{
-                background: isActive ? C.primary : C.mist,
+                background: isActive ? `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})` : C.primaryGhost,
                 color: isActive ? "#fff" : C.primary,
-                border: `1px solid ${isActive ? C.primary : C.petal}`,
+                border: `1px solid ${isActive ? C.primary : C.border}`,
+                opacity: 0,
+                animationFillMode: "forwards",
+                animationDelay: `${0.1 + idx * 0.06}s`,
+                boxShadow: isActive ? `0 4px 16px ${C.primaryGlow}` : "none",
               }}
             >
               {m.label}
@@ -126,8 +139,8 @@ export function SkinJourneySlider() {
       {/* Interactive Visualizer & Metrics */}
       <div className="grid lg:grid-cols-12 gap-8 items-center">
         {/* Left: Interactive Split Image Comparison (6 cols) */}
-        <div className="lg:col-span-6">
-          <div className="relative w-full h-80 rounded-3xl overflow-hidden shadow-md border" style={{ borderColor: C.petal }}>
+        <div className="lg:col-span-6 animate-fade-in-up stagger-3" style={{ opacity: 0, animationFillMode: "forwards" }}>
+          <div className="relative w-full h-80 rounded-3xl overflow-hidden shadow-md border" style={{ borderColor: C.border }}>
             {/* After Image (Full width background) */}
             <img
               src={milestone.afterImg}
@@ -137,20 +150,21 @@ export function SkinJourneySlider() {
 
             {/* Before Image (Clipped overlay) */}
             <div
-              className="absolute inset-y-0 left-0 overflow-hidden border-r-2"
+              className="absolute inset-y-0 left-0 overflow-hidden border-r-2 transition-all duration-100"
               style={{ width: `${sliderPos}%`, borderColor: "#fff" }}
             >
               <img
                 src={milestone.beforeImg}
                 alt="Before transformation"
                 className="absolute inset-0 w-full h-full object-cover filter brightness-90 contrast-110 saturate-90"
+                style={{ width: `${100 / (sliderPos / 100)}%`, maxWidth: "none" }}
               />
               <span className="absolute top-3 left-3 bg-black/60 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-md backdrop-blur-sm">
                 Day 0 Baseline
               </span>
             </div>
 
-            <span className="absolute top-3 right-3 bg-pink-900/80 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-md backdrop-blur-sm">
+            <span className="absolute top-3 right-3 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-md backdrop-blur-sm" style={{ background: `rgba(74, 103, 65, 0.85)` }}>
               {milestone.label} Result
             </span>
 
@@ -166,23 +180,26 @@ export function SkinJourneySlider() {
 
             {/* Divider Line visual handle */}
             <div
-              className="absolute top-0 bottom-0 w-1 bg-white shadow-lg pointer-events-none z-10 flex items-center justify-center"
+              className="absolute top-0 bottom-0 w-1 bg-white shadow-lg pointer-events-none z-10 flex items-center justify-center transition-all duration-100"
               style={{ left: `${sliderPos}%` }}
             >
-              <div className="w-7 h-7 rounded-full bg-white text-pink-900 shadow-md flex items-center justify-center text-[10px] font-bold">
+              <div
+                className="w-7 h-7 rounded-full shadow-md flex items-center justify-center text-[10px] font-bold"
+                style={{ background: `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})`, color: "#fff" }}
+              >
                 ↔
               </div>
             </div>
           </div>
-          <p className="text-center text-xs mt-2" style={{ color: C.smoke }}>
-            👈 Drag slider back and forth to compare baseline vs {milestone.label} 👉
+          <p className="text-center text-xs mt-2" style={{ color: C.textMuted }}>
+            Drag slider back and forth to compare baseline vs {milestone.label}
           </p>
         </div>
 
         {/* Right: Quantitative Metrics & Changes (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
-          <div>
-            <Badge className="border-0 text-xs px-2.5 py-0.5 rounded-full mb-1" style={{ background: C.petal, color: C.primary }}>
+          <div className="animate-fade-in-up stagger-4" style={{ opacity: 0, animationFillMode: "forwards" }}>
+            <Badge className="border-0 text-xs px-2.5 py-0.5 rounded-full mb-1" style={{ background: C.primaryGhost, color: C.primary }}>
               Milestone Phase {milestone.week}
             </Badge>
             <h4 className="text-xl font-medium" style={{ color: C.primary }}>
@@ -192,29 +209,36 @@ export function SkinJourneySlider() {
 
           {/* Metric Badges */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="p-3 rounded-2xl border text-center" style={{ background: C.mist, borderColor: C.petal }}>
-              <span className="text-[10px] uppercase font-semibold text-pink-700 block mb-0.5">Hydration</span>
-              <span className="text-xl font-bold text-blue-600">{milestone.hydrationGain}</span>
-            </div>
-            <div className="p-3 rounded-2xl border text-center" style={{ background: C.mist, borderColor: C.petal }}>
-              <span className="text-[10px] uppercase font-semibold text-pink-700 block mb-0.5">Redness</span>
-              <span className="text-xl font-bold text-emerald-600">{milestone.rednessDrop}</span>
-            </div>
-            <div className="p-3 rounded-2xl border text-center" style={{ background: C.mist, borderColor: C.petal }}>
-              <span className="text-[10px] uppercase font-semibold text-pink-700 block mb-0.5">Texture</span>
-              <span className="text-xl font-bold text-purple-600">{milestone.textureImprovement}</span>
-            </div>
+            {[
+              { label: "Hydration", value: milestone.hydrationGain, color: C.primary },
+              { label: "Redness", value: milestone.rednessDrop, color: C.primaryDark },
+              { label: "Texture", value: milestone.textureImprovement, color: C.accent },
+            ].map((metric, idx) => (
+              <div
+                key={metric.label}
+                className="glass-card p-3 rounded-2xl border text-center hover-lift animate-fade-in-up"
+                style={{
+                  borderColor: C.border,
+                  opacity: 0,
+                  animationFillMode: "forwards",
+                  animationDelay: `${0.45 + idx * 0.06}s`,
+                }}
+              >
+                <span className="text-[10px] uppercase font-semibold block mb-0.5" style={{ color: C.textMuted }}>{metric.label}</span>
+                <span className="text-xl font-bold" style={{ color: metric.color }}>{metric.value}</span>
+              </div>
+            ))}
           </div>
 
           {/* Observed Clinical Changes */}
-          <div className="p-4 rounded-2xl border" style={{ background: "#fff", borderColor: C.petal }}>
+          <div className="glass-card p-4 rounded-2xl border animate-fade-in-up stagger-6" style={{ borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
             <h5 className="text-xs font-medium uppercase tracking-wider mb-2.5" style={{ color: C.primary }}>
               Key Observed Improvements:
             </h5>
             <ul className="space-y-2">
               {milestone.keyChanges.map((change, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.smoke }}>
-                  <CheckCircle2 size={14} className="text-pink-600 shrink-0 mt-0.5" />
+                <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.textLight }}>
+                  <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: C.primary }} />
                   <span>{change}</span>
                 </li>
               ))}
@@ -222,11 +246,11 @@ export function SkinJourneySlider() {
           </div>
 
           {/* Dermatologist Insight */}
-          <div className="p-3.5 rounded-2xl border text-xs leading-relaxed" style={{ background: "#FFFBFB", borderColor: C.petal }}>
+          <div className="p-3.5 rounded-2xl border text-xs leading-relaxed animate-fade-in-up stagger-7" style={{ background: C.primaryGhost, borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
             <span className="font-semibold block mb-0.5" style={{ color: C.primary }}>
-              👨‍⚕️ Clinical Note:
+              Clinical Note:
             </span>
-            <span style={{ color: C.smoke }}>{milestone.dermatologistNote}</span>
+            <span style={{ color: C.textLight }}>{milestone.dermatologistNote}</span>
           </div>
         </div>
       </div>

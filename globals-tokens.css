@@ -1,15 +1,45 @@
-/* Lucent design tokens — paste into globals.css */
+/* Lucent design tokens - standalone reference */
 :root {
-  --lucent-primary:    #831843;
-  --lucent-active:     #BE185D;
-  --lucent-blush:      #EC4899;
-  --lucent-petal:      #FBCFE8;
-  --lucent-mist:       #FDF2F8;
-  --lucent-ink:        #1C1917;
-  --lucent-smoke:      #44403C;
-  --lucent-accent:     #4C1D95;
-  --lucent-success:    #14532D;
-  --lucent-success-bg: #BBF7D0;
-  --lucent-warn:       #78350F;
-  --lucent-warn-bg:    #FEF3C7;
+  /* Primary - Sage Green */
+  --lucent-primary: #4a6741;
+  --lucent-primary-light: #6b8c62;
+  --lucent-primary-dark: #3a5233;
+  --lucent-primary-ghost: rgba(74, 103, 65, 0.08);
+  --lucent-primary-glow: rgba(74, 103, 65, 0.15);
+
+  /* Accent - Warm Clay */
+  --lucent-accent: #c4956a;
+  --lucent-accent-light: #d4b08f;
+  --lucent-accent-dark: #a67a4f;
+  --lucent-accent-ghost: rgba(196, 149, 106, 0.10);
+
+  /* Backgrounds */
+  --lucent-bg: #faf8f5;
+  --lucent-bg-warm: #f5f0eb;
+  --lucent-bg-card: #ffffff;
+
+  /* Text */
+  --lucent-text: #2d2a26;
+  --lucent-text-light: #6b6560;
+  --lucent-text-muted: #9c9590;
+
+  /* Borders */
+  --lucent-border: #e8e4df;
+  --lucent-border-light: #f0ece7;
+
+  /* Status */
+  --lucent-success: #4a6741;
+  --lucent-success-bg: #e8f0e6;
+  --lucent-warning: #c4956a;
+  --lucent-warning-bg: #faf0e6;
+  --lucent-error: #b54a4a;
+  --lucent-error-bg: #fde8e8;
+
+  /* Shadows */
+  --lucent-shadow-xs: 0 1px 2px rgba(45, 42, 38, 0.04);
+  --lucent-shadow-sm: 0 1px 3px rgba(45, 42, 38, 0.06), 0 1px 2px rgba(45, 42, 38, 0.04);
+  --lucent-shadow-md: 0 4px 6px -1px rgba(45, 42, 38, 0.06), 0 2px 4px -2px rgba(45, 42, 38, 0.04);
+  --lucent-shadow-lg: 0 10px 15px -3px rgba(45, 42, 38, 0.06), 0 4px 6px -4px rgba(45, 42, 38, 0.04);
+  --lucent-shadow-xl: 0 20px 25px -5px rgba(45, 42, 38, 0.06), 0 8px 10px -6px rgba(45, 42, 38, 0.04);
+  --lucent-shadow-glow: 0 0 20px rgba(74, 103, 65, 0.15);
 }

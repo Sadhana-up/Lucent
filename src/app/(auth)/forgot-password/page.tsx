@@ -1,226 +1,174 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { Sparkles, ArrowLeft, CheckCircle } from "lucide-react";
+import { Leaf, Mail, ArrowLeft, CheckCircle } from "lucide-react";
 
 const C = {
-  primary: "#831843",
-  active: "#BE185D",
-  blush: "#EC4899",
-  petal: "#FBCFE8",
-  mist: "#FDF2F8",
-  ink: "#1C1917",
-  smoke: "#44403C",
+  primary: "#4a6741",
+  primaryLight: "#6b8c62",
+  primaryGhost: "rgba(74, 103, 65, 0.08)",
+  accent: "#c4956a",
+  bg: "#faf8f5",
+  bgWarm: "#f5f0eb",
+  text: "#2d2a26",
+  textLight: "#6b6560",
+  textMuted: "#9c9590",
+  border: "#e8e4df",
+  borderLight: "#f0ece7",
 };
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordContent() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const { error } = await authClient.requestPasswordReset({
-      email,
-      redirectTo: "/reset-password",
-    });
-
-    setLoading(false);
-
-    if (error) {
-      setError(error.message || "Failed to send reset email. Please try again.");
-    } else {
+    try {
+      await authClient.requestPasswordReset({
+        email,
+        redirectTo: "/reset-password",
+      });
       setSent(true);
+    } catch {
+      setError("If an account exists with this email, you'll receive a reset link.");
+      setSent(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   if (sent) {
     return (
-      <div
-        className="min-h-screen flex items-center justify-center px-4"
-        style={{ background: C.mist, color: C.ink }}
-      >
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 mb-6">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: C.primary }}
-              >
-                <Sparkles size={18} style={{ color: C.mist }} />
-              </div>
-              <span
-                className="text-xl font-medium tracking-tight"
-                style={{ color: C.primary }}
-              >
-                Lucent
-              </span>
-            </Link>
-          </div>
-
-          <Card
-            style={{
-              border: `0.5px solid ${C.petal}`,
-              background: "#fff",
-            }}
-          >
-            <CardContent className="p-6 text-center">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
-                style={{ background: "#DCFCE7" }}
-              >
-                <CheckCircle size={24} style={{ color: "#16A34A" }} />
-              </div>
-              <h1
-                className="text-xl font-medium tracking-tight mb-2"
-                style={{ color: C.primary }}
-              >
-                Check your email
-              </h1>
-              <p className="text-sm mb-6" style={{ color: C.smoke }}>
-                We sent a password reset link to{" "}
-                <span className="font-medium" style={{ color: C.ink }}>
-                  {email}
-                </span>
-              </p>
-              <p className="text-xs mb-6" style={{ color: C.smoke }}>
-                Didn&apos;t receive the email? Check your spam folder or try
-                again.
-              </p>
-              <Button
-                variant="outline"
-                className="w-full text-sm font-medium"
-                style={{
-                  borderColor: C.petal,
-                  color: C.primary,
-                  background: "transparent",
-                }}
-                onClick={() => {
-                  setSent(false);
-                  setEmail("");
-                }}
-              >
-                Try another email
-              </Button>
-            </CardContent>
-          </Card>
-
-          <p className="text-center text-sm mt-6" style={{ color: C.smoke }}>
-            <Link
-              href="/sign-in"
-              className="font-medium inline-flex items-center gap-1"
-              style={{ color: C.primary }}
-            >
-              <ArrowLeft size={14} />
-              Back to sign in
-            </Link>
-          </p>
+      <div className="w-full max-w-md text-center animate-fade-in-up">
+        <div
+          className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-success-pop"
+          style={{ background: C.primaryGhost }}
+        >
+          <CheckCircle size={32} style={{ color: C.primary }} />
         </div>
+        <h1 className="text-2xl font-semibold tracking-tight mb-2" style={{ color: C.text }}>
+          Check your email
+        </h1>
+        <p className="text-sm mb-6" style={{ color: C.textLight }}>
+          If an account exists with <strong>{email}</strong>, we&apos;ve sent a password reset link.
+        </p>
+        <Button
+          variant="outline"
+          className="rounded-xl h-11"
+          style={{ borderColor: C.border, color: C.text }}
+          onClick={() => router.push("/sign-in")}
+        >
+          <ArrowLeft size={16} className="mr-2" />
+          Back to sign in
+        </Button>
       </div>
     );
   }
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: C.mist, color: C.ink }}
-    >
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: C.primary }}
-            >
-              <Sparkles size={18} style={{ color: C.mist }} />
-            </div>
-            <span
-              className="text-xl font-medium tracking-tight"
-              style={{ color: C.primary }}
-            >
-              Lucent
-            </span>
-          </Link>
-          <h1
-            className="text-2xl font-medium tracking-tight"
-            style={{ color: C.primary }}
+    <div className="w-full max-w-md animate-fade-in-up">
+      <div className="text-center mb-8">
+        <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}
           >
-            Forgot your password?
-          </h1>
-          <p className="text-sm mt-2" style={{ color: C.smoke }}>
-            Enter your email and we&apos;ll send you a reset link
-          </p>
-        </div>
+            <Leaf size={18} className="text-white" />
+          </div>
+          <span className="text-xl font-medium tracking-tight" style={{ color: C.text }}>
+            Lucent
+          </span>
+        </Link>
+        <h1 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>
+          Reset your password
+        </h1>
+        <p className="text-sm mt-2" style={{ color: C.textLight }}>
+          Enter your email and we&apos;ll send you a reset link
+        </p>
+      </div>
 
-        <Card
-          style={{
-            border: `0.5px solid ${C.petal}`,
-            background: "#fff",
-          }}
-        >
-          <CardContent className="p-6">
-            <form onSubmit={handleForgotPassword} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label
-                  className="text-sm font-medium"
-                  style={{ color: C.primary }}
-                  htmlFor="email"
-                >
-                  Email
-                </label>
+      <div className="glass-card rounded-2xl overflow-hidden">
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium" style={{ color: C.text }} htmlFor="email">
+                Email address
+              </label>
+              <div className="relative">
+                <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: C.textMuted }} />
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                   style={{
-                    border: `0.5px solid ${C.petal}`,
-                    background: C.mist,
-                    color: C.ink,
+                    border: `1px solid ${C.border}`,
+                    background: C.bg,
+                    color: C.text,
                   }}
                   placeholder="you@example.com"
                 />
               </div>
+            </div>
 
-              {error && (
-                <p className="text-sm" style={{ color: "#DC2626" }}>
-                  {error}
-                </p>
-              )}
+            {error && (
+              <div className="px-3 py-2 rounded-xl text-sm animate-fade-in" style={{ background: C.primaryGhost, color: C.textLight }}>
+                {error}
+              </div>
+            )}
 
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full text-sm font-medium text-white mt-2"
-                style={{ background: C.primary }}
-              >
-                {loading ? "Sending link..." : "Send reset link"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        <p className="text-center text-sm mt-6" style={{ color: C.smoke }}>
-          <Link
-            href="/sign-in"
-            className="font-medium inline-flex items-center gap-1"
-            style={{ color: C.primary }}
-          >
-            <ArrowLeft size={14} />
-            Back to sign in
-          </Link>
-        </p>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full text-sm font-medium mt-2 rounded-xl h-11 magnetic-btn"
+              style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)", color: "#fff" }}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Sending...
+                </span>
+              ) : "Send reset link"}
+            </Button>
+          </form>
+        </div>
       </div>
+
+      <p className="text-center text-sm mt-6" style={{ color: C.textLight }}>
+        Remember your password?{" "}
+        <Link href="/sign-in" className="font-medium transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
+          Sign in
+        </Link>
+      </p>
+    </div>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 gradient-mesh">
+      <Suspense
+        fallback={
+          <div className="w-full max-w-md text-center p-8">
+            <div className="w-8 h-8 border-4 rounded-full animate-spin mx-auto" style={{ borderColor: C.border, borderTopColor: C.primary }} />
+          </div>
+        }
+      >
+        <ForgotPasswordContent />
+      </Suspense>
     </div>
   );
 }

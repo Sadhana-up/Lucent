@@ -6,11 +6,26 @@ import { PlusCircle, Search, Package, Edit, Trash2, ExternalLink } from "lucide-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+const C = {
+  primary: "#4a6741",
+  primaryLight: "#6b8c62",
+  primaryGhost: "rgba(74, 103, 65, 0.08)",
+  accent: "#c4956a",
+  bg: "#faf8f5",
+  bgWarm: "#f5f0eb",
+  text: "#2d2a26",
+  textLight: "#6b6560",
+  textMuted: "#9c9590",
+  border: "#e8e4df",
+  borderLight: "#f0ece7",
+};
+
 export default function SellerProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
@@ -32,6 +47,7 @@ export default function SellerProductsPage() {
   async function handleDelete(slug: string) {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
+    setDeleting(slug);
     try {
       const res = await fetch(`/api/products/${slug}`, {
         method: "DELETE",
@@ -42,6 +58,8 @@ export default function SellerProductsPage() {
       }
     } catch (err) {
       console.error("Failed to delete product:", err);
+    } finally {
+      setDeleting(null);
     }
   }
 
@@ -54,30 +72,51 @@ export default function SellerProductsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-pink-200/60 pb-6">
+      <div
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 animate-fade-in"
+        style={{ borderBottom: `1px solid ${C.border}` }}
+      >
         <div>
-          <h1 className="text-2xl font-bold text-rose-950 tracking-tight">Your Products</h1>
-          <p className="text-sm text-stone-500 mt-1">
-            Manage your skincare product catalog, update inventory, and control pricing.
+          <h1
+            className="text-2xl font-semibold tracking-tight"
+            style={{ color: C.text }}
+          >
+            Your Products
+          </h1>
+          <p className="text-sm mt-1" style={{ color: C.textLight }}>
+            Manage your skincare product catalog, update inventory, and control
+            pricing.
           </p>
         </div>
         <Link href="/seller/products/new">
-          <Button className="bg-rose-900 hover:bg-rose-950 text-white font-medium shadow-sm">
+          <Button
+            className="font-medium magnetic-btn text-white rounded-xl"
+            style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}
+          >
             <PlusCircle className="w-4 h-4 mr-2" /> Add New Product
           </Button>
         </Link>
       </div>
 
       {/* Filters Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-center gap-3 animate-fade-in-up stagger-1 opacity-0">
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-3.5 top-3 w-4 h-4 text-stone-400" />
+          <Search
+            className="absolute left-3.5 top-3 w-4 h-4"
+            style={{ color: C.textMuted }}
+          />
           <input
             type="text"
             placeholder="Search products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-pink-200 bg-white text-sm outline-none focus:border-rose-900 transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
+            style={{
+              border: `1px solid ${C.border}`,
+              background: "rgba(255,255,255,0.7)",
+              backdropFilter: "blur(8px)",
+              color: C.text,
+            }}
           />
         </div>
 
@@ -87,57 +126,149 @@ export default function SellerProductsPage() {
               key={st}
               type="button"
               onClick={() => setStatusFilter(st)}
-              className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                statusFilter === st
-                  ? "bg-rose-900 text-white shadow-xs"
-                  : "bg-white border border-pink-200 text-stone-600 hover:bg-pink-50"
-              }`}
+              className="px-3 py-2 rounded-xl text-xs font-medium transition-all duration-300 cursor-pointer magnetic-btn"
+              style={{
+                background:
+                  statusFilter === st
+                    ? "linear-gradient(135deg, #4a6741, #6b8c62)"
+                    : "rgba(255,255,255,0.7)",
+                color: statusFilter === st ? "#fff" : C.textLight,
+                border: `1px solid ${
+                  statusFilter === st ? C.primary : C.border
+                }`,
+                backdropFilter: "blur(8px)",
+              }}
             >
-              {st}
+              {st.replace("_", " ")}
             </button>
           ))}
         </div>
       </div>
 
       {/* Products Table */}
-      <Card className="border-pink-200/60 overflow-hidden">
+      <Card
+        className="glass-card rounded-2xl overflow-hidden animate-fade-in-up stagger-2 opacity-0"
+        style={{ border: `1px solid ${C.border}` }}
+      >
         <CardContent className="p-0">
           {loading ? (
             <div className="p-12 text-center">
-              <div className="w-8 h-8 border-4 border-rose-900 border-t-transparent rounded-full animate-spin mx-auto" />
+              <div
+                className="w-8 h-8 border-4 rounded-full animate-spin mx-auto"
+                style={{
+                  borderColor: C.border,
+                  borderTopColor: C.primary,
+                }}
+              />
+              <p className="text-sm mt-3" style={{ color: C.textMuted }}>
+                Loading products...
+              </p>
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="p-12 text-center text-stone-500">
-              <Package className="w-12 h-12 text-pink-300 mx-auto mb-3" />
-              <p className="font-semibold text-rose-950">No products found</p>
-              <p className="text-xs mt-1">Get started by creating your first product listing.</p>
-              <div className="mt-4">
-                <Link href="/seller/products/new">
-                  <Button size="sm" className="bg-rose-900 text-white">
-                    <PlusCircle className="w-4 h-4 mr-1" /> Create Product
-                  </Button>
-                </Link>
+            <div className="p-16 text-center">
+              <div
+                className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center"
+                style={{ background: C.primaryGhost }}
+              >
+                <Package size={32} style={{ color: C.primary }} />
               </div>
+              <p
+                className="font-semibold text-base"
+                style={{ color: C.text }}
+              >
+                No products found
+              </p>
+              <p className="text-xs mt-1 mb-5" style={{ color: C.textMuted }}>
+                Get started by creating your first product listing.
+              </p>
+              <Link href="/seller/products/new">
+                <Button
+                  size="sm"
+                  className="magnetic-btn text-white rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #4a6741, #6b8c62)",
+                  }}
+                >
+                  <PlusCircle className="w-4 h-4 mr-1" /> Create Product
+                </Button>
+              </Link>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="bg-pink-50/60 text-xs text-stone-600 uppercase border-b border-pink-200/60">
-                  <tr>
-                    <th className="p-4">Product</th>
-                    <th className="p-4">Category</th>
-                    <th className="p-4">Price</th>
-                    <th className="p-4">Stock</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4 text-right">Actions</th>
+                <thead>
+                  <tr
+                    style={{
+                      background: C.bgWarm,
+                      borderBottom: `1px solid ${C.border}`,
+                    }}
+                  >
+                    <th
+                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      style={{ color: C.textMuted }}
+                    >
+                      Product
+                    </th>
+                    <th
+                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      style={{ color: C.textMuted }}
+                    >
+                      Category
+                    </th>
+                    <th
+                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      style={{ color: C.textMuted }}
+                    >
+                      Price
+                    </th>
+                    <th
+                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      style={{ color: C.textMuted }}
+                    >
+                      Stock
+                    </th>
+                    <th
+                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      style={{ color: C.textMuted }}
+                    >
+                      Status
+                    </th>
+                    <th
+                      className="p-4 text-right font-medium text-xs uppercase tracking-wider"
+                      style={{ color: C.textMuted }}
+                    >
+                      Actions
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-pink-100">
-                  {filteredProducts.map((product) => (
-                    <tr key={product.id} className="hover:bg-pink-50/30">
+                <tbody>
+                  {filteredProducts.map((product, i) => (
+                    <tr
+                      key={product.id}
+                      className="transition-colors duration-200"
+                      style={{
+                        borderBottom: `1px solid ${C.borderLight}`,
+                        animationDelay: `${i * 0.05}s`,
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.background =
+                          C.primaryGhost;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.background =
+                          "transparent";
+                      }}
+                    >
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-xl bg-pink-100 overflow-hidden shrink-0 border border-pink-200/60">
+                          <div
+                            className="w-12 h-12 rounded-xl overflow-hidden shrink-0"
+                            style={{
+                              background: C.bgWarm,
+                              border: `1px solid ${C.border}`,
+                            }}
+                          >
                             {product.images[0]?.url ? (
                               /* eslint-disable-next-line @next/next/no-img-element */
                               <img
@@ -146,75 +277,117 @@ export default function SellerProductsPage() {
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-stone-400">
+                              <div
+                                className="w-full h-full flex items-center justify-center"
+                                style={{ color: C.textMuted }}
+                              >
                                 <Package size={18} />
                               </div>
                             )}
                           </div>
                           <div>
-                            <h4 className="font-semibold text-rose-950 text-sm">
+                            <h4
+                              className="font-medium text-sm"
+                              style={{ color: C.text }}
+                            >
                               {product.title}
                             </h4>
-                            <span className="text-xs text-stone-500 block truncate max-w-xs">
+                            <span
+                              className="text-xs block truncate max-w-xs"
+                              style={{ color: C.textMuted }}
+                            >
                               {product.skinType || "All skin types"}
                             </span>
                           </div>
                         </div>
                       </td>
-                      <td className="p-4 text-xs font-medium text-stone-700">
+                      <td
+                        className="p-4 text-xs font-medium"
+                        style={{ color: C.textLight }}
+                      >
                         {product.category?.name || "Uncategorized"}
                       </td>
-                      <td className="p-4 font-bold text-rose-950">
+                      <td className="p-4 font-semibold" style={{ color: C.text }}>
                         ${product.price.toFixed(2)}
                         {product.discountPrice && (
-                          <span className="text-xs text-stone-400 font-normal line-through ml-1.5">
+                          <span
+                            className="text-xs font-normal line-through ml-1.5"
+                            style={{ color: C.textMuted }}
+                          >
                             ${product.discountPrice.toFixed(2)}
                           </span>
                         )}
                       </td>
-                      <td className="p-4 text-xs font-semibold text-stone-800">
+                      <td
+                        className="p-4 text-xs font-medium"
+                        style={{ color: C.textLight }}
+                      >
                         {product.stock} units
                       </td>
                       <td className="p-4">
                         <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                            product.status === "ACTIVE"
-                              ? "bg-emerald-100 text-emerald-800"
-                              : product.status === "DRAFT"
-                              ? "bg-stone-100 text-stone-700"
-                              : "bg-rose-100 text-rose-800"
-                          }`}
+                          className="px-2.5 py-1 rounded-full text-xs font-medium"
+                          style={{
+                            background:
+                              product.status === "ACTIVE"
+                                ? "rgba(74, 103, 65, 0.1)"
+                                : product.status === "DRAFT"
+                                ? C.bgWarm
+                                : "rgba(196, 149, 106, 0.1)",
+                            color:
+                              product.status === "ACTIVE"
+                                ? C.primary
+                                : product.status === "DRAFT"
+                                ? C.textLight
+                                : C.accent,
+                          }}
                         >
                           {product.status}
                         </span>
                       </td>
                       <td className="p-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1">
                           <Link href={`/shop/${product.slug}`} target="_blank">
                             <button
                               type="button"
-                              className="p-1.5 rounded-lg text-stone-500 hover:text-rose-900 hover:bg-pink-100/60"
+                              className="p-2 rounded-lg transition-all duration-200 hover:bg-white/60"
+                              style={{ color: C.textMuted }}
                               title="View in Shop"
                             >
-                              <ExternalLink size={16} />
+                              <ExternalLink size={15} />
                             </button>
                           </Link>
-                          <Link href={`/seller/products/${product.slug}/edit`}>
+                          <Link
+                            href={`/seller/products/${product.slug}/edit`}
+                          >
                             <button
                               type="button"
-                              className="p-1.5 rounded-lg text-stone-500 hover:text-rose-900 hover:bg-pink-100/60"
+                              className="p-2 rounded-lg transition-all duration-200 hover:bg-white/60"
+                              style={{ color: C.textMuted }}
                               title="Edit Product"
                             >
-                              <Edit size={16} />
+                              <Edit size={15} />
                             </button>
                           </Link>
                           <button
                             type="button"
                             onClick={() => handleDelete(product.slug)}
-                            className="p-1.5 rounded-lg text-rose-600 hover:text-rose-900 hover:bg-rose-100/60"
+                            disabled={deleting === product.slug}
+                            className="p-2 rounded-lg transition-all duration-200 hover:bg-red-50 disabled:opacity-50"
+                            style={{ color: "#b54a4a" }}
                             title="Delete Product"
                           >
-                            <Trash2 size={16} />
+                            {deleting === product.slug ? (
+                              <div
+                                className="w-4 h-4 border-2 rounded-full animate-spin"
+                                style={{
+                                  borderColor: "#b54a4a",
+                                  borderTopColor: "transparent",
+                                }}
+                              />
+                            ) : (
+                              <Trash2 size={15} />
+                            )}
                           </button>
                         </div>
                       </td>

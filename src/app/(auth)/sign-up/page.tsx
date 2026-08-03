@@ -6,16 +6,20 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { Sparkles, User, Store } from "lucide-react";
+import { Leaf, User, Store } from "lucide-react";
 
 const C = {
-  primary: "#831843",
-  active: "#BE185D",
-  blush: "#EC4899",
-  petal: "#FBCFE8",
-  mist: "#FDF2F8",
-  ink: "#1C1917",
-  smoke: "#44403C",
+  primary: "#4a6741",
+  primaryLight: "#6b8c62",
+  primaryGhost: "rgba(74, 103, 65, 0.08)",
+  accent: "#c4956a",
+  bg: "#faf8f5",
+  bgWarm: "#f5f0eb",
+  text: "#2d2a26",
+  textLight: "#6b6560",
+  textMuted: "#9c9590",
+  border: "#e8e4df",
+  borderLight: "#f0ece7",
 };
 
 type Role = "customer" | "seller";
@@ -34,8 +38,6 @@ export default function SignUpPage() {
     setError("");
     setLoading(true);
 
-    // Pass role as "initialRole" - the server maps it to the real "role" field
-    // via a databaseHook to prevent clients from self-assigning elevated roles
     const { error } = await authClient.signUp.email({
       name,
       email,
@@ -65,88 +67,69 @@ export default function SignUpPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: C.mist, color: C.ink }}
-    >
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center px-4 gradient-mesh">
+      <div className="w-full max-w-md animate-fade-in-up">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: C.primary }}
+              className="w-10 h-10 rounded-xl flex items-center justify-center transition-shadow duration-300 hover:shadow-[0_0_20px_rgba(74,103,65,0.2)]"
+              style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}
             >
-              <Sparkles size={18} style={{ color: C.mist }} />
+              <Leaf size={18} className="text-white" />
             </div>
-            <span
-              className="text-xl font-medium tracking-tight"
-              style={{ color: C.primary }}
-            >
+            <span className="text-xl font-medium tracking-tight" style={{ color: C.text }}>
               Lucent
             </span>
           </Link>
-          <h1
-            className="text-2xl font-medium tracking-tight"
-            style={{ color: C.primary }}
-          >
+          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>
             Create your account
           </h1>
-          <p className="text-sm mt-2" style={{ color: C.smoke }}>
+          <p className="text-sm mt-2" style={{ color: C.textLight }}>
             Start your skincare journey today
           </p>
         </div>
 
-        <Card
-          style={{
-            border: `0.5px solid ${C.petal}`,
-            background: "#fff",
-          }}
-        >
-          <CardContent className="p-6">
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="p-6">
             <form onSubmit={handleSignUp} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label
-                  className="text-sm font-medium"
-                  style={{ color: C.primary }}
-                >
+                <label className="text-sm font-medium" style={{ color: C.text }}>
                   Continue as
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
                     onClick={() => setRole("customer")}
-                    className="flex flex-col items-center gap-2 p-4 rounded-lg text-sm font-medium transition-all"
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl text-sm font-medium transition-all duration-300"
                     style={{
-                      border: `1px solid ${role === "customer" ? C.primary : C.petal}`,
-                      background: role === "customer" ? C.mist : "#fff",
-                      color: C.primary,
+                      border: `1px solid ${role === "customer" ? C.primary : C.border}`,
+                      background: role === "customer" ? C.primaryGhost : "#fff",
+                      color: C.text,
+                      boxShadow: role === "customer" ? "0 0 16px rgba(74, 103, 65, 0.1)" : "none",
                     }}
                   >
-                    <User size={20} />
+                    <User size={20} style={{ color: role === "customer" ? C.primary : C.textMuted }} />
                     Customer
                   </button>
                   <button
                     type="button"
                     onClick={() => setRole("seller")}
-                    className="flex flex-col items-center gap-2 p-4 rounded-lg text-sm font-medium transition-all"
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl text-sm font-medium transition-all duration-300"
                     style={{
-                      border: `1px solid ${role === "seller" ? C.primary : C.petal}`,
-                      background: role === "seller" ? C.mist : "#fff",
-                      color: C.primary,
+                      border: `1px solid ${role === "seller" ? C.primary : C.border}`,
+                      background: role === "seller" ? C.primaryGhost : "#fff",
+                      color: C.text,
+                      boxShadow: role === "seller" ? "0 0 16px rgba(74, 103, 65, 0.1)" : "none",
                     }}
                   >
-                    <Store size={20} />
+                    <Store size={20} style={{ color: role === "seller" ? C.primary : C.textMuted }} />
                     Seller
                   </button>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label
-                  className="text-sm font-medium"
-                  style={{ color: C.primary }}
-                  htmlFor="name"
-                >
+                <label className="text-sm font-medium" style={{ color: C.text }} htmlFor="name">
                   Name
                 </label>
                 <input
@@ -155,22 +138,18 @@ export default function SignUpPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                   style={{
-                    border: `0.5px solid ${C.petal}`,
-                    background: C.mist,
-                    color: C.ink,
+                    border: `1px solid ${C.border}`,
+                    background: C.bg,
+                    color: C.text,
                   }}
                   placeholder="Your name"
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label
-                  className="text-sm font-medium"
-                  style={{ color: C.primary }}
-                  htmlFor="email"
-                >
+                <label className="text-sm font-medium" style={{ color: C.text }} htmlFor="email">
                   Email
                 </label>
                 <input
@@ -179,22 +158,18 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                   style={{
-                    border: `0.5px solid ${C.petal}`,
-                    background: C.mist,
-                    color: C.ink,
+                    border: `1px solid ${C.border}`,
+                    background: C.bg,
+                    color: C.text,
                   }}
                   placeholder="you@example.com"
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label
-                  className="text-sm font-medium"
-                  style={{ color: C.primary }}
-                  htmlFor="password"
-                >
+                <label className="text-sm font-medium" style={{ color: C.text }} htmlFor="password">
                   Password
                 </label>
                 <input
@@ -204,42 +179,41 @@ export default function SignUpPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={8}
-                  className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                   style={{
-                    border: `0.5px solid ${C.petal}`,
-                    background: C.mist,
-                    color: C.ink,
+                    border: `1px solid ${C.border}`,
+                    background: C.bg,
+                    color: C.text,
                   }}
                   placeholder="Min. 8 characters"
                 />
               </div>
 
               {error && (
-                <p className="text-sm" style={{ color: "#DC2626" }}>
+                <div className="px-3 py-2 rounded-xl text-sm animate-fade-in" style={{ background: "rgba(181, 74, 74, 0.08)", color: "#b54a4a" }}>
                   {error}
-                </p>
+                </div>
               )}
 
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full text-sm font-medium text-white mt-2"
-                style={{ background: C.primary }}
+                className="w-full text-sm font-medium mt-2 rounded-xl h-11 magnetic-btn"
+                style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)", color: "#fff" }}
               >
-                {loading ? "Creating account..." : "Sign up"}
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Creating account...
+                  </span>
+                ) : "Sign up"}
               </Button>
             </form>
 
             <div className="relative my-6">
-              <div
-                className="absolute inset-0 flex items-center"
-                style={{ borderTop: `0.5px solid ${C.petal}` }}
-              />
+              <div className="absolute inset-0 flex items-center" style={{ borderTop: `1px solid ${C.borderLight}` }} />
               <div className="relative flex justify-center text-xs">
-                <span
-                  className="px-2"
-                  style={{ background: "#fff", color: C.smoke }}
-                >
+                <span className="px-2" style={{ background: "rgba(255,255,255,0.9)", color: C.textMuted }}>
                   or continue with
                 </span>
               </div>
@@ -247,44 +221,24 @@ export default function SignUpPage() {
 
             <Button
               variant="outline"
-              className="w-full text-sm font-medium"
-              style={{
-                borderColor: C.petal,
-                color: C.primary,
-                background: "transparent",
-              }}
+              className="w-full text-sm font-medium rounded-xl h-11 transition-all duration-300 hover:bg-[rgba(245,240,235,0.5)]"
+              style={{ borderColor: C.border, color: C.text, background: "transparent" }}
               onClick={handleGoogleSignUp}
             >
               <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
-                <path
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                  fill="#4285F4"
-                />
-                <path
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  fill="#34A853"
-                />
-                <path
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  fill="#FBBC05"
-                />
-                <path
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  fill="#EA4335"
-                />
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
               </svg>
               Google
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <p className="text-center text-sm mt-6" style={{ color: C.smoke }}>
+        <p className="text-center text-sm mt-6" style={{ color: C.textLight }}>
           Already have an account?{" "}
-          <Link
-            href="/sign-in"
-            className="font-medium"
-            style={{ color: C.primary }}
-          >
+          <Link href="/sign-in" className="font-medium transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
             Sign in
           </Link>
         </p>
