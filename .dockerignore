@@ -50,8 +50,8 @@ docker-compose.yml
 .DS_Store
 Thumbs.db
 
-# prisma migrations (run at startup, not baked in)
-prisma/migrations
+# prisma migrations (needed at startup for migrate deploy)
+# prisma/migrations
 
 # jupyter notebooks
 *.ipynb

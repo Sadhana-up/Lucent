@@ -222,12 +222,11 @@ model Review {
 }
 
 model rateLimit {
-  id         String   @id @default(cuid())
-  key        String
-  count      Int      @default(0)
-  expiresAt  DateTime
+  id          String @id @default(cuid())
+  key         String
+  count       Int    @default(0)
+  lastRequest BigInt
 
   @@index([key])
-  @@index([expiresAt])
   @@map("rateLimit")
 }
