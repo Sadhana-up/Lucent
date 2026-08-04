@@ -12,24 +12,28 @@ import {
 } from "lucide-react";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
 };
 
 const statusColors: Record<string, { bg: string; fg: string }> = {
-  PENDING: { bg: "rgba(196, 149, 106, 0.12)", fg: "#c4956a" },
-  PROCESSING: { bg: "rgba(74, 103, 65, 0.1)", fg: "#4a6741" },
-  SHIPPED: { bg: "rgba(74, 103, 65, 0.1)", fg: "#4a6741" },
-  DELIVERED: { bg: "rgba(74, 103, 65, 0.15)", fg: "#3a5233" },
+  PENDING: { bg: "rgba(124, 107, 234, 0.1)", fg: "#7C6BEA" },
+  PROCESSING: { bg: "rgba(45, 90, 61, 0.08)", fg: "#2D5A3D" },
+  SHIPPED: { bg: "rgba(45, 90, 61, 0.08)", fg: "#2D5A3D" },
+  DELIVERED: { bg: "rgba(45, 90, 61, 0.12)", fg: "#1E3D2A" },
   CANCELLED: { bg: "rgba(181, 74, 74, 0.08)", fg: "#b54a4a" },
 };
 
@@ -90,7 +94,7 @@ export default function SellerOrdersPage() {
         >
           Customer Orders
         </h1>
-        <p className="text-sm mt-1" style={{ color: C.textLight }}>
+        <p className="text-sm mt-1" style={{ color: C.textSecondary }}>
           Review incoming orders for your products and update shipping status.
         </p>
       </div>
@@ -107,8 +111,14 @@ export default function SellerOrdersPage() {
         </div>
       ) : orders.length === 0 ? (
         <Card
-          className="glass-card rounded-2xl p-16 text-center animate-fade-in-up"
-          style={{ border: `1px solid ${C.border}` }}
+          className="rounded-2xl p-16 text-center animate-fade-in-up"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(16px) saturate(180%)",
+            WebkitBackdropFilter: "blur(16px) saturate(180%)",
+            border: `1px solid ${C.borderLight}`,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+          }}
         >
           <div
             className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center"
@@ -132,9 +142,13 @@ export default function SellerOrdersPage() {
             return (
               <Card
                 key={order.id}
-                className="glass-card rounded-2xl overflow-hidden hover-lift animate-fade-in-up opacity-0"
+                className="rounded-2xl overflow-hidden hover-lift animate-fade-in-up opacity-0"
                 style={{
-                  border: `1px solid ${C.border}`,
+                  background: "rgba(255,255,255,0.72)",
+                  backdropFilter: "blur(16px) saturate(180%)",
+                  WebkitBackdropFilter: "blur(16px) saturate(180%)",
+                  border: `1px solid ${C.borderLight}`,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
                   animationDelay: `${i * 0.08}s`,
                 }}
               >
@@ -152,7 +166,7 @@ export default function SellerOrdersPage() {
                       {order.orderNumber}
                     </span>
                     <span
-                      className="px-2.5 py-1 rounded-full text-xs font-medium"
+                      className="px-2.5 py-1 rounded-full text-xs font-semibold"
                       style={{ background: sc.bg, color: sc.fg }}
                     >
                       {order.status}
@@ -178,7 +192,7 @@ export default function SellerOrdersPage() {
                     </span>
                     <div className="flex items-center gap-2">
                       <span
-                        className="text-xs font-medium"
+                        className="text-xs font-semibold"
                         style={{ color: C.textMuted }}
                       >
                         Status:
@@ -189,10 +203,10 @@ export default function SellerOrdersPage() {
                         onChange={(e) =>
                           handleStatusChange(order.id, e.target.value)
                         }
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium outline-none cursor-pointer transition-all duration-300 input-focus-glow"
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold outline-none cursor-pointer transition-all duration-300 input-focus-glow"
                         style={{
                           border: `1px solid ${C.border}`,
-                          background: "rgba(255,255,255,0.7)",
+                          background: "rgba(255,255,255,0.72)",
                           backdropFilter: "blur(8px)",
                           color: C.text,
                         }}
@@ -255,7 +269,7 @@ export default function SellerOrdersPage() {
                             </div>
                             <div>
                               <h4
-                                className="font-medium text-sm"
+                                className="font-semibold text-sm"
                                 style={{ color: C.text }}
                               >
                                 {item.product?.title || "Skincare Product"}
@@ -298,15 +312,15 @@ export default function SellerOrdersPage() {
                             Customer Info
                           </span>
                           <p
-                            className="font-medium"
+                            className="font-semibold"
                             style={{ color: C.text }}
                           >
                             {order.customer?.name}
                           </p>
-                          <p style={{ color: C.textLight }}>
+                          <p style={{ color: C.textSecondary }}>
                             {order.customer?.email}
                           </p>
-                          <p className="mt-0.5" style={{ color: C.textLight }}>
+                          <p className="mt-0.5" style={{ color: C.textSecondary }}>
                             Phone: {order.contactPhone}
                           </p>
                         </div>
@@ -326,7 +340,7 @@ export default function SellerOrdersPage() {
                           </span>
                           <p
                             className="whitespace-pre-line"
-                            style={{ color: C.textLight }}
+                            style={{ color: C.textSecondary }}
                           >
                             {order.shippingAddress}
                           </p>

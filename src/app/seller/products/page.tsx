@@ -7,17 +7,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
 };
 
 export default function SellerProductsPage() {
@@ -83,15 +87,15 @@ export default function SellerProductsPage() {
           >
             Your Products
           </h1>
-          <p className="text-sm mt-1" style={{ color: C.textLight }}>
+          <p className="text-sm mt-1" style={{ color: C.textSecondary }}>
             Manage your skincare product catalog, update inventory, and control
             pricing.
           </p>
         </div>
         <Link href="/seller/products/new">
           <Button
-            className="font-medium magnetic-btn text-white rounded-xl"
-            style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}
+            className="font-semibold magnetic-btn text-white rounded-xl"
+            style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}
           >
             <PlusCircle className="w-4 h-4 mr-2" /> Add New Product
           </Button>
@@ -113,7 +117,7 @@ export default function SellerProductsPage() {
             className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
             style={{
               border: `1px solid ${C.border}`,
-              background: "rgba(255,255,255,0.7)",
+              background: "rgba(255,255,255,0.72)",
               backdropFilter: "blur(8px)",
               color: C.text,
             }}
@@ -126,13 +130,13 @@ export default function SellerProductsPage() {
               key={st}
               type="button"
               onClick={() => setStatusFilter(st)}
-              className="px-3 py-2 rounded-xl text-xs font-medium transition-all duration-300 cursor-pointer magnetic-btn"
+              className="px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-300 cursor-pointer magnetic-btn"
               style={{
                 background:
                   statusFilter === st
-                    ? "linear-gradient(135deg, #4a6741, #6b8c62)"
-                    : "rgba(255,255,255,0.7)",
-                color: statusFilter === st ? "#fff" : C.textLight,
+                    ? "linear-gradient(135deg, #2D5A3D, #3D7A52)"
+                    : "rgba(255,255,255,0.72)",
+                color: statusFilter === st ? "#fff" : C.textSecondary,
                 border: `1px solid ${
                   statusFilter === st ? C.primary : C.border
                 }`,
@@ -147,8 +151,14 @@ export default function SellerProductsPage() {
 
       {/* Products Table */}
       <Card
-        className="glass-card rounded-2xl overflow-hidden animate-fade-in-up stagger-2 opacity-0"
-        style={{ border: `1px solid ${C.border}` }}
+        className="rounded-2xl overflow-hidden animate-fade-in-up stagger-2 opacity-0"
+        style={{
+          background: "rgba(255,255,255,0.72)",
+          backdropFilter: "blur(16px) saturate(180%)",
+          WebkitBackdropFilter: "blur(16px) saturate(180%)",
+          border: `1px solid ${C.borderLight}`,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+        }}
       >
         <CardContent className="p-0">
           {loading ? (
@@ -187,7 +197,7 @@ export default function SellerProductsPage() {
                   className="magnetic-btn text-white rounded-xl"
                   style={{
                     background:
-                      "linear-gradient(135deg, #4a6741, #6b8c62)",
+                      "linear-gradient(135deg, #2D5A3D, #3D7A52)",
                   }}
                 >
                   <PlusCircle className="w-4 h-4 mr-1" /> Create Product
@@ -205,37 +215,37 @@ export default function SellerProductsPage() {
                     }}
                   >
                     <th
-                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      className="p-4 font-semibold text-xs uppercase tracking-wider"
                       style={{ color: C.textMuted }}
                     >
                       Product
                     </th>
                     <th
-                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      className="p-4 font-semibold text-xs uppercase tracking-wider"
                       style={{ color: C.textMuted }}
                     >
                       Category
                     </th>
                     <th
-                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      className="p-4 font-semibold text-xs uppercase tracking-wider"
                       style={{ color: C.textMuted }}
                     >
                       Price
                     </th>
                     <th
-                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      className="p-4 font-semibold text-xs uppercase tracking-wider"
                       style={{ color: C.textMuted }}
                     >
                       Stock
                     </th>
                     <th
-                      className="p-4 font-medium text-xs uppercase tracking-wider"
+                      className="p-4 font-semibold text-xs uppercase tracking-wider"
                       style={{ color: C.textMuted }}
                     >
                       Status
                     </th>
                     <th
-                      className="p-4 text-right font-medium text-xs uppercase tracking-wider"
+                      className="p-4 text-right font-semibold text-xs uppercase tracking-wider"
                       style={{ color: C.textMuted }}
                     >
                       Actions
@@ -287,7 +297,7 @@ export default function SellerProductsPage() {
                           </div>
                           <div>
                             <h4
-                              className="font-medium text-sm"
+                              className="font-semibold text-sm"
                               style={{ color: C.text }}
                             >
                               {product.title}
@@ -302,8 +312,8 @@ export default function SellerProductsPage() {
                         </div>
                       </td>
                       <td
-                        className="p-4 text-xs font-medium"
-                        style={{ color: C.textLight }}
+                        className="p-4 text-xs font-semibold"
+                        style={{ color: C.textSecondary }}
                       >
                         {product.category?.name || "Uncategorized"}
                       </td>
@@ -319,26 +329,26 @@ export default function SellerProductsPage() {
                         )}
                       </td>
                       <td
-                        className="p-4 text-xs font-medium"
-                        style={{ color: C.textLight }}
+                        className="p-4 text-xs font-semibold"
+                        style={{ color: C.textSecondary }}
                       >
                         {product.stock} units
                       </td>
                       <td className="p-4">
                         <span
-                          className="px-2.5 py-1 rounded-full text-xs font-medium"
+                          className="px-2.5 py-1 rounded-full text-xs font-semibold"
                           style={{
                             background:
                               product.status === "ACTIVE"
-                                ? "rgba(74, 103, 65, 0.1)"
+                                ? "rgba(45, 90, 61, 0.08)"
                                 : product.status === "DRAFT"
                                 ? C.bgWarm
-                                : "rgba(196, 149, 106, 0.1)",
+                                : C.accentGhost,
                             color:
                               product.status === "ACTIVE"
                                 ? C.primary
                                 : product.status === "DRAFT"
-                                ? C.textLight
+                                ? C.textSecondary
                                 : C.accent,
                           }}
                         >

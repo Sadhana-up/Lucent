@@ -9,17 +9,21 @@ import { ArrowLeft, Loader2, Leaf } from "lucide-react";
 import Link from "next/link";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
 };
 
 export default function AddProductPage() {
@@ -103,7 +107,7 @@ export default function AddProductPage() {
 
   const inputStyle = {
     border: `1px solid ${C.border}`,
-    background: "rgba(255,255,255,0.7)",
+    background: "rgba(255,255,255,0.72)",
     backdropFilter: "blur(8px)",
     color: C.text,
   };
@@ -121,7 +125,7 @@ export default function AddProductPage() {
             className="magnetic-btn rounded-xl"
             style={{
               border: `1px solid ${C.border}`,
-              color: C.textLight,
+              color: C.textSecondary,
               background: "rgba(255,255,255,0.5)",
             }}
           >
@@ -145,8 +149,14 @@ export default function AddProductPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Image Upload Section */}
         <Card
-          className="glass-card rounded-2xl overflow-hidden animate-fade-in-up stagger-1 opacity-0"
-          style={{ border: `1px solid ${C.border}` }}
+          className="rounded-2xl overflow-hidden animate-fade-in-up stagger-1 opacity-0"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(16px) saturate(180%)",
+            WebkitBackdropFilter: "blur(16px) saturate(180%)",
+            border: `1px solid ${C.borderLight}`,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+          }}
         >
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center gap-2 pb-3" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
@@ -166,7 +176,7 @@ export default function AddProductPage() {
             <div>
               <label
                 className={labelClass}
-                style={{ color: C.textLight }}
+                style={{ color: C.textSecondary }}
               >
                 Upload Images (Stored locally in /uploads) *
               </label>
@@ -181,8 +191,14 @@ export default function AddProductPage() {
 
         {/* Basic Information Section */}
         <Card
-          className="glass-card rounded-2xl overflow-hidden animate-fade-in-up stagger-2 opacity-0"
-          style={{ border: `1px solid ${C.border}` }}
+          className="rounded-2xl overflow-hidden animate-fade-in-up stagger-2 opacity-0"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(16px) saturate(180%)",
+            WebkitBackdropFilter: "blur(16px) saturate(180%)",
+            border: `1px solid ${C.borderLight}`,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+          }}
         >
           <CardContent className="p-6 space-y-5">
             <div className="flex items-center gap-2 pb-3" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
@@ -202,7 +218,7 @@ export default function AddProductPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Product Title *
                 </label>
                 <input
@@ -217,7 +233,7 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Category
                 </label>
                 <select
@@ -237,7 +253,7 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Status
                 </label>
                 <select
@@ -255,7 +271,7 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Price ($) *
                 </label>
                 <input
@@ -273,7 +289,7 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Discount Price ($) (Optional)
                 </label>
                 <input
@@ -290,7 +306,7 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Stock Quantity *
                 </label>
                 <input
@@ -306,7 +322,7 @@ export default function AddProductPage() {
               </div>
 
               <div className="md:col-span-2">
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Full Description *
                 </label>
                 <textarea
@@ -327,8 +343,14 @@ export default function AddProductPage() {
 
         {/* Skincare Specifics Section */}
         <Card
-          className="glass-card rounded-2xl overflow-hidden animate-fade-in-up stagger-3 opacity-0"
-          style={{ border: `1px solid ${C.border}` }}
+          className="rounded-2xl overflow-hidden animate-fade-in-up stagger-3 opacity-0"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(16px) saturate(180%)",
+            WebkitBackdropFilter: "blur(16px) saturate(180%)",
+            border: `1px solid ${C.borderLight}`,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+          }}
         >
           <CardContent className="p-6 space-y-5">
             <div className="flex items-center gap-2 pb-3" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
@@ -348,7 +370,7 @@ export default function AddProductPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Target Skin Types
                 </label>
                 <input
@@ -364,7 +386,7 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Target Skin Concerns (Comma separated)
                 </label>
                 <input
@@ -380,7 +402,7 @@ export default function AddProductPage() {
               </div>
 
               <div className="md:col-span-2">
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   Key Ingredients
                 </label>
                 <input
@@ -396,7 +418,7 @@ export default function AddProductPage() {
               </div>
 
               <div className="md:col-span-2">
-                <label className={labelClass} style={{ color: C.textLight }}>
+                <label className={labelClass} style={{ color: C.textSecondary }}>
                   How to Use / Directions
                 </label>
                 <textarea
@@ -420,7 +442,7 @@ export default function AddProductPage() {
         {/* Error */}
         {error && (
           <div
-            className="p-4 rounded-xl text-sm font-medium animate-fade-in"
+            className="p-4 rounded-xl text-sm font-semibold animate-fade-in"
             style={{
               background: "rgba(181, 74, 74, 0.06)",
               border: "1px solid rgba(181, 74, 74, 0.2)",
@@ -440,7 +462,7 @@ export default function AddProductPage() {
               className="magnetic-btn rounded-xl"
               style={{
                 border: `1px solid ${C.border}`,
-                color: C.textLight,
+                color: C.textSecondary,
                 background: "rgba(255,255,255,0.5)",
               }}
             >
@@ -450,9 +472,9 @@ export default function AddProductPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="text-white font-medium px-6 rounded-xl magnetic-btn"
+            className="text-white font-semibold px-6 rounded-xl magnetic-btn"
             style={{
-              background: "linear-gradient(135deg, #4a6741, #6b8c62)",
+              background: "linear-gradient(135deg, #2D5A3D, #3D7A52)",
             }}
           >
             {loading ? (

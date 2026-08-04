@@ -16,17 +16,21 @@ import {
 } from "lucide-react";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
 };
 
 export default function SellerDashboard() {
@@ -77,11 +81,11 @@ export default function SellerDashboard() {
           <h2 className="text-2xl font-semibold tracking-tight mb-3" style={{ color: C.text }}>
             Welcome to your Seller Hub
           </h2>
-          <p className="text-sm mb-6 max-w-md mx-auto" style={{ color: C.textLight }}>
+          <p className="text-sm mb-6 max-w-md mx-auto" style={{ color: C.textSecondary }}>
             Set up your store profile to start selling skincare products on the Lucent marketplace.
           </p>
           <Link href="/seller/profile">
-            <Button className="rounded-xl magnetic-btn" style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)", color: "#fff" }}>
+            <Button className="rounded-xl magnetic-btn" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)", color: "#fff" }}>
               Set Up Store <ArrowRight size={16} className="ml-2" />
             </Button>
           </Link>
@@ -104,7 +108,7 @@ export default function SellerDashboard() {
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>
             Dashboard
           </h1>
-          <p className="text-sm mt-1" style={{ color: C.textLight }}>
+          <p className="text-sm mt-1" style={{ color: C.textSecondary }}>
             Welcome back, {session?.user?.name || "Seller"}
           </p>
         </div>
@@ -116,11 +120,18 @@ export default function SellerDashboard() {
             return (
               <div
                 key={metric.label}
-                className="glass-card rounded-2xl p-5 hover-lift animate-fade-in-up opacity-0"
-                style={{ animationDelay: `${i * 0.08}s` }}
+                className="rounded-2xl p-5 hover-lift animate-fade-in-up opacity-0"
+                style={{
+                  background: "rgba(255,255,255,0.72)",
+                  backdropFilter: "blur(16px) saturate(180%)",
+                  WebkitBackdropFilter: "blur(16px) saturate(180%)",
+                  border: `1px solid ${C.borderLight}`,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+                  animationDelay: `${i * 0.08}s`,
+                }}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-medium uppercase tracking-wider" style={{ color: C.textMuted }}>
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.textMuted }}>
                     {metric.label}
                   </span>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: C.primaryGhost }}>
@@ -142,10 +153,19 @@ export default function SellerDashboard() {
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Recent Orders */}
-          <div className="glass-card rounded-2xl overflow-hidden">
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{
+              background: "rgba(255,255,255,0.72)",
+              backdropFilter: "blur(16px) saturate(180%)",
+              WebkitBackdropFilter: "blur(16px) saturate(180%)",
+              border: `1px solid ${C.borderLight}`,
+              boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+            }}
+          >
             <div className="p-5 flex items-center justify-between" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
-              <h3 className="text-sm font-medium" style={{ color: C.text }}>Recent Orders</h3>
-              <Link href="/seller/orders" className="text-xs font-medium transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
+              <h3 className="text-sm font-semibold" style={{ color: C.text }}>Recent Orders</h3>
+              <Link href="/seller/orders" className="text-xs font-semibold transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
                 View all
               </Link>
             </div>
@@ -155,9 +175,9 @@ export default function SellerDashboard() {
               ) : (
                 <div className="space-y-3">
                   {recentOrders.map((order: any) => (
-                    <div key={order.id} className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200 hover:bg-[rgba(74,103,65,0.03)]">
+                    <div key={order.id} className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200 hover:bg-[rgba(45,90,61,0.04)]">
                       <div>
-                        <p className="text-sm font-medium" style={{ color: C.text }}>
+                        <p className="text-sm font-semibold" style={{ color: C.text }}>
                           {order.orderNumber || order.id?.slice(0, 8)}
                         </p>
                         <p className="text-xs" style={{ color: C.textMuted }}>
@@ -165,13 +185,13 @@ export default function SellerDashboard() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium" style={{ color: C.text }}>
+                        <p className="text-sm font-semibold" style={{ color: C.text }}>
                           ${order.total?.toFixed(2) || "0.00"}
                         </p>
                         <span
-                          className="text-[10px] px-2 py-0.5 rounded-full font-medium"
+                          className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
                           style={{
-                            background: order.status === "DELIVERED" ? C.primaryGhost : "rgba(196, 149, 106, 0.1)",
+                            background: order.status === "DELIVERED" ? C.primaryGhost : C.accentGhost,
                             color: order.status === "DELIVERED" ? C.primary : C.accent,
                           }}
                         >
@@ -186,10 +206,19 @@ export default function SellerDashboard() {
           </div>
 
           {/* Products */}
-          <div className="glass-card rounded-2xl overflow-hidden">
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{
+              background: "rgba(255,255,255,0.72)",
+              backdropFilter: "blur(16px) saturate(180%)",
+              WebkitBackdropFilter: "blur(16px) saturate(180%)",
+              border: `1px solid ${C.borderLight}`,
+              boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+            }}
+          >
             <div className="p-5 flex items-center justify-between" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
-              <h3 className="text-sm font-medium" style={{ color: C.text }}>Products</h3>
-              <Link href="/seller/products/new" className="text-xs font-medium flex items-center gap-1 transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
+              <h3 className="text-sm font-semibold" style={{ color: C.text }}>Products</h3>
+              <Link href="/seller/products/new" className="text-xs font-semibold flex items-center gap-1 transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
                 <PlusCircle size={12} /> Add new
               </Link>
             </div>
@@ -198,7 +227,7 @@ export default function SellerDashboard() {
                 <div className="text-center py-6">
                   <p className="text-sm mb-3" style={{ color: C.textMuted }}>No products yet</p>
                   <Link href="/seller/products/new">
-                    <Button variant="outline" size="sm" className="rounded-xl" style={{ borderColor: C.border, color: C.text }}>
+                    <Button variant="outline" size="sm" className="rounded-xl" style={{ borderColor: C.border, color: C.textSecondary }}>
                       Add your first product
                     </Button>
                   </Link>
@@ -206,7 +235,7 @@ export default function SellerDashboard() {
               ) : (
                 <div className="space-y-3">
                   {products.map((product: any) => (
-                    <div key={product.id} className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200 hover:bg-[rgba(74,103,65,0.03)]">
+                    <div key={product.id} className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200">
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden" style={{ background: C.bgWarm }}>
                           {product.images?.[0] && (
@@ -215,14 +244,14 @@ export default function SellerDashboard() {
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium truncate" style={{ color: C.text }}>{product.title}</p>
+                          <p className="text-sm font-semibold truncate" style={{ color: C.text }}>{product.title}</p>
                           <p className="text-xs" style={{ color: C.textMuted }}>${product.price?.toFixed(2)}</p>
                         </div>
                       </div>
                       <span
-                        className="text-[10px] px-2 py-0.5 rounded-full font-medium flex-shrink-0"
+                        className="text-[10px] px-2 py-0.5 rounded-full font-semibold flex-shrink-0"
                         style={{
-                          background: product.status === "ACTIVE" ? C.primaryGhost : "rgba(196, 149, 106, 0.1)",
+                          background: product.status === "ACTIVE" ? C.primaryGhost : C.accentGhost,
                           color: product.status === "ACTIVE" ? C.primary : C.accent,
                         }}
                       >

@@ -8,17 +8,21 @@ import { Store, CheckCircle2, Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
 };
 
 export default function SellerProfilePage() {
@@ -112,16 +116,16 @@ export default function SellerProfilePage() {
           <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-20 -left-40" />
         </div>
 
-        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 248, 245, 0.92)" }}>
+        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.92)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center">
-            <span className="font-medium text-lg" style={{ color: C.text }}>Store Settings</span>
+            <span className="font-semibold text-lg" style={{ color: C.text }}>Store Settings</span>
           </div>
         </header>
 
         <main className="relative max-w-3xl mx-auto px-4 sm:px-6 pt-8 space-y-6">
           <div className="animate-fade-in-up opacity-0 stagger-1">
             <div className="mb-6">
-              <h1 className="text-2xl font-bold tracking-tight" style={{ color: C.text }}>Store Settings & Profile</h1>
+              <h1 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>Store Settings & Profile</h1>
               <p className="text-sm mt-1" style={{ color: C.textMuted }}>
                 Customize how your skincare brand appears to buyers in the Lucent marketplace.
               </p>
@@ -130,14 +134,23 @@ export default function SellerProfilePage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="animate-fade-in-up opacity-0 stagger-2">
-              <Card className="glass-card hover-lift p-6 space-y-5 rounded-2xl">
-                <h2 className="text-lg font-bold border-b pb-3 flex items-center gap-2" style={{ color: C.text, borderColor: C.borderLight }}>
+              <Card
+                className="p-6 space-y-5 rounded-2xl"
+                style={{
+                  background: "rgba(255,255,255,0.72)",
+                  backdropFilter: "blur(16px) saturate(180%)",
+                  WebkitBackdropFilter: "blur(16px) saturate(180%)",
+                  border: `1px solid ${C.borderLight}`,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+                }}
+              >
+                <h2 className="text-lg font-semibold border-b pb-3 flex items-center gap-2" style={{ color: C.text, borderColor: C.borderLight }}>
                   <Store className="w-5 h-5" style={{ color: C.primary }} /> Store Details
                 </h2>
 
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-semibold block mb-1" style={{ color: C.textLight }}>
+                    <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                       Store Name *
                     </label>
                     <input
@@ -147,12 +160,12 @@ export default function SellerProfilePage() {
                       onChange={(e) => setForm({ ...form, storeName: e.target.value })}
                       placeholder="e.g. Pure Botanicals Skincare"
                       className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                      style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                      style={{ border: `1px solid ${C.border}`, background: "rgba(255,255,255,0.72)", backdropFilter: "blur(8px)", color: C.text }}
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold block mb-1" style={{ color: C.textLight }}>
+                    <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                       Store Bio / Description
                     </label>
                     <textarea
@@ -161,13 +174,13 @@ export default function SellerProfilePage() {
                       onChange={(e) => setForm({ ...form, bio: e.target.value })}
                       placeholder="Tell customers about your skincare formulation philosophy, ingredients quality, or story..."
                       className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow resize-y"
-                      style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                      style={{ border: `1px solid ${C.border}`, background: "rgba(255,255,255,0.72)", backdropFilter: "blur(8px)", color: C.text }}
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-semibold block mb-1" style={{ color: C.textLight }}>
+                      <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                         Customer Support Email
                       </label>
                       <input
@@ -176,12 +189,12 @@ export default function SellerProfilePage() {
                         onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
                         placeholder="support@yourbrand.com"
                         className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                        style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                        style={{ border: `1px solid ${C.border}`, background: "rgba(255,255,255,0.72)", backdropFilter: "blur(8px)", color: C.text }}
                       />
                     </div>
 
                     <div>
-                      <label className="text-xs font-semibold block mb-1" style={{ color: C.textLight }}>
+                      <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                         Contact Phone
                       </label>
                       <input
@@ -190,7 +203,7 @@ export default function SellerProfilePage() {
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                         placeholder="+1 (555) 000-0000"
                         className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                        style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                        style={{ border: `1px solid ${C.border}`, background: "rgba(255,255,255,0.72)", backdropFilter: "blur(8px)", color: C.text }}
                       />
                     </div>
                   </div>
@@ -199,8 +212,17 @@ export default function SellerProfilePage() {
             </div>
 
             <div className="animate-fade-in-up opacity-0 stagger-3">
-              <Card className="glass-card hover-lift p-6 space-y-4 rounded-2xl">
-                <h2 className="text-lg font-bold border-b pb-3" style={{ color: C.text, borderColor: C.borderLight }}>
+              <Card
+                className="p-6 space-y-4 rounded-2xl"
+                style={{
+                  background: "rgba(255,255,255,0.72)",
+                  backdropFilter: "blur(16px) saturate(180%)",
+                  WebkitBackdropFilter: "blur(16px) saturate(180%)",
+                  border: `1px solid ${C.borderLight}`,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+                }}
+              >
+                <h2 className="text-lg font-semibold border-b pb-3" style={{ color: C.text, borderColor: C.borderLight }}>
                   Store Logo
                 </h2>
                 <div>
@@ -215,13 +237,19 @@ export default function SellerProfilePage() {
 
             <div className="animate-fade-in-up opacity-0 stagger-4">
               {error && (
-                <div className="p-4 rounded-xl text-sm font-medium" style={{ background: "#fde8e8", border: `1px solid #f5c6c6`, color: "#b54a4a" }}>
+                <div
+                  className="p-4 rounded-xl text-sm font-semibold"
+                  style={{ background: "rgba(181, 74, 74, 0.06)", border: `1px solid rgba(181, 74, 74, 0.2)`, color: "#8b3a3a" }}
+                >
                   {error}
                 </div>
               )}
 
               {success && (
-                <div className="p-4 rounded-xl text-sm font-medium flex items-center gap-2 animate-success-pop" style={{ background: "#e8f0e6", border: `1px solid #c5dcc0`, color: "#3a5233" }}>
+                <div
+                  className="p-4 rounded-xl text-sm font-semibold flex items-center gap-2 animate-success-pop"
+                  style={{ background: "rgba(45, 90, 61, 0.06)", border: `1px solid rgba(45, 90, 61, 0.15)`, color: C.primary }}
+                >
                   <CheckCircle2 size={16} /> {success}
                 </div>
               )}
@@ -231,7 +259,8 @@ export default function SellerProfilePage() {
               <Button
                 type="submit"
                 disabled={saving}
-                className="magnetic-btn gradient-primary text-white font-medium px-8 py-2.5 rounded-xl shadow-sm transition-all duration-300"
+                className="magnetic-btn text-white font-semibold px-8 py-2.5 rounded-xl shadow-sm transition-all duration-300"
+                style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}
               >
                 {saving ? (
                   <>

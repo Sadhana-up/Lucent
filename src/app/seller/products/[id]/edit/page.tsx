@@ -5,8 +5,26 @@ import { useRouter } from "next/navigation";
 import { ImageUpload } from "@/components/image-upload";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Leaf } from "lucide-react";
 import Link from "next/link";
+
+const C = {
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+};
 
 export default function EditProductPage({
   params,
@@ -99,34 +117,78 @@ export default function EditProductPage({
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="w-8 h-8 border-4 border-rose-900 border-t-transparent rounded-full animate-spin" />
+        <div
+          className="w-8 h-8 border-4 rounded-full animate-spin"
+          style={{
+            borderColor: C.border,
+            borderTopColor: C.primary,
+          }}
+        />
       </div>
     );
   }
+
+  const inputClass =
+    "w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow";
+
+  const inputStyle = {
+    border: `1px solid ${C.border}`,
+    background: "rgba(255,255,255,0.72)",
+    backdropFilter: "blur(8px)",
+    color: C.text,
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/seller/products">
-          <Button variant="outline" size="sm" className="border-pink-200 text-stone-700">
+          <Button
+            variant="outline"
+            size="sm"
+            className="magnetic-btn rounded-xl"
+            style={{
+              border: `1px solid ${C.border}`,
+              color: C.textSecondary,
+              background: "rgba(255,255,255,0.5)",
+            }}
+          >
             <ArrowLeft className="w-4 h-4 mr-1" /> Back
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-rose-950 tracking-tight">Edit Product</h1>
-          <p className="text-xs text-stone-500">
+          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>
+            Edit Product
+          </h1>
+          <p className="text-xs" style={{ color: C.textMuted }}>
             Update product details, pricing, images, and status.
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card className="border-pink-200/60 p-6 space-y-6">
-          <h2 className="text-lg font-bold text-rose-950 border-b border-pink-100 pb-3">
-            Product Images
-          </h2>
+        <Card
+          className="p-6 space-y-6 rounded-2xl"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(16px) saturate(180%)",
+            WebkitBackdropFilter: "blur(16px) saturate(180%)",
+            border: `1px solid ${C.borderLight}`,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+          }}
+        >
+          <div className="flex items-center gap-2 pb-3" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center"
+              style={{ background: C.primaryGhost }}
+            >
+              <Leaf size={16} style={{ color: C.primary }} />
+            </div>
+            <h2 className="text-base font-semibold" style={{ color: C.text }}>
+              Product Images
+            </h2>
+          </div>
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-stone-600 block mb-2">
+            <label className="text-xs font-semibold uppercase tracking-wider block mb-2" style={{ color: C.textSecondary }}>
               Upload Images (Stored in /uploads) *
             </label>
             <ImageUpload
@@ -137,14 +199,31 @@ export default function EditProductPage({
           </div>
         </Card>
 
-        <Card className="border-pink-200/60 p-6 space-y-5">
-          <h2 className="text-lg font-bold text-rose-950 border-b border-pink-100 pb-3">
-            Basic Information
-          </h2>
+        <Card
+          className="p-6 space-y-5 rounded-2xl"
+          style={{
+            background: "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(16px) saturate(180%)",
+            WebkitBackdropFilter: "blur(16px) saturate(180%)",
+            border: `1px solid ${C.borderLight}`,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+          }}
+        >
+          <div className="flex items-center gap-2 pb-3" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center"
+              style={{ background: C.primaryGhost }}
+            >
+              <Leaf size={16} style={{ color: C.primary }} />
+            </div>
+            <h2 className="text-base font-semibold" style={{ color: C.text }}>
+              Basic Information
+            </h2>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
-              <label className="text-xs font-semibold text-rose-950 block mb-1">
+              <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                 Product Title *
               </label>
               <input
@@ -152,18 +231,20 @@ export default function EditProductPage({
                 required
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 bg-stone-50/50 text-sm outline-none focus:border-rose-900"
+                className={inputClass}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-rose-950 block mb-1">
+              <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                 Category
               </label>
               <select
                 value={form.categoryId}
                 onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 bg-stone-50/50 text-sm outline-none focus:border-rose-900"
+                className={inputClass}
+                style={inputStyle}
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -174,13 +255,14 @@ export default function EditProductPage({
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-rose-950 block mb-1">
+              <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                 Status
               </label>
               <select
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 bg-stone-50/50 text-sm outline-none focus:border-rose-900"
+                className={inputClass}
+                style={inputStyle}
               >
                 <option value="ACTIVE">ACTIVE</option>
                 <option value="DRAFT">DRAFT</option>
@@ -189,7 +271,7 @@ export default function EditProductPage({
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-rose-950 block mb-1">
+              <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                 Price ($) *
               </label>
               <input
@@ -198,12 +280,13 @@ export default function EditProductPage({
                 required
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 bg-stone-50/50 text-sm outline-none focus:border-rose-900"
+                className={inputClass}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-rose-950 block mb-1">
+              <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                 Discount Price ($)
               </label>
               <input
@@ -211,12 +294,13 @@ export default function EditProductPage({
                 step="0.01"
                 value={form.discountPrice}
                 onChange={(e) => setForm({ ...form, discountPrice: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 bg-stone-50/50 text-sm outline-none focus:border-rose-900"
+                className={inputClass}
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-rose-950 block mb-1">
+              <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                 Stock Quantity *
               </label>
               <input
@@ -224,12 +308,13 @@ export default function EditProductPage({
                 required
                 value={form.stock}
                 onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 bg-stone-50/50 text-sm outline-none focus:border-rose-900"
+                className={inputClass}
+                style={inputStyle}
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-xs font-semibold text-rose-950 block mb-1">
+              <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
                 Full Description *
               </label>
               <textarea
@@ -237,28 +322,48 @@ export default function EditProductPage({
                 required
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-pink-200 bg-stone-50/50 text-sm outline-none focus:border-rose-900 resize-y"
+                className={`${inputClass} resize-y`}
+                style={inputStyle}
               />
             </div>
           </div>
         </Card>
 
         {error && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm font-medium">
+          <div
+            className="p-4 rounded-xl text-sm font-semibold"
+            style={{
+              background: "rgba(181, 74, 74, 0.06)",
+              border: "1px solid rgba(181, 74, 74, 0.2)",
+              color: "#8b3a3a",
+            }}
+          >
             {error}
           </div>
         )}
 
         <div className="flex justify-end gap-3">
           <Link href="/seller/products">
-            <Button variant="outline" type="button" className="border-pink-200 text-stone-700">
+            <Button
+              variant="outline"
+              type="button"
+              className="magnetic-btn rounded-xl"
+              style={{
+                border: `1px solid ${C.border}`,
+                color: C.textSecondary,
+                background: "rgba(255,255,255,0.5)",
+              }}
+            >
               Cancel
             </Button>
           </Link>
           <Button
             type="submit"
             disabled={saving}
-            className="bg-rose-900 hover:bg-rose-950 text-white font-medium px-6 shadow-sm"
+            className="text-white font-semibold px-6 rounded-xl magnetic-btn"
+            style={{
+              background: "linear-gradient(135deg, #2D5A3D, #3D7A52)",
+            }}
           >
             {saving ? (
               <>
