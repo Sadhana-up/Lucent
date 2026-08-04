@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Star } from "lucide-react";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
 };
 
 interface StarRatingProps {
@@ -56,7 +56,7 @@ export function StarRating({
               style={{
                 fill: filled || hovered ? (hovered ? C.primaryLight : C.primary) : "none",
                 color: filled || hovered ? (hovered ? C.primaryLight : C.primary) : C.border,
-                filter: hovered ? `drop-shadow(0 0 4px rgba(74, 103, 65, 0.3))` : "none",
+                filter: hovered ? `drop-shadow(0 0 4px rgba(45, 90, 61, 0.3))` : "none",
                 transition: "fill 0.2s ease, color 0.2s ease, filter 0.2s ease",
               }}
             />

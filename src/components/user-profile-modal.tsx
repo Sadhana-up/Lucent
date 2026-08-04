@@ -7,26 +7,20 @@ import { authClient } from "@/lib/auth-client";
 import { LogOut, User, Mail, X } from "lucide-react";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryDark: "#3a5233",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  primaryGlow: "rgba(74, 103, 65, 0.15)",
-  accent: "#c4956a",
-  accentLight: "#d4b08f",
-  accentGhost: "rgba(196, 149, 106, 0.10)",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  bgCard: "#ffffff",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successFg: "#3a5233",
-  successBg: "#e8f0e6",
-  warnFg: "#78350f",
-  warnBg: "#FEF3C7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
 };
 
 interface UserProfileModalProps {
@@ -54,12 +48,12 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
-      style={{ background: "rgba(45, 42, 38, 0.4)", backdropFilter: "blur(8px)" }}
+      style={{ background: "rgba(26, 29, 33, 0.4)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
       <div
         className="w-full max-w-sm glass-card rounded-3xl overflow-hidden animate-scale-in"
-        style={{ border: `1px solid ${C.border}` }}
+        style={{ border: `1px solid ${C.border}`, boxShadow: `0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)` }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -67,7 +61,7 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
           className="px-6 py-4 flex items-center justify-between"
           style={{ borderBottom: `1px solid ${C.border}` }}
         >
-          <h3 className="text-base font-medium" style={{ color: C.primary }}>
+          <h3 className="text-base font-semibold" style={{ color: C.primary }}>
             Your Profile
           </h3>
           <button
@@ -92,7 +86,7 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
                 className="w-20 h-20 rounded-full object-cover"
                 style={{
                   border: `3px solid ${C.primary}`,
-                  boxShadow: `0 0 0 4px ${C.primaryGlow}, 0 0 20px ${C.primaryGlow}`,
+                  boxShadow: `0 0 0 4px rgba(45, 90, 61, 0.10), 0 0 20px rgba(45, 90, 61, 0.10)`,
                 }}
               />
             </div>
@@ -100,9 +94,9 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
             <div
               className="w-20 h-20 rounded-full flex items-center justify-center"
               style={{
-                background: `linear-gradient(135deg, ${C.primaryGhost}, ${C.primaryGlow})`,
+                background: `linear-gradient(135deg, ${C.primaryGhost}, rgba(45, 90, 61, 0.10))`,
                 border: `3px solid ${C.primary}`,
-                boxShadow: `0 0 0 4px ${C.primaryGlow}, 0 0 20px ${C.primaryGlow}`,
+                boxShadow: `0 0 0 4px rgba(45, 90, 61, 0.10), 0 0 20px rgba(45, 90, 61, 0.10)`,
               }}
             >
               <User size={32} style={{ color: C.primary }} />
@@ -111,7 +105,7 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
 
           {/* Name */}
           <h4
-            className="text-lg font-medium mt-4"
+            className="text-lg font-semibold mt-4"
             style={{ color: C.primary }}
           >
             {user.name}
@@ -120,7 +114,7 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
           {/* Email */}
           <div className="flex items-center gap-2 mt-2">
             <Mail size={14} style={{ color: C.textMuted }} />
-            <span className="text-sm" style={{ color: C.textLight }}>
+            <span className="text-sm" style={{ color: C.textSecondary }}>
               {user.email}
             </span>
           </div>

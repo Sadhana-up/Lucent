@@ -5,18 +5,20 @@ import { StarRating } from "./star-rating";
 import { Store, CheckCircle2 } from "lucide-react";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successFg: "#3a5233",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
 };
 
 export interface ProductCardProps {
@@ -71,7 +73,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {product.discountPrice && (
           <span
             className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-white text-[11px] font-medium shadow-sm"
-            style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}
+            style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}
           >
             SALE
           </span>
@@ -80,7 +82,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {product.skinType && (
           <span
             className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg backdrop-blur-md text-[10px] font-medium"
-            style={{ background: "rgba(255,255,255,0.9)", border: `1px solid ${C.border}`, color: C.textLight }}
+            style={{ background: "rgba(255,255,255,0.9)", border: `1px solid ${C.border}`, color: C.textSecondary }}
           >
             {product.skinType}
           </span>
@@ -100,13 +102,13 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
-          <h3 className="font-medium text-base line-clamp-1 transition-colors duration-200" style={{ color: C.text }}>
+          <h3 className="font-semibold text-base line-clamp-1 transition-colors duration-200" style={{ color: C.text }}>
             {product.title}
           </h3>
 
           <div className="flex items-center gap-1.5 mt-1.5">
             <StarRating rating={product.avgRating || 5} size={13} />
-            <span className="text-xs font-medium" style={{ color: C.textLight }}>
+            <span className="text-xs font-medium" style={{ color: C.textSecondary }}>
               {product.avgRating ? product.avgRating : "5.0"}
             </span>
             <span className="text-[11px]" style={{ color: C.textMuted }}>
@@ -120,7 +122,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <span
                   key={concern}
                   className="px-2 py-0.5 rounded-md text-[10px] font-medium"
-                  style={{ background: C.primaryGhost, border: `1px solid rgba(74, 103, 65, 0.08)`, color: C.primary }}
+                  style={{ background: C.primaryGhost, border: `1px solid rgba(45, 90, 61, 0.06)`, color: C.primary }}
                 >
                   {concern}
                 </span>
