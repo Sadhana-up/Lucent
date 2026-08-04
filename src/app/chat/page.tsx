@@ -32,23 +32,23 @@ type UploadedImage = {
 
 /* ─── Design tokens ─── */
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryDark: "#3a5233",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  primaryGlow: "rgba(74, 103, 65, 0.15)",
-  accent: "#c4956a",
-  accentLight: "#d4b08f",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  bgCard: "#ffffff",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successBg: "#e8f0e6",
-  successFg: "#3a5233",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentLight: "#9B8DF0",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successBg: "rgba(45, 90, 61, 0.08)",
+  successFg: "#1E3D2A",
 };
 
 function parseSSE(buffer: string): { events: any[]; rest: string } {
@@ -70,7 +70,7 @@ function parseSSE(buffer: string): { events: any[]; rest: string } {
 }
 
 /* ─── Bouncing dot loader ─── */
-export function MessageLoading({ className = "text-[#4a6741]", style }: { className?: string; style?: React.CSSProperties }) {
+export function MessageLoading({ className = "text-[#2D5A3D]", style }: { className?: string; style?: React.CSSProperties }) {
   const uid = useId();
   const idA = `spinnerA-${uid}`;
   const idB = `spinnerB-${uid}`;
@@ -279,7 +279,7 @@ function AssistantMessage({
           <div className="h-1.5 w-1.5 rounded-full" style={{ background: C.primary }} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <span className="font-mono text-[9px] uppercase tracking-[0.25em]" style={{ color: C.primary }}>Assistant</span>
+          <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.25em]" style={{ color: C.primary }}>Assistant</span>
           <div className="space-y-3 pr-4 pt-1 text-[14px] leading-relaxed" style={{ color: C.text }}>
             {showWeaving ? (
               <div className="flex items-center gap-2 font-mono text-xs italic" style={{ color: C.textMuted }}>
@@ -312,7 +312,7 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
         className="flex w-full justify-end pl-10"
       >
         <div className="flex flex-col items-end gap-1.5">
-          <span className="font-mono text-[9px] uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>You</span>
+          <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>You</span>
           {images && images.length > 0 && (
             <div className="flex gap-2 mb-2">
               {images.map((img, idx) => (
@@ -327,7 +327,7 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
               ))}
             </div>
           )}
-          <div className="max-w-full whitespace-pre-wrap text-right text-[13.5px] font-light leading-relaxed px-4 py-2.5 rounded-2xl" style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)", color: "#fff" }}>
+          <div className="max-w-full whitespace-pre-wrap text-right text-[13.5px] font-light leading-relaxed px-4 py-2.5 rounded-2xl" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)", color: "#fff" }}>
             {content}
           </div>
         </div>
@@ -341,7 +341,7 @@ function UserMessage({ content, images }: { content: string; images?: UploadedIm
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
-            style={{ background: "rgba(45, 42, 38, 0.8)" }}
+            style={{ background: "rgba(26, 29, 33, 0.8)" }}
             onClick={() => setExpandedImage(null)}
           >
             <motion.div
@@ -627,28 +627,42 @@ export default function ChatPage() {
         <div className="flex h-full items-center justify-center">
           <div className="flex flex-col items-center gap-3 animate-fade-in">
             <div className="h-8 w-8 animate-spin rounded-full border-2" style={{ borderColor: C.border, borderTopColor: C.primary }} />
-            <span className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>Verifying session...</span>
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>Verifying session...</span>
           </div>
         </div>
       )}
 
       {!isPending && session && (
         <>
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 backdrop-blur-md sm:px-6 sm:py-[18px]" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 248, 245, 0.92)" }}>
+          {/* Header — glass-strong */}
+          <div
+            className="flex items-center justify-between px-4 py-3 backdrop-blur-xl sm:px-6 sm:py-[18px]"
+            style={{
+              borderBottom: `1px solid ${C.border}`,
+              background: "rgba(250, 251, 252, 0.85)",
+              boxShadow: `0 1px 3px rgba(45, 90, 61, 0.04), inset 0 1px 0 rgba(255,255,255,0.6)`,
+            }}
+          >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
                 <Leaf size={14} className="text-white" />
               </div>
               <div>
                 <span className="text-sm font-medium" style={{ color: C.text }}>AI Skincare Advisor</span>
-                <span className="text-[10px] block" style={{ color: C.textMuted }}>Ask me anything about skincare</span>
+                <span className="text-[10px] font-semibold block" style={{ color: C.textMuted }}>Ask me anything about skincare</span>
               </div>
             </div>
           </div>
 
           <div className="relative flex min-h-0 flex-1 flex-col">
-            <div ref={scrollRef} className="custom-scroll flex-1 overflow-y-auto overscroll-contain">
+            {/* Chat area — subtle ambient background */}
+            <div
+              ref={scrollRef}
+              className="custom-scroll flex-1 overflow-y-auto overscroll-contain"
+              style={{
+                background: `radial-gradient(ellipse 80% 60% at 50% 0%, ${C.primaryGhost}, transparent), ${C.bg}`,
+              }}
+            >
               <div ref={contentRef} className="mx-auto max-w-3xl space-y-8 px-4 py-6 sm:px-6">
                 {messages.length === 0 && (
                   <div className="flex flex-col items-center justify-center px-4 py-24 text-center">
@@ -656,17 +670,17 @@ export default function ChatPage() {
                       initial={{ scale: 0.95, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
-                      style={{ background: C.primaryGhost, border: `1px solid rgba(74, 103, 65, 0.1)` }}
+                      style={{ background: C.primaryGhost, border: `1px solid ${C.primaryGlow}` }}
                     >
                       <Sparkles size={24} style={{ color: C.primary }} />
                     </motion.div>
                     <h3 className="mt-2 text-base font-medium" style={{ color: C.text }}>Start a conversation</h3>
-                    <p className="mt-2 max-w-[280px] px-2 text-[13px] leading-relaxed" style={{ color: C.textMuted }}>
+                    <p className="mt-2 max-w-[280px] px-2 text-[13px] font-semibold leading-relaxed" style={{ color: C.textMuted }}>
                       Ask a question or pick a suggestion below to get started.
                     </p>
 
                     <div className="mt-10 flex w-full max-w-[360px] flex-col gap-3">
-                      <span className="mb-1 pb-2 text-left text-[10px] uppercase tracking-widest font-medium" style={{ color: C.textMuted }}>
+                      <span className="mb-1 pb-2 text-left text-[10px] font-semibold uppercase tracking-widest" style={{ color: C.textMuted }}>
                         Suggested questions
                       </span>
                       {SUGGESTIONS.map((s, idx) => (
@@ -681,7 +695,7 @@ export default function ChatPage() {
                             textareaRef.current?.focus();
                           }}
                           className="group flex items-center justify-between py-2.5 text-left text-[13px] font-light transition-all duration-200"
-                          style={{ color: C.textLight }}
+                          style={{ color: C.textSecondary }}
                         >
                           <span className="line-clamp-1">{s}</span>
                           <span className="translate-x-[-4px] text-xs opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" style={{ color: C.primary }}>↗</span>
@@ -770,14 +784,22 @@ export default function ChatPage() {
             )}
           </AnimatePresence>
 
-          {/* Input area */}
-          <div className="px-4 py-4 sm:px-6 sm:py-[22px]" style={{ borderTop: `1px solid ${C.border}`, background: "rgba(255, 255, 255, 0.9)" }}>
+          {/* Input area — refined glass */}
+          <div
+            className="px-4 py-4 sm:px-6 sm:py-[22px]"
+            style={{
+              borderTop: `1px solid ${C.border}`,
+              background: "rgba(255, 255, 255, 0.92)",
+              backdropFilter: "blur(12px)",
+              boxShadow: `inset 0 1px 0 rgba(255,255,255,0.5)`,
+            }}
+          >
             <div className="mx-auto flex max-w-3xl items-end gap-3 pb-2.5 transition-all" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
               {/* Image upload button */}
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={busy || uploadedImages.length >= 3}
-                className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-20 hover:bg-[rgba(74,103,65,0.06)]"
+                className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-20 hover:bg-[rgba(45,90,61,0.06)]"
                 style={{ border: `1px solid ${C.border}`, color: C.textMuted }}
                 title="Upload image (max 3)"
               >
@@ -807,7 +829,7 @@ export default function ChatPage() {
                 onClick={send}
                 disabled={busy || (!input.trim() && uploadedImages.length === 0)}
                 className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full shadow-sm transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-20 magnetic-btn"
-                style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)", color: "#fff" }}
+                style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)", color: "#fff" }}
                 title="Send"
               >
                 <motion.span
@@ -820,10 +842,10 @@ export default function ChatPage() {
               </button>
             </div>
             <div className="mx-auto mt-3 flex max-w-3xl justify-between px-1">
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: C.textMuted }}>
+              <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em]" style={{ color: C.textMuted }}>
                 {uploadedImages.length > 0 ? `${uploadedImages.length}/3 images attached` : "Shift+Enter for new line"}
               </span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: C.primary }}>{busy ? "Thinking" : "Ready"}</span>
+              <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em]" style={{ color: C.primary }}>{busy ? "Thinking" : "Ready"}</span>
             </div>
           </div>
         </>
