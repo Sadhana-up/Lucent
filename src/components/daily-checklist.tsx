@@ -5,23 +5,25 @@ import { Check, Flame, Sun, Moon, Sparkles, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryDark: "#3a5233",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  primaryGlow: "rgba(74, 103, 65, 0.15)",
-  accent: "#c4956a",
-  accentLight: "#d4b08f",
-  accentGhost: "rgba(196, 149, 106, 0.10)",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  bgCard: "#ffffff",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successFg: "#3a5233",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentLight: "#9B8DF0",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  rose: "#E8B4B8",
+  roseGhost: "rgba(232, 180, 184, 0.10)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
   successBg: "#e8f0e6",
   warnFg: "#78350f",
   warnBg: "#FEF3C7",
@@ -57,18 +59,18 @@ export function DailyChecklist() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="animate-fade-in-up stagger-1" style={{ opacity: 0, animationFillMode: "forwards" }}>
           <div className="flex items-center gap-2 mb-1">
-            <Badge className="border-0 text-xs px-2.5 py-0.5 rounded-full font-medium" style={{ background: C.primaryGhost, color: C.primary }}>
+            <Badge className="border-0 text-xs px-2.5 py-0.5 rounded-full font-semibold" style={{ background: C.primaryGhost, color: C.primary }}>
               <Flame size={12} className="mr-1 inline" style={{ color: C.accent }} /> Live Skincare Companion
             </Badge>
           </div>
-          <h3 className="text-xl sm:text-2xl font-medium tracking-tight" style={{ color: C.primary }}>
+          <h3 className="text-xl sm:text-2xl font-semibold tracking-tight" style={{ color: C.primary }}>
             Today&apos;s Skincare Checklist
           </h3>
         </div>
 
         <div className="flex items-center gap-3 self-start sm:self-auto animate-fade-in-up stagger-2" style={{ opacity: 0, animationFillMode: "forwards" }}>
           <div
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold animate-glow-pulse"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold animate-glow-pulse"
             style={{ background: C.primaryGhost, borderColor: C.border, color: C.primary }}
           >
             <Flame size={14} style={{ color: C.accent }} /> 7-Day Streak
@@ -99,7 +101,7 @@ export function DailyChecklist() {
         <div className="glass-card p-4 rounded-2xl border animate-fade-in-up stagger-3" style={{ borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
           <div className="flex items-center gap-2 mb-3 pb-2 border-b" style={{ borderColor: C.border }}>
             <Sun size={16} className="text-amber-500" />
-            <span className="font-medium text-xs uppercase tracking-wider" style={{ color: C.primary }}>
+            <span className="font-semibold text-xs uppercase tracking-wider" style={{ color: C.primary }}>
               Morning Steps
             </span>
           </div>
@@ -116,7 +118,7 @@ export function DailyChecklist() {
                 }}
               >
                 <span
-                  className="text-xs font-medium"
+                  className="text-xs font-semibold"
                   style={{
                     color: C.text,
                     textDecoration: item.completed ? "line-through" : "none",
@@ -144,7 +146,7 @@ export function DailyChecklist() {
         <div className="glass-card p-4 rounded-2xl border animate-fade-in-up stagger-4" style={{ borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
           <div className="flex items-center gap-2 mb-3 pb-2 border-b" style={{ borderColor: C.border }}>
             <Moon size={16} className="text-purple-600" />
-            <span className="font-medium text-xs uppercase tracking-wider" style={{ color: C.primary }}>
+            <span className="font-semibold text-xs uppercase tracking-wider" style={{ color: C.primary }}>
               Evening Steps
             </span>
           </div>
@@ -161,7 +163,7 @@ export function DailyChecklist() {
                 }}
               >
                 <span
-                  className="text-xs font-medium"
+                  className="text-xs font-semibold"
                   style={{
                     color: C.text,
                     textDecoration: item.completed ? "line-through" : "none",

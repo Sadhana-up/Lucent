@@ -5,23 +5,25 @@ import { Sparkles, ArrowRight, CheckCircle2, TrendingUp, ShieldCheck, RefreshCw 
 import { Badge } from "@/components/ui/badge";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryDark: "#3a5233",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  primaryGlow: "rgba(74, 103, 65, 0.15)",
-  accent: "#c4956a",
-  accentLight: "#d4b08f",
-  accentGhost: "rgba(196, 149, 106, 0.10)",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  bgCard: "#ffffff",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successFg: "#3a5233",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentLight: "#9B8DF0",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  rose: "#E8B4B8",
+  roseGhost: "rgba(232, 180, 184, 0.10)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
   successBg: "#e8f0e6",
   warnFg: "#78350f",
   warnBg: "#FEF3C7",
@@ -100,13 +102,13 @@ export function SkinJourneySlider() {
   return (
     <div className="w-full glass-card rounded-3xl p-6 sm:p-8 animate-fade-in-up">
       <div className="text-center max-w-xl mx-auto mb-8">
-        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-medium" style={{ background: C.primaryGhost, color: C.primary }}>
+        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-semibold" style={{ background: C.primaryGhost, color: C.primary }}>
           Clinical Progress Simulator
         </Badge>
-        <h3 className="text-2xl sm:text-3xl font-medium tracking-tight mb-2" style={{ color: C.primary }}>
+        <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-2" style={{ color: C.primary }}>
           Interactive 4-Week Skin Transformation
         </h3>
-        <p className="text-sm" style={{ color: C.textLight }}>
+        <p className="text-sm" style={{ color: C.textSecondary }}>
           Select a week milestone to simulate the clinical skin regeneration timeline guided by Lucent routine protocols.
         </p>
       </div>
@@ -119,7 +121,7 @@ export function SkinJourneySlider() {
             <button
               key={m.week}
               onClick={() => setSelectedWeek(m.week)}
-              className="magnetic-btn px-4 sm:px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer animate-fade-in-up"
+              className="magnetic-btn px-4 sm:px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer animate-fade-in-up"
               style={{
                 background: isActive ? `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})` : C.primaryGhost,
                 color: isActive ? "#fff" : C.primary,
@@ -164,7 +166,7 @@ export function SkinJourneySlider() {
               </span>
             </div>
 
-            <span className="absolute top-3 right-3 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-md backdrop-blur-sm" style={{ background: `rgba(74, 103, 65, 0.85)` }}>
+            <span className="absolute top-3 right-3 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-md backdrop-blur-sm" style={{ background: `rgba(45, 90, 61, 0.85)` }}>
               {milestone.label} Result
             </span>
 
@@ -202,7 +204,7 @@ export function SkinJourneySlider() {
             <Badge className="border-0 text-xs px-2.5 py-0.5 rounded-full mb-1" style={{ background: C.primaryGhost, color: C.primary }}>
               Milestone Phase {milestone.week}
             </Badge>
-            <h4 className="text-xl font-medium" style={{ color: C.primary }}>
+            <h4 className="text-xl font-semibold" style={{ color: C.primary }}>
               {milestone.title}
             </h4>
           </div>
@@ -232,12 +234,12 @@ export function SkinJourneySlider() {
 
           {/* Observed Clinical Changes */}
           <div className="glass-card p-4 rounded-2xl border animate-fade-in-up stagger-6" style={{ borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
-            <h5 className="text-xs font-medium uppercase tracking-wider mb-2.5" style={{ color: C.primary }}>
+            <h5 className="text-xs font-semibold uppercase tracking-wider mb-2.5" style={{ color: C.primary }}>
               Key Observed Improvements:
             </h5>
             <ul className="space-y-2">
               {milestone.keyChanges.map((change, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.textLight }}>
+                <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.textSecondary }}>
                   <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: C.primary }} />
                   <span>{change}</span>
                 </li>
@@ -250,7 +252,7 @@ export function SkinJourneySlider() {
             <span className="font-semibold block mb-0.5" style={{ color: C.primary }}>
               Clinical Note:
             </span>
-            <span style={{ color: C.textLight }}>{milestone.dermatologistNote}</span>
+            <span style={{ color: C.textSecondary }}>{milestone.dermatologistNote}</span>
           </div>
         </div>
       </div>

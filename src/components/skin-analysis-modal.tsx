@@ -6,23 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryDark: "#3a5233",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  primaryGlow: "rgba(74, 103, 65, 0.15)",
-  accent: "#c4956a",
-  accentLight: "#d4b08f",
-  accentGhost: "rgba(196, 149, 106, 0.10)",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  bgCard: "#ffffff",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successFg: "#3a5233",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentLight: "#9B8DF0",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  rose: "#E8B4B8",
+  roseGhost: "rgba(232, 180, 184, 0.10)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
   successBg: "#e8f0e6",
 };
 
@@ -171,14 +173,14 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
             <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: C.primary }}>
               <Sparkles size={14} className="text-white" />
             </div>
-            <span className="font-medium text-base" style={{ color: C.primary }}>
+            <span className="font-semibold text-base" style={{ color: C.primary }}>
               Lucent AI Skin Diagnostic Engine
             </span>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-[rgba(74,103,65,0.08)]"
-            style={{ color: C.textLight }}
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-[rgba(45,90,61,0.06)]"
+            style={{ color: C.textSecondary }}
           >
             <X size={18} />
           </button>
@@ -189,13 +191,13 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
           {step === "select" && (
             <div>
               <div className="text-center max-w-xl mx-auto mb-8">
-                <Badge className="mb-3 border-0 text-xs px-3 py-1 rounded-full" style={{ background: C.primaryGhost, color: C.primary }}>
+                <Badge className="mb-3 border-0 text-xs px-3 py-1 rounded-full font-semibold" style={{ background: C.primaryGhost, color: C.primary }}>
                   Instant Facial Telemetry
                 </Badge>
-                <h3 className="text-2xl md:text-3xl font-medium tracking-tight mb-2" style={{ color: C.primary }}>
+                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2" style={{ color: C.primary }}>
                   Select or upload a photo to analyze
                 </h3>
-                <p className="text-sm" style={{ color: C.textLight }}>
+                <p className="text-sm" style={{ color: C.textSecondary }}>
                   Choose a realistic sample skin profile or upload your own selfie to experience Lucent&apos;s AI diagnosis.
                 </p>
               </div>
@@ -216,10 +218,10 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end p-2.5">
-                        <span className="text-xs text-white font-medium">{profile.skinType}</span>
+                        <span className="text-xs text-white font-semibold">{profile.skinType}</span>
                       </div>
                     </div>
-                    <h4 className="font-medium text-sm mb-1" style={{ color: C.text }}>
+                    <h4 className="font-semibold text-sm mb-1" style={{ color: C.text }}>
                       {profile.name}
                     </h4>
                     <p className="text-xs mb-3 line-clamp-2" style={{ color: C.textMuted }}>
@@ -227,7 +229,7 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                     </p>
                     <Button
                       size="sm"
-                      className="w-full text-xs font-medium text-white mt-auto"
+                      className="w-full text-xs font-semibold text-white mt-auto"
                       style={{ background: C.primary }}
                     >
                       Scan profile <ArrowRight size={12} className="ml-1" />
@@ -238,7 +240,7 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
 
               {/* Upload Custom Selfie Option */}
               <div
-                className="border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-colors hover:border-[#6b8c62] hover:bg-[rgba(74,103,65,0.04)] flex flex-col items-center justify-center"
+                className="border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-colors hover:border-[#3D7A52] hover:bg-[rgba(45,90,61,0.03)] flex flex-col items-center justify-center"
                 style={{ borderColor: C.border, background: C.bgWarm }}
               >
                 <input
@@ -252,7 +254,7 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                   <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3" style={{ background: C.bgCard, border: `1px solid ${C.border}` }}>
                     <Upload size={20} style={{ color: C.primary }} />
                   </div>
-                  <span className="font-medium text-sm mb-1" style={{ color: C.primary }}>
+                  <span className="font-semibold text-sm mb-1" style={{ color: C.primary }}>
                     Upload your own photo / selfie
                   </span>
                   <span className="text-xs" style={{ color: C.textMuted }}>
@@ -273,17 +275,17 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                   className="w-full h-full object-cover filter contrast-105"
                 />
                 {/* Laser scan line */}
-                <div className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#6b8c62] to-transparent shadow-[0_0_15px_rgba(74,103,65,0.6)] animate-scan" />
+                <div className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#3D7A52] to-transparent shadow-[0_0_15px_rgba(45,90,61,0.6)] animate-scan" />
 
                 {/* Facial Grid Landmarks overlay */}
-                <div className="absolute inset-0 border-2 border-dashed border-[rgba(74,103,65,0.3)] m-6 rounded-full pointer-events-none animate-pulse" />
+                <div className="absolute inset-0 border-2 border-dashed border-[rgba(45,90,61,0.3)] m-6 rounded-full pointer-events-none animate-pulse" />
                 <div className="absolute top-1/3 left-1/3 w-3 h-3 border-l-2 border-t-2" style={{ borderColor: C.primary }} />
                 <div className="absolute top-1/3 right-1/3 w-3 h-3 border-r-2 border-t-2" style={{ borderColor: C.primary }} />
                 <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 w-4 h-4 border-b-2" style={{ borderColor: C.primary }} />
               </div>
 
               {/* Progress Text & Telemetry */}
-              <h4 className="text-lg font-medium mb-2" style={{ color: C.primary }}>
+              <h4 className="text-lg font-semibold mb-2" style={{ color: C.primary }}>
                 {scanStatus}
               </h4>
 
@@ -294,7 +296,7 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                 />
               </div>
 
-              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: C.textMuted }}>
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.textMuted }}>
                 Lucent Vision Engine v2.4 · {scanProgress}% complete
               </span>
             </div>
@@ -312,14 +314,14 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                     style={{ borderColor: C.border }}
                   />
                   <div>
-                    <Badge className="border-0 text-xs px-2.5 py-0.5 rounded-full mb-1" style={{ background: C.primaryGhost, color: C.primary }}>
+                    <Badge className="border-0 text-xs px-2.5 py-0.5 rounded-full mb-1 font-semibold" style={{ background: C.primaryGhost, color: C.primary }}>
                       Diagnostic Report
                     </Badge>
-                    <h3 className="text-xl font-medium" style={{ color: C.text }}>
+                    <h3 className="text-xl font-semibold" style={{ color: C.text }}>
                       {selectedProfile.name}
                     </h3>
-                    <p className="text-xs" style={{ color: C.textLight }}>
-                      Skin Type: <span className="font-medium" style={{ color: C.primary }}>{selectedProfile.skinType}</span>
+                    <p className="text-xs" style={{ color: C.textSecondary }}>
+                      Skin Type: <span className="font-semibold" style={{ color: C.primary }}>{selectedProfile.skinType}</span>
                     </p>
                   </div>
                 </div>
@@ -344,7 +346,7 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                   { label: "Calmness Index", val: 100 - selectedProfile.sensitivityScore, icon: Sparkles, color: "#7a9a6f" },
                 ].map((metric) => (
                   <div key={metric.label} className="p-3.5 rounded-2xl text-center border" style={{ background: C.bg, borderColor: C.borderLight }}>
-                    <div className="flex items-center justify-center gap-1 text-xs mb-1 font-medium" style={{ color: C.textLight }}>
+                    <div className="flex items-center justify-center gap-1 text-xs mb-1 font-semibold" style={{ color: C.textSecondary }}>
                       <metric.icon size={13} style={{ color: metric.color }} />
                       {metric.label}
                     </div>
@@ -363,10 +365,10 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
 
               {/* AI Clinical Summary */}
               <div className="p-4 rounded-2xl mb-6 border text-xs sm:text-sm leading-relaxed" style={{ background: C.bg, borderColor: C.borderLight }}>
-                <p className="font-medium mb-1" style={{ color: C.primary }}>
+                <p className="font-semibold mb-1" style={{ color: C.primary }}>
                   Dermatological AI Analysis
                 </p>
-                <p style={{ color: C.textLight }}>{selectedProfile.summary}</p>
+                <p style={{ color: C.textSecondary }}>{selectedProfile.summary}</p>
               </div>
 
               {/* Recommended Routine AM / PM */}
@@ -375,13 +377,13 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                 <div className="p-4 rounded-2xl border" style={{ background: C.bgCard, borderColor: C.border }}>
                   <div className="flex items-center gap-2 mb-3 pb-2 border-b" style={{ borderColor: C.borderLight }}>
                     <Sun size={16} style={{ color: C.accent }} />
-                    <span className="font-medium text-sm" style={{ color: C.text }}>
+                    <span className="font-semibold text-sm" style={{ color: C.text }}>
                       Morning Routine (AM)
                     </span>
                   </div>
                   <ul className="space-y-2">
                     {selectedProfile.amRoutine.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.textLight }}>
+                      <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.textSecondary }}>
                         <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: C.primary }} />
                         <span>Step {idx + 1}: {item}</span>
                       </li>
@@ -393,13 +395,13 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
                 <div className="p-4 rounded-2xl border" style={{ background: C.bgCard, borderColor: C.border }}>
                   <div className="flex items-center gap-2 mb-3 pb-2 border-b" style={{ borderColor: C.borderLight }}>
                     <Moon size={16} style={{ color: C.primaryDark }} />
-                    <span className="font-medium text-sm" style={{ color: C.text }}>
+                    <span className="font-semibold text-sm" style={{ color: C.text }}>
                       Evening Routine (PM)
                     </span>
                   </div>
                   <ul className="space-y-2">
                     {selectedProfile.pmRoutine.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.textLight }}>
+                      <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: C.textSecondary }}>
                         <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: C.primary }} />
                         <span>Step {idx + 1}: {item}</span>
                       </li>
@@ -411,7 +413,7 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
               {/* Safety Warnings & Flags */}
               {selectedProfile.warnings.length > 0 && (
                 <div className="p-4 rounded-2xl border mb-6" style={{ background: "#fdf6e3", borderColor: "#e8d5a3" }}>
-                  <div className="flex items-center gap-2 font-medium text-xs mb-2" style={{ color: "#8b6914" }}>
+                  <div className="flex items-center gap-2 font-semibold text-xs mb-2" style={{ color: "#8b6914" }}>
                     <AlertTriangle size={14} />
                     Ingredient Interaction Cautions
                   </div>
@@ -427,10 +429,10 @@ export function SkinAnalysisModal({ isOpen, onClose }: SkinAnalysisModalProps) {
 
               {/* Bottom Action */}
               <div className="flex justify-end gap-3 pt-2">
-                <Button variant="outline" size="sm" onClick={onClose} style={{ borderColor: C.border, color: C.textLight }}>
+                <Button variant="outline" size="sm" onClick={onClose} style={{ borderColor: C.border, color: C.textSecondary }}>
                   Close
                 </Button>
-                <Button size="sm" className="text-white font-medium" style={{ background: C.primary }} onClick={onClose}>
+                <Button size="sm" className="text-white font-semibold" style={{ background: C.primary }} onClick={onClose}>
                   Save to My Routine
                 </Button>
               </div>

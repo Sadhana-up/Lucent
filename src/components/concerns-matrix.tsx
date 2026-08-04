@@ -6,23 +6,25 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryDark: "#3a5233",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  primaryGlow: "rgba(74, 103, 65, 0.15)",
-  accent: "#c4956a",
-  accentLight: "#d4b08f",
-  accentGhost: "rgba(196, 149, 106, 0.10)",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  bgCard: "#ffffff",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successFg: "#3a5233",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentLight: "#9B8DF0",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  rose: "#E8B4B8",
+  roseGhost: "rgba(232, 180, 184, 0.10)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
   successBg: "#e8f0e6",
   warnFg: "#78350f",
   warnBg: "#FEF3C7",
@@ -154,13 +156,13 @@ export function ConcernsMatrix() {
   return (
     <div className="w-full glass-card rounded-3xl p-6 sm:p-8 animate-fade-in-up">
       <div className="text-center max-w-xl mx-auto mb-8">
-        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-medium" style={{ background: C.primaryGhost, color: C.primary }}>
+        <Badge className="mb-2 border-0 text-xs px-3 py-1 rounded-full font-semibold" style={{ background: C.primaryGhost, color: C.primary }}>
           Clinical Ingredient Explorer
         </Badge>
-        <h3 className="text-2xl sm:text-3xl font-medium tracking-tight mb-2" style={{ color: C.primary }}>
+        <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-2" style={{ color: C.primary }}>
           Select a skin concern to reveal the science
         </h3>
-        <p className="text-sm" style={{ color: C.textLight }}>
+        <p className="text-sm" style={{ color: C.textSecondary }}>
           Click any concern chip below to see dermatologically proven active ingredients, routine advice, and ingredients to avoid.
         </p>
       </div>
@@ -173,7 +175,7 @@ export function ConcernsMatrix() {
             <button
               key={concern}
               onClick={() => setSelectedConcern(concern)}
-              className="magnetic-btn px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer animate-fade-in-up"
+              className="magnetic-btn px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer animate-fade-in-up"
               style={{
                 background: isActive ? `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})` : C.primaryGhost,
                 color: isActive ? "#fff" : C.primary,
@@ -196,15 +198,15 @@ export function ConcernsMatrix() {
         <div className="lg:col-span-7 space-y-4">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: C.primary }}>Targeted Protocol</span>
-            <h4 className="text-xl font-medium mt-0.5" style={{ color: C.primary }}>
+            <h4 className="text-xl font-semibold mt-0.5" style={{ color: C.primary }}>
               {detail.title}
             </h4>
-            <p className="text-xs mt-1 leading-relaxed" style={{ color: C.textLight }}>
+            <p className="text-xs mt-1 leading-relaxed" style={{ color: C.textSecondary }}>
               {detail.description}
             </p>
           </div>
 
-          <h5 className="text-xs font-medium uppercase tracking-wider pt-2" style={{ color: C.primary }}>
+          <h5 className="text-xs font-semibold uppercase tracking-wider pt-2" style={{ color: C.primary }}>
             Science-Backed Key Actives:
           </h5>
 
@@ -221,15 +223,15 @@ export function ConcernsMatrix() {
                 }}
               >
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="font-medium text-xs flex items-center gap-1.5" style={{ color: C.text }}>
+                  <span className="font-semibold text-xs flex items-center gap-1.5" style={{ color: C.text }}>
                     <Sparkles size={13} style={{ color: C.primary }} />
                     {active.name}
                   </span>
-                  <Badge className="border-0 text-[10px] px-2 py-0.5 rounded-md" style={{ background: C.primaryGhost, color: C.primary }}>
+                  <Badge className="border-0 text-[10px] px-2 py-0.5 rounded-md font-semibold" style={{ background: C.primaryGhost, color: C.primary }}>
                     {active.scienceRating}
                   </Badge>
                 </div>
-                <p className="text-xs" style={{ color: C.textLight }}>
+                <p className="text-xs" style={{ color: C.textSecondary }}>
                   {active.description}
                 </p>
               </div>
@@ -241,23 +243,23 @@ export function ConcernsMatrix() {
         <div className="lg:col-span-5 flex flex-col gap-4">
           <Card className="glass-card border" style={{ borderColor: C.border }}>
             <CardContent className="p-4 space-y-3 text-xs">
-              <span className="font-medium uppercase tracking-wider text-[11px] block" style={{ color: C.primary }}>
+              <span className="font-semibold uppercase tracking-wider text-[11px] block" style={{ color: C.primary }}>
                 AM Routine Strategy
               </span>
-              <p style={{ color: C.textLight }}>{detail.amTip}</p>
+              <p style={{ color: C.textSecondary }}>{detail.amTip}</p>
 
               <div className="border-t pt-3" style={{ borderColor: C.border }}>
-                <span className="font-medium uppercase tracking-wider text-[11px] block" style={{ color: C.primary }}>
+                <span className="font-semibold uppercase tracking-wider text-[11px] block" style={{ color: C.primary }}>
                   PM Routine Strategy
                 </span>
-                <p style={{ color: C.textLight }}>{detail.pmTip}</p>
+                <p style={{ color: C.textSecondary }}>{detail.pmTip}</p>
               </div>
             </CardContent>
           </Card>
 
           {/* Avoid List */}
           <div className="p-4 rounded-2xl border text-xs" style={{ background: C.warnBg, borderColor: "#FDE68A" }}>
-            <span className="font-medium flex items-center gap-1.5 mb-2" style={{ color: C.warnFg }}>
+            <span className="font-semibold flex items-center gap-1.5 mb-2" style={{ color: C.warnFg }}>
               <AlertTriangle size={14} /> Ingredients & Practices to Avoid:
             </span>
             <ul className="space-y-1">

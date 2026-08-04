@@ -6,23 +6,25 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryDark: "#3a5233",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  primaryGlow: "rgba(74, 103, 65, 0.15)",
-  accent: "#c4956a",
-  accentLight: "#d4b08f",
-  accentGhost: "rgba(196, 149, 106, 0.10)",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  bgCard: "#ffffff",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
-  successFg: "#3a5233",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentLight: "#9B8DF0",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  rose: "#E8B4B8",
+  roseGhost: "rgba(232, 180, 184, 0.10)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
   successBg: "#e8f0e6",
   warnFg: "#78350f",
   warnBg: "#FEF3C7",
@@ -104,14 +106,14 @@ export function RoutineBuilder() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div className="animate-fade-in-up stagger-1" style={{ opacity: 0, animationFillMode: "forwards" }}>
           <div className="flex items-center gap-2 mb-1">
-            <Badge className="border-0 text-xs px-3 py-1 rounded-full font-medium" style={{ background: C.primaryGhost, color: C.primary }}>
+            <Badge className="border-0 text-xs px-3 py-1 rounded-full font-semibold" style={{ background: C.primaryGhost, color: C.primary }}>
               <Sparkles size={12} className="mr-1 inline" /> Interactive Tool
             </Badge>
           </div>
-          <h3 className="text-2xl font-medium tracking-tight" style={{ color: C.primary }}>
+          <h3 className="text-2xl font-semibold tracking-tight" style={{ color: C.primary }}>
             Interactive Routine Builder & Ingredient Audit
           </h3>
-          <p className="text-sm" style={{ color: C.textLight }}>
+          <p className="text-sm" style={{ color: C.textSecondary }}>
             Click products to add or remove from your daily routine. Lucent continuously audits ingredient interactions in real-time.
           </p>
         </div>
@@ -120,20 +122,20 @@ export function RoutineBuilder() {
         <div className="flex items-center p-1 rounded-2xl border self-start md:self-auto animate-fade-in-up stagger-2" style={{ background: C.primaryGhost, borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
           <button
             onClick={() => setActiveTab("AM")}
-            className="magnetic-btn flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-all"
+            className="magnetic-btn flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all"
             style={{
               background: activeTab === "AM" ? `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})` : "transparent",
-              color: activeTab === "AM" ? "#fff" : C.textLight,
+              color: activeTab === "AM" ? "#fff" : C.textSecondary,
             }}
           >
             <Sun size={14} className={activeTab === "AM" ? "text-amber-300" : ""} /> AM Routine
           </button>
           <button
             onClick={() => setActiveTab("PM")}
-            className="magnetic-btn flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-all"
+            className="magnetic-btn flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all"
             style={{
               background: activeTab === "PM" ? `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})` : "transparent",
-              color: activeTab === "PM" ? "#fff" : C.textLight,
+              color: activeTab === "PM" ? "#fff" : C.textSecondary,
             }}
           >
             <Moon size={14} className={activeTab === "PM" ? "text-purple-300" : ""} /> PM Routine
@@ -144,7 +146,7 @@ export function RoutineBuilder() {
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left Column: Product Selection Catalog (7 cols) */}
         <div className="lg:col-span-7 space-y-3">
-          <h4 className="text-sm font-medium uppercase tracking-wider mb-2 animate-fade-in-up stagger-3" style={{ color: C.primary, opacity: 0, animationFillMode: "forwards" }}>
+          <h4 className="text-sm font-semibold uppercase tracking-wider mb-2 animate-fade-in-up stagger-3" style={{ color: C.primary, opacity: 0, animationFillMode: "forwards" }}>
             Available Products & Actives
           </h4>
 
@@ -172,7 +174,7 @@ export function RoutineBuilder() {
                       <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md" style={{ background: C.primaryGhost, color: C.primary }}>
                         {prod.category}
                       </span>
-                      <h5 className="font-medium text-xs mt-1.5" style={{ color: C.text }}>
+                      <h5 className="font-semibold text-xs mt-1.5" style={{ color: C.text }}>
                         {prod.name}
                       </h5>
                     </div>
@@ -189,7 +191,7 @@ export function RoutineBuilder() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] pt-2 border-t" style={{ borderColor: C.borderLight, color: C.textLight }}>
+                  <div className="flex items-center justify-between text-[11px] pt-2 border-t" style={{ borderColor: C.borderLight, color: C.textSecondary }}>
                     <span className="truncate max-w-[140px]">Active: {prod.activeIngredient}</span>
                     <span className="font-mono text-[10px]">pH {prod.ph}</span>
                   </div>
@@ -205,7 +207,7 @@ export function RoutineBuilder() {
           <Card className="glass-card border overflow-hidden animate-fade-in-up stagger-4" style={{ borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: C.primary }}>
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.primary }}>
                   Routine Balance Index
                 </span>
                 <span className="text-2xl font-bold" style={{ color: synergyScore > 75 ? C.successFg : C.primary }}>
@@ -227,13 +229,13 @@ export function RoutineBuilder() {
                 />
               </div>
 
-              <div className="text-xs" style={{ color: C.textLight }}>
+              <div className="text-xs" style={{ color: C.textSecondary }}>
                 {conflicts.length === 0 ? (
-                  <span className="font-medium flex items-center gap-1" style={{ color: C.successFg }}>
+                  <span className="font-semibold flex items-center gap-1" style={{ color: C.successFg }}>
                     <Check size={14} /> Outstanding synergy! No ingredient conflicts detected.
                   </span>
                 ) : (
-                  <span className="font-medium flex items-center gap-1" style={{ color: C.warnFg }}>
+                  <span className="font-semibold flex items-center gap-1" style={{ color: C.warnFg }}>
                     <ShieldAlert size={14} /> {conflicts.length} safety alert{conflicts.length > 1 ? "s" : ""} require attention.
                   </span>
                 )}
@@ -244,7 +246,7 @@ export function RoutineBuilder() {
           {/* Real-time Conflict Flags */}
           {conflicts.length > 0 && (
             <div className="p-4 rounded-2xl border space-y-2 animate-fade-in-up" style={{ background: C.warnBg, borderColor: "#FDE68A" }}>
-              <span className="text-xs font-medium flex items-center gap-1.5" style={{ color: C.warnFg }}>
+              <span className="text-xs font-semibold flex items-center gap-1.5" style={{ color: C.warnFg }}>
                 <ShieldAlert size={14} /> Dermatological Warnings:
               </span>
               <ul className="space-y-1.5">
@@ -259,7 +261,7 @@ export function RoutineBuilder() {
 
           {/* Active Steps List */}
           <div className="glass-card p-4 rounded-2xl border flex-1 animate-fade-in-up stagger-5" style={{ borderColor: C.border, opacity: 0, animationFillMode: "forwards" }}>
-            <h5 className="text-xs font-medium uppercase tracking-wider mb-3" style={{ color: C.primary }}>
+            <h5 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: C.primary }}>
               Active {activeTab} Routine Steps ({selectedProducts.length})
             </h5>
 
@@ -283,12 +285,12 @@ export function RoutineBuilder() {
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span
-                        className="w-5 h-5 rounded-full flex items-center justify-center font-medium text-[10px] shrink-0"
+                        className="w-5 h-5 rounded-full flex items-center justify-center font-semibold text-[10px] shrink-0"
                         style={{ background: `linear-gradient(135deg, ${C.primary}, ${C.primaryLight})`, color: "#fff" }}
                       >
                         {index + 1}
                       </span>
-                      <span className="font-medium truncate" style={{ color: C.text }}>
+                      <span className="font-semibold truncate" style={{ color: C.text }}>
                         {prod.name}
                       </span>
                     </div>
