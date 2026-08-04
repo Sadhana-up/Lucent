@@ -167,19 +167,18 @@ export const auth = betterAuth({
         );
       },
     },
-    databaseHooks: {
-      user: {
-        create: {
-          after: async (user: { id: string; [key: string]: unknown }) => {
-            // Map initialRole to role during sign-up
-            const initialRole = user.initialRole;
-            if (initialRole && typeof initialRole === "string" && initialRole !== "user") {
-              await db.user.update({
-                where: { id: user.id },
-                data: { role: initialRole },
-              });
-            }
-          },
+  },
+
+  // ── Database Hooks ─────────────────────────────────────────
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user: { id: string; [key: string]: unknown }) => {
+          const initialRole = user.initialRole;
+          if (initialRole && typeof initialRole === "string" && initialRole !== "user") {
+            return { data: { ...user, role: initialRole } };
+          }
+          return { data: user };
         },
       },
     },
@@ -235,7 +234,7 @@ export const auth = betterAuth({
 
     // ── Admin / RBAC ─────────────────────────────────────────
     admin({
-      defaultRole: "user",
+      defaultRole: "customer",
       adminRoles: ["admin"],
       bannedUserMessage:
         "Your account has been suspended. Contact support if you believe this is an error.",

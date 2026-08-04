@@ -55,8 +55,10 @@ export default function SignUpPage() {
     if (error) {
       setError(error.message || "Something went wrong. Please try again.");
     } else {
-      if (role === "seller") {
-        router.push("/seller/dashboard");
+      const session = await authClient.getSession();
+      const userRole = session.data?.user?.role;
+      if (role === "seller" && (userRole === "seller" || userRole === "admin")) {
+        router.push("/seller");
       } else {
         router.push("/");
       }

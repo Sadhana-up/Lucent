@@ -308,6 +308,15 @@ export default function LandingPage() {
   const { data: session } = authClient.useSession();
 
   useEffect(() => {
+    if (session?.user) {
+      const role = (session.user as { role?: string }).role;
+      if (role === "seller" || role === "admin") {
+        router.push("/seller");
+      }
+    }
+  }, [session, router]);
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
