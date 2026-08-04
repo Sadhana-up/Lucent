@@ -7,17 +7,22 @@ import { Search, Leaf, ShoppingBag, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
 };
 
 export default function ShopPage() {
@@ -67,21 +72,25 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen pb-16" style={{ background: C.bg, color: C.text }}>
-      {/* Header Bar */}
-      <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 248, 245, 0.92)" }}>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="ambient-spot ambient-spot-primary w-[600px] h-[600px] -top-40 -right-40" />
+        <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-20 -left-40" />
+      </div>
+
+      <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.92)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
               <Leaf className="w-4 h-4 text-white" />
             </div>
-            <span className="text-lg font-medium tracking-tight" style={{ color: C.text }}>
+            <span className="text-lg font-semibold tracking-tight" style={{ color: C.text }}>
               Lucent Shop
             </span>
           </Link>
 
           <div className="flex items-center gap-3">
             <Link href="/shop/cart">
-              <Button variant="outline" size="sm" className="rounded-xl transition-all duration-300 hover:bg-[rgba(74,103,65,0.04)]" style={{ borderColor: C.border, color: C.text }}>
+              <Button variant="outline" size="sm" className="rounded-xl transition-all duration-300 hover:bg-[rgba(45,90,61,0.04)]" style={{ borderColor: C.border, color: C.text }}>
                 <ShoppingBag className="w-4 h-4 mr-1.5" />
                 Cart
               </Button>
@@ -90,15 +99,14 @@ export default function ShopPage() {
         </div>
       </header>
 
-      {/* Hero Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-6">
-        <div className="p-8 sm:p-12 rounded-3xl relative overflow-hidden" style={{ background: "linear-gradient(135deg, #4a6741, #6b8c62)" }}>
+        <div className="p-8 sm:p-12 rounded-3xl relative overflow-hidden" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
           <div className="absolute inset-0 opacity-20" aria-hidden="true">
             <div className="absolute top-10 right-20 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
             <div className="absolute bottom-10 left-20 w-40 h-40 rounded-full bg-white/10 blur-3xl" />
           </div>
           <div className="relative z-10 max-w-2xl">
-            <span className="px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider mb-3 inline-block" style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.9)" }}>
+            <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 inline-block" style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.9)" }}>
               Clean & Verified Formulations
             </span>
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight text-white">
@@ -111,9 +119,7 @@ export default function ShopPage() {
         </div>
       </section>
 
-      {/* Main Content Area */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
-        {/* Search & Filter Controls */}
         <div className="flex flex-col md:flex-row items-center gap-4 p-4 rounded-2xl glass-card animate-fade-in">
           <div className="relative flex-1 w-full">
             <Search className="absolute left-3.5 top-3 w-4 h-4" style={{ color: C.textMuted }} />
@@ -123,7 +129,7 @@ export default function ShopPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-              style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+              style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
             />
             {search && (
               <button
@@ -141,7 +147,7 @@ export default function ShopPage() {
               value={selectedSkinType}
               onChange={(e) => setSelectedSkinType(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none cursor-pointer transition-all duration-300 input-focus-glow"
-              style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+              style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
             >
               <option value="">All Skin Types</option>
               <option value="Oily">Oily Skin</option>
@@ -152,15 +158,14 @@ export default function ShopPage() {
           </div>
         </div>
 
-        {/* Categories Chips */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2">
           <button
             type="button"
             onClick={() => setSelectedCategory("")}
-            className="px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-300 cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer"
             style={{
-              background: !selectedCategory ? "linear-gradient(135deg, #4a6741, #6b8c62)" : "#fff",
-              color: !selectedCategory ? "#fff" : C.textLight,
+              background: !selectedCategory ? "linear-gradient(135deg, #2D5A3D, #3D7A52)" : C.bgCard,
+              color: !selectedCategory ? "#fff" : C.textSecondary,
               border: `1px solid ${!selectedCategory ? "transparent" : C.border}`,
             }}
           >
@@ -171,10 +176,10 @@ export default function ShopPage() {
               key={cat.id}
               type="button"
               onClick={() => setSelectedCategory(cat.slug)}
-              className="px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-300 cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer"
               style={{
-                background: selectedCategory === cat.slug ? "linear-gradient(135deg, #4a6741, #6b8c62)" : "#fff",
-                color: selectedCategory === cat.slug ? "#fff" : C.textLight,
+                background: selectedCategory === cat.slug ? "linear-gradient(135deg, #2D5A3D, #3D7A52)" : C.bgCard,
+                color: selectedCategory === cat.slug ? "#fff" : C.textSecondary,
                 border: `1px solid ${selectedCategory === cat.slug ? "transparent" : C.border}`,
               }}
             >
@@ -183,7 +188,6 @@ export default function ShopPage() {
           ))}
         </div>
 
-        {/* Products Grid */}
         {loading ? (
           <div className="py-20 text-center">
             <div className="w-10 h-10 border-4 rounded-full animate-spin mx-auto" style={{ borderColor: C.border, borderTopColor: C.primary }} />
@@ -192,7 +196,7 @@ export default function ShopPage() {
         ) : filteredProducts.length === 0 ? (
           <div className="py-20 rounded-3xl text-center p-8 glass-card">
             <ShoppingBag className="w-12 h-12 mx-auto mb-3" style={{ color: C.textMuted }} />
-            <h3 className="text-lg font-medium" style={{ color: C.text }}>No products match your search</h3>
+            <h3 className="text-lg font-semibold" style={{ color: C.text }}>No products match your search</h3>
             <p className="text-sm mt-1 max-w-md mx-auto" style={{ color: C.textMuted }}>
               Try adjusting your search filters or browse all skincare categories.
             </p>

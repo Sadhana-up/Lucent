@@ -19,17 +19,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
 };
 
 export default function ProductDetailPage({
@@ -102,7 +107,7 @@ export default function ProductDetailPage({
         <div className="glass-card rounded-2xl p-8 text-center animate-scale-in">
           <h2 className="text-xl font-bold" style={{ color: C.text }}>Product not found</h2>
           <Link href="/shop" className="mt-4 inline-block">
-            <Button className="magnetic-btn gradient-primary text-white px-6 py-2.5 rounded-xl">
+            <Button variant="premium" className="px-6 py-2.5 rounded-xl">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Shop
             </Button>
           </Link>
@@ -123,14 +128,14 @@ export default function ProductDetailPage({
           <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-20 -left-40" />
         </div>
 
-        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 248, 245, 0.92)" }}>
+        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.92)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <Link href="/shop" className="flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:opacity-70" style={{ color: C.textLight }}>
+            <Link href="/shop" className="flex items-center gap-2 text-sm font-semibold transition-colors duration-200 hover:opacity-70" style={{ color: C.textSecondary }}>
               <ArrowLeft className="w-4 h-4" /> Back to Shop
             </Link>
 
             <Link href="/shop/cart">
-              <Button className="magnetic-btn px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300" style={{ border: `1px solid ${C.border}`, background: "#fff", color: C.text }}>
+              <Button variant="glass" size="sm" className="rounded-xl">
                 <ShoppingBag className="w-4 h-4 mr-1.5" style={{ color: C.primary }} /> Cart
               </Button>
             </Link>
@@ -139,7 +144,6 @@ export default function ProductDetailPage({
 
         <main className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-8 space-y-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            {/* Left Column: Image Gallery */}
             <div className="space-y-4 animate-fade-in-left opacity-0 stagger-1">
               <div className="aspect-[4/3] w-full rounded-3xl overflow-hidden glass-card shadow-md">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -150,7 +154,6 @@ export default function ProductDetailPage({
                 />
               </div>
 
-              {/* Thumbnail Row */}
               {product.images && product.images.length > 1 && (
                 <div className="flex gap-3 overflow-x-auto pb-2">
                   {product.images.map((img: any) => (
@@ -181,10 +184,8 @@ export default function ProductDetailPage({
               )}
             </div>
 
-            {/* Right Column: Product Overview */}
             <div className="space-y-6 animate-fade-in-right opacity-0 stagger-2">
               <div>
-                {/* Seller Brand Header */}
                 {product.seller && (
                   <div className="flex items-center gap-2 mb-2 text-sm font-semibold" style={{ color: C.primary }}>
                     <Store size={16} />
@@ -199,7 +200,6 @@ export default function ProductDetailPage({
                   {product.title}
                 </h1>
 
-                {/* Rating Summary */}
                 <div className="flex items-center gap-2 mt-2">
                   <StarRating rating={product.avgRating || 5} size={18} />
                   <span className="font-bold text-sm" style={{ color: C.text }}>
@@ -211,8 +211,7 @@ export default function ProductDetailPage({
                 </div>
               </div>
 
-              {/* Price Box */}
-              <div className="p-4 rounded-2xl" style={{ background: C.primaryGhost, border: `1px solid ${C.border}` }}>
+              <div className="p-4 rounded-2xl" style={{ background: C.primaryGhost, border: `1px solid ${C.borderLight}` }}>
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-extrabold" style={{ color: C.text }}>
                     ${product.discountPrice ? product.discountPrice.toFixed(2) : product.price.toFixed(2)}
@@ -223,19 +222,17 @@ export default function ProductDetailPage({
                     </span>
                   )}
                   {product.discountPrice && (
-                    <span className="px-2.5 py-0.5 rounded-full text-white text-xs font-bold gradient-primary">
+                    <span className="px-2.5 py-0.5 rounded-full text-white text-xs font-bold" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
                       Save ${(product.price - product.discountPrice).toFixed(2)}
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Description */}
-              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: C.textLight }}>
+              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: C.textSecondary }}>
                 {product.description}
               </p>
 
-              {/* Target Concerns Chips */}
               {concernsList.length > 0 && (
                 <div>
                   <span className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: C.textMuted }}>
@@ -255,7 +252,6 @@ export default function ProductDetailPage({
                 </div>
               )}
 
-              {/* Add to Cart Actions */}
               <div className="pt-4 space-y-4" style={{ borderTop: `1px solid ${C.border}` }}>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center rounded-xl glass-card p-1" style={{ border: `1px solid ${C.border}` }}>
@@ -279,13 +275,9 @@ export default function ProductDetailPage({
                   </div>
 
                   <Button
+                    variant={added ? "default" : "premium"}
                     onClick={handleAddToCart}
-                    className={`magnetic-btn flex-1 py-6 rounded-xl font-bold text-base shadow-md transition-all duration-300 ${
-                      added
-                        ? "text-white"
-                        : "text-white gradient-primary"
-                    }`}
-                    style={added ? { background: "#3a5233" } : undefined}
+                    className="flex-1 py-6 rounded-xl font-bold text-base shadow-md transition-all duration-300"
                   >
                     {added ? (
                       <>
@@ -299,8 +291,7 @@ export default function ProductDetailPage({
                   </Button>
                 </div>
 
-                {/* Guarantees */}
-                <div className="grid grid-cols-2 gap-3 text-xs pt-2" style={{ color: C.textLight }}>
+                <div className="grid grid-cols-2 gap-3 text-xs pt-2" style={{ color: C.textSecondary }}>
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4" style={{ color: C.primary }} />
                     <span>Dermatologist Approved Ingredients</span>
@@ -314,7 +305,6 @@ export default function ProductDetailPage({
             </div>
           </div>
 
-          {/* Ingredients & How to Use Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {product.ingredients && (
               <div className="animate-fade-in-up opacity-0 stagger-3">
@@ -322,7 +312,7 @@ export default function ProductDetailPage({
                   <h3 className="font-bold text-base flex items-center gap-2" style={{ color: C.text }}>
                     <Sparkles className="w-4 h-4" style={{ color: C.primary }} /> Key Ingredients
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: C.textLight }}>
+                  <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>
                     {product.ingredients}
                   </p>
                 </Card>
@@ -335,7 +325,7 @@ export default function ProductDetailPage({
                   <h3 className="font-bold text-base flex items-center gap-2" style={{ color: C.text }}>
                     <CheckCircle2 className="w-4 h-4" style={{ color: C.primary }} /> How to Use
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: C.textLight }}>
+                  <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>
                     {product.usageInstructions}
                   </p>
                 </Card>

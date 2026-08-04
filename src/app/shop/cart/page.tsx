@@ -7,17 +7,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
 };
 
 export default function CartPage() {
@@ -74,12 +79,12 @@ export default function CartPage() {
           <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-20 -left-40" />
         </div>
 
-        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 248, 245, 0.92)" }}>
+        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.92)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <Link href="/shop" className="flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:opacity-70" style={{ color: C.textLight }}>
+            <Link href="/shop" className="flex items-center gap-2 text-sm font-semibold transition-colors duration-200 hover:opacity-70" style={{ color: C.textSecondary }}>
               <ArrowLeft className="w-4 h-4" /> Continue Shopping
             </Link>
-            <span className="font-medium text-lg" style={{ color: C.text }}>Your Skincare Bag</span>
+            <span className="font-semibold text-lg" style={{ color: C.text }}>Your Skincare Bag</span>
           </div>
         </header>
 
@@ -91,10 +96,10 @@ export default function CartPage() {
                   <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 animate-float-gentle" style={{ background: C.primaryGhost }}>
                     <ShoppingBag className="w-10 h-10" style={{ color: C.primary }} />
                   </div>
-                  <h2 className="text-xl font-medium" style={{ color: C.text }}>Your cart is empty</h2>
+                  <h2 className="text-xl font-semibold" style={{ color: C.text }}>Your cart is empty</h2>
                   <p className="text-sm mt-1" style={{ color: C.textMuted }}>Discover curated skincare products for your routine.</p>
                   <Link href="/shop" className="mt-6 inline-block">
-                    <Button className="magnetic-btn gradient-primary text-white px-6 py-2.5 rounded-xl font-medium">
+                    <Button variant="premium" className="px-6 py-2.5 rounded-xl font-semibold">
                       Explore Skincare Shop
                     </Button>
                   </Link>
@@ -103,7 +108,6 @@ export default function CartPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Cart Items List */}
               <div className="lg:col-span-2 space-y-4">
                 {cartItems.map((item, i) => (
                   <div
@@ -128,7 +132,7 @@ export default function CartPage() {
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-base truncate" style={{ color: C.text }}>
+                            <h3 className="font-semibold text-base truncate" style={{ color: C.text }}>
                               {item.title}
                             </h3>
                             <p className="text-sm font-semibold mt-0.5" style={{ color: C.primary }}>
@@ -179,15 +183,14 @@ export default function CartPage() {
                 ))}
               </div>
 
-              {/* Order Summary Box */}
               <div className="animate-fade-in-right opacity-0 stagger-2">
                 <Card className="glass-card rounded-2xl sticky top-24">
                   <CardContent className="p-6 space-y-4">
-                    <h3 className="font-medium text-lg pb-3" style={{ color: C.text, borderBottom: `1px solid ${C.borderLight}` }}>
+                    <h3 className="font-semibold text-lg pb-3" style={{ color: C.text, borderBottom: `1px solid ${C.borderLight}` }}>
                       Order Summary
                     </h3>
 
-                    <div className="space-y-2 text-sm" style={{ color: C.textLight }}>
+                    <div className="space-y-2 text-sm" style={{ color: C.textSecondary }}>
                       <div className="flex justify-between">
                         <span>Subtotal</span>
                         <span className="font-semibold" style={{ color: C.text }}>${subtotal.toFixed(2)}</span>
@@ -203,7 +206,7 @@ export default function CartPage() {
                     </div>
 
                     <Link href="/shop/checkout">
-                      <Button className="magnetic-btn gradient-primary w-full mt-4 py-6 rounded-xl shadow-sm font-medium text-white transition-all duration-300">
+                      <Button variant="premium" className="w-full mt-4 py-6 rounded-xl shadow-sm font-semibold transition-all duration-300">
                         Proceed to Checkout <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>

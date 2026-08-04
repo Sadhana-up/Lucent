@@ -9,17 +9,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 
 const C = {
-  primary: "#4a6741",
-  primaryLight: "#6b8c62",
-  primaryGhost: "rgba(74, 103, 65, 0.08)",
-  accent: "#c4956a",
-  bg: "#faf8f5",
-  bgWarm: "#f5f0eb",
-  text: "#2d2a26",
-  textLight: "#6b6560",
-  textMuted: "#9c9590",
-  border: "#e8e4df",
-  borderLight: "#f0ece7",
+  primary: "#2D5A3D",
+  primaryLight: "#3D7A52",
+  primaryDark: "#1E3D2A",
+  primaryGhost: "rgba(45, 90, 61, 0.06)",
+  primaryGlow: "rgba(45, 90, 61, 0.12)",
+  accent: "#7C6BEA",
+  accentGhost: "rgba(124, 107, 234, 0.08)",
+  bg: "#FAFBFC",
+  bgWarm: "#F5F3F0",
+  bgCard: "#FFFFFF",
+  text: "#1A1D21",
+  textSecondary: "#5A5F6B",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F0F1F3",
+  successFg: "#1E3D2A",
 };
 
 const STEPS = [
@@ -127,8 +132,8 @@ export default function CheckoutPage() {
           <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-0 left-0" />
         </div>
         <Card className="glass-card max-w-lg w-full p-8 text-center space-y-6 shadow-lg rounded-2xl animate-scale-in relative">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto animate-success-pop" style={{ background: "#e8f0e6" }}>
-            <CheckCircle2 size={36} style={{ color: "#3a5233" }} />
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto animate-success-pop" style={{ background: C.primaryGhost }}>
+            <CheckCircle2 size={36} style={{ color: C.primary }} />
           </div>
 
           <div>
@@ -144,14 +149,14 @@ export default function CheckoutPage() {
               <span>${completedOrder.totalAmount.toFixed(2)}</span>
             </div>
             <div>
-              <span className="font-medium" style={{ color: C.textLight }}>Shipping to:</span>
+              <span className="font-medium" style={{ color: C.textSecondary }}>Shipping to:</span>
               <p style={{ color: C.text }}>{completedOrder.shippingAddress}</p>
             </div>
           </div>
 
           <div className="pt-2">
             <Link href="/shop" className="w-full block">
-              <Button className="magnetic-btn gradient-primary w-full font-medium text-white py-2.5 rounded-xl transition-all duration-300">
+              <Button variant="premium" className="w-full font-semibold py-2.5 rounded-xl transition-all duration-300">
                 Back to Shop
               </Button>
             </Link>
@@ -169,24 +174,23 @@ export default function CheckoutPage() {
           <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-20 -left-40" />
         </div>
 
-        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 248, 245, 0.92)" }}>
+        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.92)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <Link href="/shop/cart" className="flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:opacity-70" style={{ color: C.textLight }}>
+            <Link href="/shop/cart" className="flex items-center gap-2 text-sm font-semibold transition-colors duration-200 hover:opacity-70" style={{ color: C.textSecondary }}>
               <ArrowLeft className="w-4 h-4" /> Back to Cart
             </Link>
-            <span className="font-medium text-lg" style={{ color: C.text }}>Checkout</span>
+            <span className="font-semibold text-lg" style={{ color: C.text }}>Checkout</span>
           </div>
         </header>
 
         <main className="relative max-w-5xl mx-auto px-4 sm:px-6 pt-8">
-          {/* Step Indicator */}
           <div className="flex items-center justify-center gap-4 mb-8 animate-fade-in-down opacity-0 stagger-1">
             {STEPS.map((step, i) => (
               <div key={step.id} className="flex items-center gap-3">
                 <div
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300"
                   style={{
-                    background: currentStep >= step.id ? "linear-gradient(135deg, #4a6741, #6b8c62)" : "#fff",
+                    background: currentStep >= step.id ? "linear-gradient(135deg, #2D5A3D, #3D7A52)" : C.bgCard,
                     color: currentStep >= step.id ? "#fff" : C.textMuted,
                     border: `1px solid ${currentStep >= step.id ? "transparent" : C.border}`,
                   }}
@@ -207,19 +211,18 @@ export default function CheckoutPage() {
           </div>
 
           <form onSubmit={handleSubmitOrder} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Shipping Form */}
             <div className="lg:col-span-2 space-y-6">
               <div className="animate-fade-in-up opacity-0 stagger-2">
                 <Card className="glass-card rounded-2xl">
                   <CardContent className="p-6 space-y-4">
-                    <h2 className="text-lg font-medium pb-3 flex items-center gap-2" style={{ color: C.text, borderBottom: `1px solid ${C.borderLight}` }}>
+                    <h2 className="text-lg font-semibold pb-3 flex items-center gap-2" style={{ color: C.text, borderBottom: `1px solid ${C.borderLight}` }}>
                       <MapPin className="w-5 h-5" style={{ color: C.primary }} />
                       Shipping Information
                     </h2>
 
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium block mb-1" style={{ color: C.textLight }}>
+                        <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                           Delivery Address *
                         </label>
                         <textarea
@@ -229,13 +232,13 @@ export default function CheckoutPage() {
                           onChange={(e) => setForm({ ...form, shippingAddress: e.target.value })}
                           placeholder="Street address, apartment"
                           className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                          style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                          style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                         />
                       </div>
 
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <div className="col-span-2 sm:col-span-1">
-                          <label className="text-sm font-medium block mb-1" style={{ color: C.textLight }}>
+                          <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                             City *
                           </label>
                           <input
@@ -245,11 +248,11 @@ export default function CheckoutPage() {
                             onChange={(e) => setForm({ ...form, shippingCity: e.target.value })}
                             placeholder="City"
                             className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                            style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                            style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                           />
                         </div>
                         <div>
-                          <label className="text-sm font-medium block mb-1" style={{ color: C.textLight }}>
+                          <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                             State *
                           </label>
                           <input
@@ -259,11 +262,11 @@ export default function CheckoutPage() {
                             onChange={(e) => setForm({ ...form, shippingState: e.target.value })}
                             placeholder="State"
                             className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                            style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                            style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                           />
                         </div>
                         <div>
-                          <label className="text-sm font-medium block mb-1" style={{ color: C.textLight }}>
+                          <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                             ZIP *
                           </label>
                           <input
@@ -273,13 +276,13 @@ export default function CheckoutPage() {
                             onChange={(e) => setForm({ ...form, shippingZip: e.target.value })}
                             placeholder="ZIP"
                             className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                            style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                            style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="text-sm font-medium block mb-1" style={{ color: C.textLight }}>
+                        <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                           Contact Phone Number *
                         </label>
                         <input
@@ -289,12 +292,12 @@ export default function CheckoutPage() {
                           onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
                           placeholder="+1 (555) 000-0000"
                           className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                          style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                          style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                         />
                       </div>
 
                       <div>
-                        <label className="text-sm font-medium block mb-1" style={{ color: C.textLight }}>
+                        <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                           Special Delivery Instructions (Optional)
                         </label>
                         <input
@@ -303,7 +306,7 @@ export default function CheckoutPage() {
                           onChange={(e) => setForm({ ...form, notes: e.target.value })}
                           placeholder="Leave package at doorstep, call upon arrival, etc."
                           className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                          style={{ border: `1px solid ${C.border}`, background: C.bg, color: C.text }}
+                          style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                         />
                       </div>
                     </div>
@@ -312,18 +315,17 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Checkout Review */}
             <div className="animate-fade-in-right opacity-0 stagger-3">
               <Card className="glass-card rounded-2xl sticky top-24">
                 <CardContent className="p-6 space-y-4">
-                  <h3 className="font-medium text-lg pb-3" style={{ color: C.text, borderBottom: `1px solid ${C.borderLight}` }}>
+                  <h3 className="font-semibold text-lg pb-3" style={{ color: C.text, borderBottom: `1px solid ${C.borderLight}` }}>
                     Items ({cartItems.length})
                   </h3>
 
                   <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
                     {cartItems.map((item) => (
                       <div key={item.productId} className="flex justify-between text-sm">
-                        <span className="truncate pr-2 font-medium" style={{ color: C.textLight }}>
+                        <span className="truncate pr-2 font-medium" style={{ color: C.textSecondary }}>
                           {item.quantity}x {item.title}
                         </span>
                         <span className="font-semibold" style={{ color: C.text }}>
@@ -344,8 +346,9 @@ export default function CheckoutPage() {
 
                   <Button
                     type="submit"
+                    variant="premium"
                     disabled={loading || cartItems.length === 0}
-                    className="magnetic-btn gradient-primary w-full py-6 rounded-xl shadow-sm font-medium text-white transition-all duration-300"
+                    className="w-full py-6 rounded-xl shadow-sm font-semibold transition-all duration-300"
                   >
                     {loading ? (
                       <>
