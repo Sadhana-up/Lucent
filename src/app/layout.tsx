@@ -13,8 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Lucent - AI Skincare Advisor",
-  description: "Your skin, finally understood. AI-powered skincare analysis and personalized routines.",
+  title: "Lucent — AI Skincare Advisor",
+  description: "Your skin, finally understood. AI-powered skincare analysis, personalized routines, and curated products — all in one place.",
+  keywords: ["skincare", "AI", "skin analysis", "personalized routine", "dermatologist", "beauty"],
+  openGraph: {
+    title: "Lucent — AI Skincare Advisor",
+    description: "AI-powered skincare analysis and personalized routines.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -27,7 +33,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col" style={{ background: "#FAFBFC" }}>
+        {children}
+      </body>
     </html>
   );
 }
