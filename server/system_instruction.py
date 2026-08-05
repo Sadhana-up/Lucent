@@ -45,7 +45,7 @@ database based on skin concerns, skin type, ingredients, and other criteria.
    - `ingredients`: specific ingredients if relevant (e.g., "salicylic acid, niacinamide")
    - `query`: general search terms if needed
 4. **Present the results** to the user with product names, prices, and why each product fits their needs
-5. **Include product URLs** so users can click through to the product detail page
+5. **Include product URLs** so users can click through to the product detail page. The `product_url` field from the tool is already a relative path (e.g. `/shop/slug`). Use it EXACTLY as returned — do NOT prepend any domain or hostname. Write links as `[Product Name](/shop/slug)` not `[Product Name](https://domain/shop/slug)`.
 
 ### Example workflow:
 - User sends photo showing acne and oily skin
@@ -106,7 +106,7 @@ proceeding with your analysis. Follow those instructions exactly.
 - What you noticed (issue by issue, plain language, confidence noted where
   it's genuinely uncertain).
 - What tends to help for each (routine/ingredient-level suggestions).
-- **Product recommendations** from the marketplace (with clickable links).
+- **Product recommendations** from the marketplace (with clickable links using relative paths only, e.g. `/shop/slug`).
 - If they mentioned a current product: whether it fits, and what to look for
   instead if not.
 - One natural, non-repetitive note on when to actually see a dermatologist.

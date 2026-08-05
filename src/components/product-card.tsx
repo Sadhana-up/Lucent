@@ -49,7 +49,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const primaryImage =
     product.images.find((img) => img.isPrimary)?.url ||
     product.images[0]?.url ||
-    "/placeholder-product.png";
+    "";
 
   const concernsList = product.skinConcerns
     ? product.skinConcerns.split(",").map((s) => s.trim()).slice(0, 2)
@@ -63,11 +63,31 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Product Image Box */}
       <div className="relative aspect-[4/3] w-full overflow-hidden" style={{ background: C.bgWarm }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={primaryImage}
-          alt={product.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        />
+        {primaryImage ? (
+          <img
+            src={primaryImage}
+            alt={product.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              if (!target.dataset.fallback) {
+                target.dataset.fallback = "1";
+                target.style.display = "none";
+                const parent = target.parentElement;
+                if (parent && !parent.querySelector(".img-fallback")) {
+                  const div = document.createElement("div");
+                  div.className = "img-fallback w-full h-full flex items-center justify-center";
+                  div.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>';
+                  parent.appendChild(div);
+                }
+              }
+            }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {product.discountPrice && (

@@ -59,4 +59,4 @@ Thumbs.db
 *.ipynb
 
 # seed data (regenerated at startup)
-public/seed/*
+# public/seed/*  -- DO NOT exclude: product images served from public/seed/products/

@@ -6,26 +6,26 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
 const C = {
-  primary: "#2D5A3D",
-  primaryLight: "#3D7A52",
-  primaryDark: "#1E3D2A",
-  primaryGhost: "rgba(45, 90, 61, 0.06)",
-  primaryGlow: "rgba(45, 90, 61, 0.12)",
-  accent: "#7C6BEA",
-  accentLight: "#9B8DF0",
-  accentGhost: "rgba(124, 107, 234, 0.08)",
-  rose: "#E8B4B8",
-  roseGhost: "rgba(232, 180, 184, 0.10)",
-  bg: "#FAFBFC",
-  bgWarm: "#F5F3F0",
+  primary: "#435B49",          // Soothing Sage Green
+  primaryLight: "#5B7562",
+  primaryDark: "#2B3B2F",
+  primaryGhost: "rgba(67, 91, 73, 0.05)",
+  primaryGlow: "rgba(67, 91, 73, 0.12)",
+  accent: "#9A94C5",           // Soothing Soft Lavender
+  accentLight: "#B2ACDC",
+  accentGhost: "rgba(154, 148, 197, 0.06)",
+  rose: "#5A7F75",             // Muted Teal
+  roseGhost: "rgba(90, 127, 117, 0.08)",
+  bg: "#FAF6F0",               // Warm Silk off-white
+  bgWarm: "#F5EFEB",           // Soft Cashmere cream
   bgCard: "#FFFFFF",
-  text: "#1A1D21",
-  textSecondary: "#5A5F6B",
-  textMuted: "#9CA3AF",
-  border: "#E5E7EB",
-  borderLight: "#F0F1F3",
-  successFg: "#1E3D2A",
-  successBg: "#e8f0e6",
+  text: "#2A2A28",             // Charcoal
+  textSecondary: "#5C5C58",
+  textMuted: "#9C9C96",
+  border: "#EAE2D9",           // Elegant soft border
+  borderLight: "#F4EFE7",
+  successFg: "#2B3B2F",
+  successBg: "rgba(67, 91, 73, 0.06)",
   warnFg: "#78350f",
   warnBg: "#FEF3C7",
 };

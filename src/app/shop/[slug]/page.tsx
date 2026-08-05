@@ -145,12 +145,27 @@ export default function ProductDetailPage({
         <main className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-8 space-y-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="space-y-4 animate-fade-in-left opacity-0 stagger-1">
-              <div className="aspect-[4/3] w-full rounded-3xl overflow-hidden glass-card shadow-md">
+              <div className="aspect-[4/3] w-full rounded-3xl overflow-hidden glass-card shadow-md" style={{ background: C.bgWarm }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={selectedImage || "/placeholder-product.png"}
+                  src={selectedImage || ""}
                   alt={product.title}
                   className="w-full h-full object-cover transition-all duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (!target.dataset.fallback) {
+                      target.dataset.fallback = "1";
+                      target.style.display = "none";
+                      const parent = target.parentElement;
+                      if (parent && !parent.querySelector(".img-fallback")) {
+                        const div = document.createElement("div");
+                        div.className = "img-fallback";
+                        div.style.cssText = "display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:300px;";
+                        div.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>';
+                        parent.appendChild(div);
+                      }
+                    }
+                  }}
                 />
               </div>
 

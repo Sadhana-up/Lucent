@@ -8,6 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
+  --font-serif: var(--font-cormorant);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,38 +50,38 @@
 }
 
 :root {
-  --background: oklch(0.985 0.002 90);
-  --foreground: oklch(0.18 0.015 160);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.015 160);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.015 160);
-  --primary: oklch(0.38 0.08 160);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.96 0.01 90);
-  --secondary-foreground: oklch(0.30 0.05 160);
-  --muted: oklch(0.96 0.005 90);
-  --muted-foreground: oklch(0.48 0.02 160);
-  --accent: oklch(0.68 0.14 280);
-  --accent-foreground: oklch(0.99 0 0);
+  --background: oklch(0.985 0.003 70); /* Warm Silk off-white */
+  --foreground: oklch(0.24 0.008 70); /* Softer Charcoal text */
+  --card: oklch(1 0.002 70); /* Alabaster white/cream */
+  --card-foreground: oklch(0.24 0.008 70);
+  --popover: oklch(1 0.002 70);
+  --popover-foreground: oklch(0.24 0.008 70);
+  --primary: oklch(0.42 0.035 130); /* Muted Sage Green */
+  --primary-foreground: oklch(0.99 0.001 70);
+  --secondary: oklch(0.96 0.004 70);
+  --secondary-foreground: oklch(0.35 0.02 130);
+  --muted: oklch(0.96 0.004 70);
+  --muted-foreground: oklch(0.52 0.006 70);
+  --accent: oklch(0.68 0.045 285); /* Soothing Lavender */
+  --accent-foreground: oklch(0.99 0.001 70);
   --destructive: oklch(0.58 0.2 25);
-  --border: oklch(0.90 0.01 90);
-  --input: oklch(0.90 0.01 90);
-  --ring: oklch(0.42 0.10 160);
-  --chart-1: oklch(0.42 0.10 160);
-  --chart-2: oklch(0.68 0.14 280);
-  --chart-3: oklch(0.72 0.10 350);
+  --border: oklch(0.93 0.004 70); /* Soft beige-grey border */
+  --input: oklch(0.93 0.004 70);
+  --ring: oklch(0.42 0.035 130);
+  --chart-1: oklch(0.42 0.035 130);
+  --chart-2: oklch(0.68 0.045 285);
+  --chart-3: oklch(0.52 0.05 170);
   --chart-4: oklch(0.70 0.08 120);
   --chart-5: oklch(0.55 0.12 340);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.98 0.002 90);
-  --sidebar-foreground: oklch(0.18 0.015 160);
-  --sidebar-primary: oklch(0.38 0.08 160);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.96 0.01 90);
-  --sidebar-accent-foreground: oklch(0.30 0.05 160);
-  --sidebar-border: oklch(0.92 0.01 90);
-  --sidebar-ring: oklch(0.42 0.10 160);
+  --radius: 0.875rem;
+  --sidebar: oklch(0.98 0.003 70);
+  --sidebar-foreground: oklch(0.24 0.008 70);
+  --sidebar-primary: oklch(0.42 0.035 130);
+  --sidebar-primary-foreground: oklch(0.99 0.001 70);
+  --sidebar-accent: oklch(0.96 0.004 70);
+  --sidebar-accent-foreground: oklch(0.35 0.02 130);
+  --sidebar-border: oklch(0.93 0.004 70);
+  --sidebar-ring: oklch(0.42 0.035 130);
 }
 
 @layer base {
@@ -99,48 +100,49 @@
    LUCENT PREMIUM DESIGN TOKENS
    ═══════════════════════════════════════════════════════════ */
 :root {
-  --lucent-primary: #2D5A3D;
-  --lucent-primary-light: #3D7A52;
-  --lucent-primary-dark: #1E3D2A;
-  --lucent-primary-ghost: rgba(45, 90, 61, 0.06);
-  --lucent-primary-glow: rgba(45, 90, 61, 0.12);
-  --lucent-primary-subtle: rgba(45, 90, 61, 0.04);
+  --lucent-primary: #435B49; /* Soft Sage Green */
+  --lucent-primary-light: #5B7562;
+  --lucent-primary-dark: #2B3B2F;
+  --lucent-primary-ghost: rgba(67, 91, 73, 0.05);
+  --lucent-primary-glow: rgba(67, 91, 73, 0.12);
+  --lucent-primary-subtle: rgba(67, 91, 73, 0.03);
 
-  --lucent-accent: #7C6BEA;
-  --lucent-accent-light: #9B8DF0;
-  --lucent-accent-dark: #5B4BC7;
-  --lucent-accent-ghost: rgba(124, 107, 234, 0.08);
-  --lucent-accent-glow: rgba(124, 107, 234, 0.15);
+  --lucent-accent: #9A94C5; /* Subtle Lavender */
+  --lucent-accent-light: #B2ACDC;
+  --lucent-accent-dark: #6C6698;
+  --lucent-accent-ghost: rgba(154, 148, 197, 0.06);
+  --lucent-accent-glow: rgba(154, 148, 197, 0.12);
 
-  --lucent-rose: #E8B4B8;
-  --lucent-rose-ghost: rgba(232, 180, 184, 0.10);
+  --lucent-rose: #5A7F75; /* Muted Teal */
+  --lucent-rose-ghost: rgba(90, 127, 117, 0.08);
 
-  --lucent-bg: #FAFBFC;
-  --lucent-bg-warm: #F5F3F0;
+  --lucent-bg: #FAF6F0; /* Warm Silk Off-White */
+  --lucent-bg-warm: #F5EFEB; /* Soft Cashmere Cream */
   --lucent-bg-card: #FFFFFF;
   --lucent-bg-elevated: #FFFFFF;
 
-  --lucent-text: #1A1D21;
-  --lucent-text-secondary: #5A5F6B;
-  --lucent-text-muted: #9CA3AF;
+  --lucent-text: #2A2A28; /* Charcoal */
+  --lucent-text-secondary: #5C5C58;
+  --lucent-text-muted: #9C9C96;
 
-  --lucent-border: #E5E7EB;
-  --lucent-border-light: #F0F1F3;
+  --lucent-border: #EAE2D9; /* Soft Beige border */
+  --lucent-border-light: #F4EFE7;
 
-  --lucent-success: #2D5A3D;
-  --lucent-success-bg: rgba(45, 90, 61, 0.08);
-  --lucent-warning: #D97706;
-  --lucent-warning-bg: rgba(217, 119, 6, 0.08);
-  --lucent-error: #DC2626;
-  --lucent-error-bg: rgba(220, 38, 38, 0.08);
+  --lucent-success: #435B49;
+  --lucent-success-bg: rgba(67, 91, 73, 0.06);
+  --lucent-warning: #C59569;
+  --lucent-warning-bg: rgba(197, 149, 105, 0.06);
+  --lucent-error: #B54A4A;
+  --lucent-error-bg: rgba(181, 74, 74, 0.06);
 
-  --lucent-gradient-primary: linear-gradient(135deg, #2D5A3D 0%, #3D7A52 50%, #4A9066 100%);
-  --lucent-gradient-accent: linear-gradient(135deg, #7C6BEA 0%, #9B8DF0 100%);
-  --lucent-gradient-rose: linear-gradient(135deg, #E8B4B8 0%, #F0C8CC 100%);
-  --lucent-gradient-mesh: radial-gradient(ellipse at 20% 50%, rgba(45, 90, 61, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(124, 107, 234, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(232, 180, 184, 0.03) 0%, transparent 50%);
+  --lucent-gradient-primary: linear-gradient(135deg, #435B49 0%, #5B7562 50%, #6E8C77 100%);
+  --lucent-gradient-accent: linear-gradient(135deg, #9A94C5 0%, #B2ACDC 100%);
+  --lucent-gradient-rose: linear-gradient(135deg, #5A7F75 0%, #6A8E85 100%);
+  --lucent-gradient-mesh: radial-gradient(ellipse at 20% 50%, rgba(67, 91, 73, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(154, 148, 197, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(90, 127, 117, 0.02) 0%, transparent 50%);
 }
+
 
 /* ═══════════════════════════════════════════════════════════
    GLASSMORPHISM — Refined & Premium
