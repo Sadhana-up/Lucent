@@ -8,7 +8,6 @@ import { authClient } from "@/lib/auth-client";
 import { UserProfileModal } from "@/components/user-profile-modal";
 import { RoutineBuilder } from "@/components/routine-builder";
 import { ConcernsMatrix } from "@/components/concerns-matrix";
-import { DailyChecklist } from "@/components/daily-checklist";
 import {
   Camera,
   MessageCircle,
@@ -138,7 +137,7 @@ export default function LandingPage() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [activeInteractiveTab, setActiveInteractiveTab] = useState<"analyzer" | "builder" | "matrix" | "checklist" | "chat">("analyzer");
+  const [activeInteractiveTab, setActiveInteractiveTab] = useState<"analyzer" | "builder" | "matrix" | "chat">("analyzer");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHoveredHero, setIsHoveredHero] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -608,7 +607,6 @@ export default function LandingPage() {
               { id: "analyzer", label: "Skin Analysis", icon: Camera },
               { id: "builder", label: "Routine Builder", icon: Sliders },
               { id: "matrix", label: "Ingredients Explorer", icon: Layers },
-              { id: "checklist", label: "Daily Companion", icon: CheckCircle },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeInteractiveTab === tab.id;
@@ -654,7 +652,6 @@ export default function LandingPage() {
               >
                 {activeInteractiveTab === "builder" && <RoutineBuilder />}
                 {activeInteractiveTab === "matrix" && <ConcernsMatrix />}
-                {activeInteractiveTab === "checklist" && <DailyChecklist />}
                 {activeInteractiveTab === "analyzer" && (
                   <div className="glass-card p-10 sm:p-14 rounded-3xl text-center max-w-2xl mx-auto border" style={{ background: "rgba(255,255,255,0.7)", borderColor: C.borderLight }}>
                     <div
