@@ -4,8 +4,6 @@ services:
     image: postgres:16-alpine
     container_name: lucent-db
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-lucent}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lucent_dev_password}
@@ -25,8 +23,6 @@ services:
       dockerfile: Dockerfile
     container_name: lucent-fastapi
     restart: unless-stopped
-    ports:
-      - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
@@ -43,7 +39,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+        - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://localhost}
         - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
         - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
         - CHAT_BACKEND_URL=http://fastapi:8000
@@ -55,12 +51,10 @@ services:
         - DEV_EMAIL_OVERRIDE=${DEV_EMAIL_OVERRIDE}
     container_name: lucent-nextjs
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
-      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://localhost}
       - CHAT_BACKEND_URL=http://fastapi:8000
       - NEXT_PUBLIC_CHAT_API_BASE=/api/chat
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
@@ -69,12 +63,27 @@ services:
       - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
       - DEV_EMAIL_OVERRIDE=${DEV_EMAIL_OVERRIDE}
-      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS}
+      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS:-https://localhost}
+      - NEXTAUTH_URL=${BETTER_AUTH_URL:-https://localhost}
     depends_on:
       db:
         condition: service_healthy
       fastapi:
         condition: service_started
+
+  # ── Nginx (HTTPS Reverse Proxy) ───────────────────────────
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: lucent-nginx
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - nextjs
 
 volumes:
   postgres_data:
