@@ -3,7 +3,7 @@ import { Resend } from "resend";
 const resendApiKey = process.env.RESEND_API_KEY?.trim();
 const devEmailOverride = process.env.DEV_EMAIL_OVERRIDE?.trim() || undefined;
 const emailFrom =
-  process.env.EMAIL_FROM?.trim() || "Dobaeni <onboarding@resend.dev>";
+  process.env.EMAIL_FROM?.trim() || "Lucent <onboarding@resend.dev>";
 
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
@@ -37,7 +37,7 @@ export async function sendEmail({
     ? `[DEV → ${to}] ${subject}`
     : subject;
   const fromAddress = devEmailOverride
-    ? "Dobaeni <onboarding@resend.dev>"
+    ? "Lucent <onboarding@resend.dev>"
     : emailFrom;
 
   const { error } = await resend.emails.send({

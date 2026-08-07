@@ -12,8 +12,7 @@ import {
   User,
   ArrowRight,
   CheckCircle,
-  Sparkles,
-  Star,
+  Leaf,
   ChevronRight,
   Sun,
   Moon,
@@ -82,22 +81,22 @@ const STEPS = [
   {
     icon: Camera,
     title: "Upload your skin photo",
-    desc: "Take or upload a selfie. Lucent reads skin tone, texture, pore size, hydration, and visible concerns in seconds.",
+    desc: "Take or upload a selfie. We evaluate your skin tone, texture, pore size, hydration, and visible concerns in seconds.",
   },
   {
     icon: MessageCircle,
-    title: "Chat with your advisor",
-    desc: "Describe your lifestyle — sleep, diet, stress, past reactions. The AI listens and remembers across every session.",
+    title: "Tell us about your routine",
+    desc: "Share your lifestyle — sleep, diet, stress, past reactions. We remember your context across every session.",
   },
   {
     icon: User,
     title: "Build your skin profile",
-    desc: "Lucent captures your skin type, environment, hormonal patterns, and personal goals into a living profile.",
+    desc: "Your skin type, environment, hormonal patterns, and personal goals are captured into a living profile.",
   },
   {
     icon: FlaskConical,
     title: "Audit your products",
-    desc: "Photograph or type in your current routine. Lucent scans every ingredient and flags conflicts, gaps, and redundancies.",
+    desc: "Photograph or type in your current routine. We scan every ingredient and flag conflicts, gaps, and redundancies.",
   },
   {
     icon: Map,
@@ -227,8 +226,8 @@ export default function LandingPage() {
             className="mb-6 text-xs font-medium px-4 py-1.5 rounded-full border-0 animate-fade-in"
             style={{ background: C.primaryGhost, color: C.primary, border: `0.5px solid ${C.border}` }}
           >
-            <Sparkles size={12} className="mr-1.5" />
-            AI-powered skincare advisor
+            <Leaf size={12} className="mr-1.5" />
+            Science-backed skincare guidance
           </Badge>
 
           <h1
@@ -298,13 +297,13 @@ export default function LandingPage() {
                     <User size={16} style={{ color: C.primary, margin: "auto" }} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium" style={{ color: C.primary }}>Skin analysis complete</p>
-                    <p className="text-xs" style={{ color: C.accent }}>3 concerns · 6-step routine ready</p>
+                    <p className="text-sm font-medium" style={{ color: C.primary }}>Your skin profile</p>
+                    <p className="text-xs" style={{ color: C.accent }}>3 concerns identified · routine ready</p>
                   </div>
                   <CheckCircle size={18} className="ml-auto" style={{ color: C.primary }} />
                 </div>
                 <div className="px-5 py-4 flex flex-col gap-3">
-                  {["Hyperpigmentation detected", "Dehydration markers found", "Barrier sensitivity — mild"].map(
+                  {["Uneven skin tone noted", "Hydration levels need attention", "Mild sensitivity around cheeks"].map(
                     (item, i) => (
                       <div key={i} className="flex items-center gap-2.5">
                         <div
@@ -543,7 +542,7 @@ export default function LandingPage() {
             </span>
           </h2>
           <p className="text-lg mb-10 max-w-xl mx-auto" style={{ color: C.textLight }}>
-            Five minutes. One photo. A skincare routine that&apos;s actually yours.
+            Five minutes. One photo. A skincare routine that&apos;s made for your skin.
           </p>
           <Button
             size="lg"
