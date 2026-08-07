@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Package, Leaf, Clock, CheckCircle, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -79,7 +80,7 @@ export default function OrdersPage() {
                     <div>
                       <p className="text-xs font-mono" style={{ color: C.textMuted }}>#{order.orderNumber}</p>
                       <p className="text-sm font-medium mt-1" style={{ color: C.text }}>
-                        {new Date(order.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                        {new Date(order.createdAt).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })}
                       </p>
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium" style={{ background: `${status.color}15`, color: status.color }}>
@@ -102,14 +103,14 @@ export default function OrdersPage() {
                           <p className="text-sm font-medium truncate" style={{ color: C.text }}>{item.product?.title}</p>
                           <p className="text-xs" style={{ color: C.textMuted }}>Qty: {item.quantity}</p>
                         </div>
-                        <p className="text-sm font-semibold" style={{ color: C.text }}>${(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-sm font-semibold" style={{ color: C.text }}>{formatCurrency(item.price * item.quantity)}</p>
                       </div>
                     ))}
                   </div>
 
                   <div className="mt-4 pt-3 flex justify-between" style={{ borderTop: `1px solid ${C.borderLight}` }}>
                     <span className="text-xs" style={{ color: C.textMuted }}>{order.items?.length || 0} item(s)</span>
-                    <span className="text-sm font-bold" style={{ color: C.primary }}>${order.totalAmount?.toFixed(2)}</span>
+                    <span className="text-sm font-bold" style={{ color: C.primary }}>{formatCurrency(order.totalAmount ?? 0)}</span>
                   </div>
                 </div>
               );

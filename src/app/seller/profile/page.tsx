@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Store, CheckCircle2, Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { getPhoneValidationError } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -75,6 +76,14 @@ export default function SellerProfilePage() {
     if (!form.storeName) {
       setError("Store name is required.");
       return;
+    }
+
+    if (form.phone) {
+      const phoneError = getPhoneValidationError(form.phone);
+      if (phoneError) {
+        setError(phoneError);
+        return;
+      }
     }
 
     setSaving(true);
@@ -198,10 +207,10 @@ export default function SellerProfilePage() {
                         Contact Phone
                       </label>
                       <input
-                        type="text"
+                        type="tel"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        placeholder="+1 (555) 000-0000"
+                        placeholder="+977-98XXXXXXXX"
                         className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                         style={{ border: `1px solid ${C.border}`, background: "rgba(255,255,255,0.72)", backdropFilter: "blur(8px)", color: C.text }}
                       />

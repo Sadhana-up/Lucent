@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { validateNepaliPhone } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,6 +44,13 @@ export async function POST(request: NextRequest) {
 
     if (!storeName) {
       return NextResponse.json({ error: "Store name is required" }, { status: 400 });
+    }
+
+    if (phone && !validateNepaliPhone(phone)) {
+      return NextResponse.json(
+        { error: "Invalid phone number. Please enter a valid Nepali phone number (e.g., +977-98XXXXXXXX)" },
+        { status: 400 }
+      );
     }
 
     const baseSlug = storeName
