@@ -180,7 +180,7 @@ async def before_model_callback(
 # ---------------------------------------------------------------------------
 # Agent
 # ---------------------------------------------------------------------------
-MODEL_NAME = "gemini-2.0-flash"
+MODEL_NAME = "gemini-3-flash-preview"
 APP_NAME = "web_chat"
 USER_ID = "web-client"  # single-tenant demo; swap for a real user id if you add auth
 
