@@ -32,7 +32,7 @@ export async function sendEmail({
     return;
   }
 
-const isProd = process.env.NODE_ENV === "production";
+  const isProd = process.env.NODE_ENV === "production";
   const recipient = !isProd && devEmailOverride ? devEmailOverride : to;
   const effectiveSubject =
     !isProd && devEmailOverride ? `[DEV → ${to}] ${subject}` : subject;
