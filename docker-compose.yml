@@ -58,6 +58,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - NODE_ENV=production
       - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
@@ -68,7 +69,6 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
-      - DEV_EMAIL_OVERRIDE=${DEV_EMAIL_OVERRIDE}
       - TRUSTED_ORIGINS=${TRUSTED_ORIGINS}
     depends_on:
       db:

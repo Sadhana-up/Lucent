@@ -32,13 +32,12 @@ export async function sendEmail({
     return;
   }
 
-  const recipient = devEmailOverride ?? to;
-  const effectiveSubject = devEmailOverride
-    ? `[DEV → ${to}] ${subject}`
-    : subject;
-  const fromAddress = devEmailOverride
-    ? "Dobaeni <onboarding@resend.dev>"
-    : emailFrom;
+  const isProd = process.env.NODE_ENV === "production";
+  const recipient = !isProd && devEmailOverride ? devEmailOverride : to;
+  const effectiveSubject =
+    !isProd && devEmailOverride ? `[DEV → ${to}] ${subject}` : subject;
+  const fromAddress =
+    !isProd && devEmailOverride ? "Dobaeni <onboarding@resend.dev>" : emailFrom;
 
   const { error } = await resend.emails.send({
     from: fromAddress,
@@ -56,7 +55,7 @@ export async function sendEmail({
       recipient: recipient.includes("@") ? recipient.split("@")[1] : "unknown",
     });
     throw error;
-  } else if (devEmailOverride) {
+  } else if (!isProd && devEmailOverride) {
     console.log(
       `[Email] Redirected from ${to} → ${recipient} | Subject: ${subject}`,
     );
