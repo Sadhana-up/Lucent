@@ -14,6 +14,7 @@ import {
   ArrowRight,
   PlusCircle,
 } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -95,7 +96,7 @@ export default function SellerDashboard() {
   }
 
   const metricCards = [
-    { label: "Total Revenue", value: `$${stats.revenue.toFixed(2)}`, icon: DollarSign, change: "+12%" },
+    { label: "Total Revenue", value: formatCurrency(stats.revenue), icon: DollarSign, change: "+12%" },
     { label: "Total Orders", value: stats.orders.toString(), icon: ShoppingBag, change: "+5%" },
     { label: "Active Products", value: stats.products.toString(), icon: Package, change: "" },
     { label: "Store Status", value: "Active", icon: TrendingUp, change: "" },
@@ -186,7 +187,7 @@ export default function SellerDashboard() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold" style={{ color: C.text }}>
-                          ${order.total?.toFixed(2) || "0.00"}
+                          {formatCurrency(order.total ?? 0)}
                         </p>
                         <span
                           className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
@@ -245,7 +246,7 @@ export default function SellerDashboard() {
                         </div>
                         <div className="min-w-0">
                           <p className="text-sm font-semibold truncate" style={{ color: C.text }}>{product.title}</p>
-                          <p className="text-xs" style={{ color: C.textMuted }}>${product.price?.toFixed(2)}</p>
+                          <p className="text-xs" style={{ color: C.textMuted }}>{formatCurrency(product.price ?? 0)}</p>
                         </div>
                       </div>
                       <span

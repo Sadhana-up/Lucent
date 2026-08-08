@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle2, ShieldCheck, Loader2, Leaf, Package, MapPin, P
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
+import { formatCurrency, getPhoneValidationError } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -80,6 +81,12 @@ export default function CheckoutPage() {
       return;
     }
 
+    const phoneError = getPhoneValidationError(form.contactPhone);
+    if (phoneError) {
+      setError(phoneError);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -146,7 +153,7 @@ export default function CheckoutPage() {
           <div className="p-4 rounded-xl text-left text-sm space-y-2" style={{ background: C.primaryGhost, border: `1px solid ${C.borderLight}` }}>
             <div className="flex justify-between font-semibold pb-2" style={{ color: C.text, borderBottom: `1px solid ${C.border}` }}>
               <span>Total Paid</span>
-              <span>${completedOrder.totalAmount.toFixed(2)}</span>
+              <span>{formatCurrency(completedOrder.totalAmount)}</span>
             </div>
             <div>
               <span className="font-medium" style={{ color: C.textSecondary }}>Shipping to:</span>
@@ -239,7 +246,7 @@ export default function CheckoutPage() {
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <div className="col-span-2 sm:col-span-1">
                           <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
-                            City *
+                            City / Municipality *
                           </label>
                           <input
                             type="text"
@@ -253,28 +260,28 @@ export default function CheckoutPage() {
                         </div>
                         <div>
                           <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
-                            State *
+                            Province *
                           </label>
                           <input
                             type="text"
                             required
                             value={form.shippingState}
                             onChange={(e) => setForm({ ...form, shippingState: e.target.value })}
-                            placeholder="State"
+                            placeholder="Province"
                             className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                             style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                           />
                         </div>
                         <div>
                           <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
-                            ZIP *
+                            Postal Code *
                           </label>
                           <input
                             type="text"
                             required
                             value={form.shippingZip}
                             onChange={(e) => setForm({ ...form, shippingZip: e.target.value })}
-                            placeholder="ZIP"
+                            placeholder="Postal Code"
                             className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                             style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                           />
@@ -290,7 +297,7 @@ export default function CheckoutPage() {
                           required
                           value={form.contactPhone}
                           onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
-                          placeholder="+1 (555) 000-0000"
+                          placeholder="+977-98XXXXXXXX"
                           className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                           style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                         />
@@ -329,7 +336,7 @@ export default function CheckoutPage() {
                           {item.quantity}x {item.title}
                         </span>
                         <span className="font-semibold" style={{ color: C.text }}>
-                          ${(item.price * item.quantity).toFixed(2)}
+                          {formatCurrency(item.price * item.quantity)}
                         </span>
                       </div>
                     ))}
@@ -337,7 +344,7 @@ export default function CheckoutPage() {
 
                   <div className="pt-3 flex justify-between text-base font-semibold" style={{ color: C.text, borderTop: `1px solid ${C.borderLight}` }}>
                     <span>Total Amount</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>{formatCurrency(subtotal)}</span>
                   </div>
 
                   {error && (

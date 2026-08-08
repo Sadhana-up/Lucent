@@ -272,7 +272,7 @@ export default function EditProductPage({
 
             <div>
               <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
-                Price ($) *
+                Price (NPR) *
               </label>
               <input
                 type="number"
@@ -287,7 +287,7 @@ export default function EditProductPage({
 
             <div>
               <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
-                Discount Price ($)
+                Discount Price (NPR)
               </label>
               <input
                 type="number"

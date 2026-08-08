@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { validateNepaliPhone } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +23,13 @@ export async function POST(request: NextRequest) {
     if (!shippingAddress || !contactPhone) {
       return NextResponse.json(
         { error: "Shipping address and contact phone are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!validateNepaliPhone(contactPhone)) {
+      return NextResponse.json(
+        { error: "Invalid phone number. Please enter a valid Nepali phone number (e.g., +977-98XXXXXXXX)" },
         { status: 400 }
       );
     }

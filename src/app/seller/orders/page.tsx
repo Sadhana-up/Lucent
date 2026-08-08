@@ -10,6 +10,7 @@ import {
   MapPin,
   User,
 } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -181,14 +182,13 @@ export default function SellerOrdersPage() {
                       className="text-sm font-semibold"
                       style={{ color: C.text }}
                     >
-                      $
-                      {order.items
-                        .reduce(
+                      {formatCurrency(
+                        order.items.reduce(
                           (sum: number, item: any) =>
                             sum + item.quantity * item.price,
                           0
                         )
-                        .toFixed(2)}
+                      )}
                     </span>
                     <div className="flex items-center gap-2">
                       <span
@@ -278,8 +278,7 @@ export default function SellerOrdersPage() {
                                 className="text-xs"
                                 style={{ color: C.textMuted }}
                               >
-                                Qty: {item.quantity} × $
-                                {item.price.toFixed(2)}
+                                Qty: {item.quantity} x {formatCurrency(item.price)}
                               </span>
                             </div>
                           </div>
@@ -287,7 +286,7 @@ export default function SellerOrdersPage() {
                             className="font-semibold text-sm"
                             style={{ color: C.text }}
                           >
-                            ${(item.quantity * item.price).toFixed(2)}
+                            {formatCurrency(item.quantity * item.price)}
                           </span>
                         </div>
                       ))}

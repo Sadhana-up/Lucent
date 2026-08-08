@@ -5,6 +5,7 @@ import Link from "next/link";
 import { PlusCircle, Search, Package, Edit, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -318,13 +319,13 @@ export default function SellerProductsPage() {
                         {product.category?.name || "Uncategorized"}
                       </td>
                       <td className="p-4 font-semibold" style={{ color: C.text }}>
-                        ${product.price.toFixed(2)}
+                        {formatCurrency(product.price)}
                         {product.discountPrice && (
                           <span
                             className="text-xs font-normal line-through ml-1.5"
                             style={{ color: C.textMuted }}
                           >
-                            ${product.discountPrice.toFixed(2)}
+                            {formatCurrency(product.discountPrice)}
                           </span>
                         )}
                       </td>

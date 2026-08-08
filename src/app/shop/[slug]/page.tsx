@@ -17,6 +17,7 @@ import {
 import { StarRating } from "@/components/star-rating";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -229,16 +230,16 @@ export default function ProductDetailPage({
               <div className="p-4 rounded-2xl" style={{ background: C.primaryGhost, border: `1px solid ${C.borderLight}` }}>
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-extrabold" style={{ color: C.text }}>
-                    ${product.discountPrice ? product.discountPrice.toFixed(2) : product.price.toFixed(2)}
+                    {formatCurrency(product.discountPrice ?? product.price)}
                   </span>
                   {product.discountPrice && (
                     <span className="text-base line-through" style={{ color: C.textMuted }}>
-                      ${product.price.toFixed(2)}
+                      {formatCurrency(product.price)}
                     </span>
                   )}
                   {product.discountPrice && (
                     <span className="px-2.5 py-0.5 rounded-full text-white text-xs font-bold" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
-                      Save ${(product.price - product.discountPrice).toFixed(2)}
+                      Save {formatCurrency(product.price - product.discountPrice)}
                     </span>
                   )}
                 </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Trash2, ShoppingBag, ArrowRight, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -136,7 +137,7 @@ export default function CartPage() {
                               {item.title}
                             </h3>
                             <p className="text-sm font-semibold mt-0.5" style={{ color: C.primary }}>
-                              ${item.price.toFixed(2)}
+                              {formatCurrency(item.price)}
                             </p>
 
                             <div className="flex items-center gap-3 mt-3">
@@ -173,7 +174,7 @@ export default function CartPage() {
 
                           <div className="text-right">
                             <span className="font-semibold text-base" style={{ color: C.text }}>
-                              ${(item.price * item.quantity).toFixed(2)}
+                              {formatCurrency(item.price * item.quantity)}
                             </span>
                           </div>
                         </div>
@@ -193,7 +194,7 @@ export default function CartPage() {
                     <div className="space-y-2 text-sm" style={{ color: C.textSecondary }}>
                       <div className="flex justify-between">
                         <span>Subtotal</span>
-                        <span className="font-semibold" style={{ color: C.text }}>${subtotal.toFixed(2)}</span>
+                        <span className="font-semibold" style={{ color: C.text }}>{formatCurrency(subtotal)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Shipping</span>
@@ -201,7 +202,7 @@ export default function CartPage() {
                       </div>
                       <div className="pt-3 flex justify-between text-base font-semibold" style={{ color: C.text, borderTop: `1px solid ${C.borderLight}` }}>
                         <span>Total</span>
-                        <span>${subtotal.toFixed(2)}</span>
+                        <span>{formatCurrency(subtotal)}</span>
                       </div>
                     </div>
 

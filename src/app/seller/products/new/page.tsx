@@ -272,7 +272,7 @@ export default function AddProductPage() {
 
               <div>
                 <label className={labelClass} style={{ color: C.textSecondary }}>
-                  Price ($) *
+                  Price (NPR) *
                 </label>
                 <input
                   type="number"
@@ -290,7 +290,7 @@ export default function AddProductPage() {
 
               <div>
                 <label className={labelClass} style={{ color: C.textSecondary }}>
-                  Discount Price ($) (Optional)
+                  Discount Price (NPR) (Optional)
                 </label>
                 <input
                   type="number"

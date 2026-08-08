@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { StarRating } from "./star-rating";
 import { Store, CheckCircle2 } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -155,11 +156,11 @@ export function ProductCard({ product }: ProductCardProps) {
           <div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-lg font-semibold" style={{ color: C.text }}>
-                ${product.discountPrice ? product.discountPrice.toFixed(2) : product.price.toFixed(2)}
+                {formatCurrency(product.discountPrice ?? product.price)}
               </span>
               {product.discountPrice && (
                 <span className="text-xs line-through" style={{ color: C.textMuted }}>
-                  ${product.price.toFixed(2)}
+                  {formatCurrency(product.price)}
                 </span>
               )}
             </div>
