@@ -38,6 +38,12 @@ function ForgotPasswordContent() {
     setError("");
     setLoading(true);
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
+
     try {
       await authClient.requestPasswordReset({
         email,
