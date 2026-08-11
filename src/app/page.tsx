@@ -439,6 +439,77 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Lucent Shop ── */}
+      <section
+        id="shop"
+        className="py-20"
+        style={{ background: C.bgWarm, borderTop: `1px solid ${C.borderLight}`, borderBottom: `1px solid ${C.borderLight}` }}
+      >
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex-1">
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: C.accent }}>
+                Lucent Shop
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold mb-5" style={{ color: C.text }}>
+                Products your skin<br />
+                <span style={{ color: C.primary }}>will actually love.</span>
+              </h2>
+              <p className="text-sm leading-relaxed mb-8 max-w-md" style={{ color: C.textSecondary }}>
+                Curated skincare products chosen by our AI based on your unique skin profile.
+                Every recommendation is backed by ingredient science — not marketing.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  size="lg"
+                  className="text-sm font-medium text-white px-8 h-12"
+                  style={{ background: C.primary }}
+                  onClick={() => router.push("/shop")}
+                >
+                  Browse the shop
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-sm h-12 px-8"
+                  style={{ borderColor: C.border, color: C.textSecondary }}
+                  onClick={() => router.push("/chat")}
+                >
+                  Get personalized picks
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex-1 grid grid-cols-2 gap-4">
+              {[
+                { icon: Leaf, title: "AI-Matched", desc: "Products selected for your skin type and concerns." },
+                { icon: FlaskConical, title: "Ingredient-First", desc: "Every product scored by what's inside, not the label." },
+                { icon: Shield, title: "Barrier Safe", desc: "We never recommend anything that compromises your skin." },
+                { icon: Zap, title: "Fast Delivery", desc: "Get your routine delivered to your door, hassle-free." },
+              ].map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.08 }}
+                    className="p-5 rounded-xl"
+                    style={{ background: "rgba(255,255,255,0.6)", border: `1px solid ${C.borderLight}` }}
+                  >
+                    <Icon size={18} style={{ color: C.primary }} className="mb-2" />
+                    <h3 className="text-sm font-bold mb-1" style={{ color: C.text }}>{item.title}</h3>
+                    <p className="text-xs leading-relaxed" style={{ color: C.textSecondary }}>{item.desc}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Footer ── */}
       <footer
         className="py-10 px-6"
