@@ -18,10 +18,21 @@ export const metadata: Metadata = {
   title: "Lucent — AI Skincare Advisor",
   description: "Your skin, finally understood. AI-powered skincare analysis, personalized routines, and curated products — all in one place.",
   keywords: ["skincare", "AI", "skin analysis", "personalized routine", "dermatologist", "beauty"],
+  icons: {
+    icon: "/lucene.ico",
+  },
   openGraph: {
     title: "Lucent — AI Skincare Advisor",
     description: "AI-powered skincare analysis and personalized routines.",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Lucent — AI Skincare Advisor",
+      },
+    ],
   },
 };
 
