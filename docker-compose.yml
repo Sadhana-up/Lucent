@@ -39,7 +39,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://localhost}
+        - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://lucentnepal.com}
         - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
         - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
         - CHAT_BACKEND_URL=http://fastapi:8000
@@ -55,7 +55,7 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://${POSTGRES_USER:-lucent}:${POSTGRES_PASSWORD:-lucent_dev_password}@db:5432/${POSTGRES_DB:-lucent_db}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
-      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://localhost}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://lucentnepal.com}
       - CHAT_BACKEND_URL=http://fastapi:8000
       - NEXT_PUBLIC_CHAT_API_BASE=/api/chat
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
@@ -63,8 +63,8 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
-      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS:-https://localhost}
-      - NEXTAUTH_URL=${BETTER_AUTH_URL:-https://localhost}
+      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS:-https://lucentnepal.com}
+      - NEXTAUTH_URL=${BETTER_AUTH_URL:-https://lucentnepal.com}
     depends_on:
       db:
         condition: service_healthy
@@ -80,8 +80,9 @@ services:
     restart: unless-stopped
     ports:
       - "443:443"
+      - "80:80"
     volumes:
-      - ./certs:/etc/nginx/certs:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - nextjs
 
