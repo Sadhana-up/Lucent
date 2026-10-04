@@ -98,12 +98,11 @@ export default function LandingPage() {
             className="flex items-center gap-2.5 cursor-pointer"
             onClick={() => router.push("/")}
           >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: C.primary }}
-            >
-              <Leaf size={16} className="text-white" />
-            </div>
+            <img
+              src="/logo.jpeg"
+              alt="Lucent"
+              className="h-8 w-auto object-contain"
+            />
             <span className="font-serif text-xl font-semibold" style={{ color: C.primary }}>
               Lucent
             </span>
@@ -519,9 +518,11 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="md:col-span-1">
               <div className="flex items-center gap-2 mb-3" onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
-                <div className="w-6 h-6 rounded flex items-center justify-center" style={{ background: C.primary }}>
-                  <Leaf size={12} className="text-white" />
-                </div>
+              <img
+                src="/logo.jpeg"
+                alt="Lucent"
+                className="h-6 w-auto object-contain"
+              />
                 <span className="font-serif text-base font-bold" style={{ color: C.text }}>Lucent</span>
               </div>
               <p className="text-xs leading-relaxed" style={{ color: C.textMuted }}>
