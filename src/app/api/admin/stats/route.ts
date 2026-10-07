@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
         categories: totalCategories,
       },
       orders: {
-        total: revenueAgg._count,
+        total: revenueAgg._count._all,
         byStatus: ordersByStatusMap,
         newLast7Days: newOrdersLast7Days,
         revenue: revenueAgg._sum.totalAmount ?? 0,
