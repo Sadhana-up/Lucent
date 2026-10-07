@@ -56,7 +56,9 @@ function SignInFormContent() {
 
       if (callbackUrl) {
         router.push(callbackUrl);
-      } else if (userRole === "seller" || userRole === "admin") {
+      } else if (userRole === "admin") {
+        router.push("/admin");
+      } else if (userRole === "seller") {
         router.push("/seller");
       } else {
         router.push("/");

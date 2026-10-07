@@ -71,7 +71,8 @@ export default function LandingPage() {
   useEffect(() => {
     if (session?.user) {
       const role = (session.user as { role?: string }).role;
-      if (role === "seller" || role === "admin") router.push("/seller");
+      if (role === "admin") router.push("/admin");
+      else if (role === "seller") router.push("/seller");
     }
   }, [session, router]);
 

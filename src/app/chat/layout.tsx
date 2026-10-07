@@ -17,7 +17,10 @@ export default async function ChatLayout({
   }
 
   const userRole = (session.user as { role?: string })?.role;
-  if (userRole === "seller" || userRole === "admin") {
+  if (userRole === "admin") {
+    redirect("/admin");
+  }
+  if (userRole === "seller") {
     redirect("/seller/dashboard");
   }
 
