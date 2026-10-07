@@ -104,7 +104,7 @@ export default function LandingPage() {
               className="h-8 w-auto object-contain"
             />
             <span className="font-serif text-xl font-semibold" style={{ color: C.primary }}>
-              Lucent
+              Lucene AI Nepal
             </span>
           </div>
 
