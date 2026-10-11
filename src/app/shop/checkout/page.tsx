@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, ShieldCheck, Loader2, Leaf, Package, MapPin, Phone, FileText } from "lucide-react";
+import { ArrowLeft, Loader2, Package, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
@@ -38,7 +38,6 @@ export default function CheckoutPage() {
   const { data: session, isPending } = authClient.useSession();
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [completedOrder, setCompletedOrder] = useState<any>(null);
   const [error, setError] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -114,11 +113,16 @@ export default function CheckoutPage() {
         throw new Error(data.error || "Failed to place order");
       }
 
-      localStorage.removeItem("lucent_cart");
-      setCompletedOrder(data);
+      if (data.paymentUrl) {
+        // Redirect to Khalti's hosted checkout. The cart is cleared on the
+        // success page once payment is verified.
+        window.location.href = data.paymentUrl;
+        return;
+      }
+
+      throw new Error("Payment could not be started. Please try again.");
     } catch (err: any) {
       setError(err.message || "Failed to place order");
-    } finally {
       setLoading(false);
     }
   };
@@ -127,48 +131,6 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: C.bg }}>
         <div className="w-10 h-10 border-4 rounded-full animate-spin" style={{ borderColor: C.border, borderTopColor: C.primary }} />
-      </div>
-    );
-  }
-
-  if (completedOrder) {
-    return (
-      <div className="min-h-screen py-12 px-4 flex items-center justify-center" style={{ background: C.bg }}>
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div className="ambient-spot ambient-spot-primary w-[500px] h-[500px] top-0 right-0" />
-          <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-0 left-0" />
-        </div>
-        <Card className="glass-card max-w-lg w-full p-8 text-center space-y-6 shadow-lg rounded-2xl animate-scale-in relative">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto animate-success-pop" style={{ background: C.primaryGhost }}>
-            <CheckCircle2 size={36} style={{ color: C.primary }} />
-          </div>
-
-          <div>
-            <h1 className="text-2xl font-semibold" style={{ color: C.text }}>Order Placed Successfully!</h1>
-            <p className="text-sm mt-1" style={{ color: C.textMuted }}>
-              Order #{completedOrder.orderNumber}
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl text-left text-sm space-y-2" style={{ background: C.primaryGhost, border: `1px solid ${C.borderLight}` }}>
-            <div className="flex justify-between font-semibold pb-2" style={{ color: C.text, borderBottom: `1px solid ${C.border}` }}>
-              <span>Total Paid</span>
-              <span>{formatCurrency(completedOrder.totalAmount)}</span>
-            </div>
-            <div>
-              <span className="font-medium" style={{ color: C.textSecondary }}>Shipping to:</span>
-              <p style={{ color: C.text }}>{completedOrder.shippingAddress}</p>
-            </div>
-          </div>
-
-          <div className="pt-2">
-            <Link href="/shop" className="w-full block">
-              <Button variant="premium" className="w-full font-semibold py-2.5 rounded-xl transition-all duration-300">
-                Back to Shop
-              </Button>
-            </Link>
-          </div>
-        </Card>
       </div>
     );
   }
@@ -359,10 +321,10 @@ export default function CheckoutPage() {
                   >
                     {loading ? (
                       <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Placing Order...
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Redirecting to Khalti...
                       </>
                     ) : (
-                      "Confirm Order"
+                      "Confirm & Pay"
                     )}
                   </Button>
                 </CardContent>

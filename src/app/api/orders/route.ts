@@ -3,9 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { validateNepaliPhone } from "@/lib/utils";
 import {
-  sendNewOrderSellerEmail,
-  type SellerOrderEmailItem,
-} from "@/lib/email";
+  initiateKhaltiPayment,
+  KhaltiError,
+  toKhaltiPhone,
+  toPaisa,
+} from "@/lib/khalti";
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,47 +43,25 @@ export async function POST(request: NextRequest) {
     // Calculate total amount & verify items
     let totalAmount = 0;
     const orderItemsData = [];
-    const sellerNotifications = new Map<
-      string,
-      { to: string; storeName: string; items: SellerOrderEmailItem[] }
-    >();
+    const productTitles: string[] = [];
 
     for (const item of items) {
       const product = await prisma.product.findUnique({
         where: { id: item.productId },
-        include: { seller: { include: { user: true } } },
       });
 
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.productId}` }, { status: 400 });
       }
 
-      const itemTotal = product.price * item.quantity;
-      totalAmount += itemTotal;
+      totalAmount += product.price * item.quantity;
+      productTitles.push(product.title);
 
       orderItemsData.push({
         productId: product.id,
         quantity: item.quantity,
         price: product.price,
       });
-
-      // Group purchased items by seller so each seller only hears about their
-      // own products.
-      const seller = product.seller;
-      const recipient = seller.contactEmail || seller.user?.email;
-      if (recipient) {
-        const group = sellerNotifications.get(seller.id) ?? {
-          to: recipient,
-          storeName: seller.storeName,
-          items: [],
-        };
-        group.items.push({
-          title: product.title,
-          quantity: item.quantity,
-          price: product.price,
-        });
-        sellerNotifications.set(seller.id, group);
-      }
     }
 
     const orderNumber = `LUC-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
@@ -91,6 +71,8 @@ export async function POST(request: NextRequest) {
         orderNumber,
         customerId: session.user.id,
         status: "PENDING",
+        paymentProvider: "khalti",
+        paymentStatus: "UNPAID",
         totalAmount,
         shippingAddress,
         contactPhone,
@@ -110,36 +92,46 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Notify each seller that their product was purchased. Failures are
-    // logged but never block the order from being created.
-    if (sellerNotifications.size > 0) {
-      const buyerName = session.user.name || "A customer";
-      const buyerEmail = session.user.email;
+    // Hand off to Khalti. The order stays PENDING/UNPAID until the return
+    // callback is verified against Khalti's lookup API.
+    const appUrl =
+      process.env.NEXT_PUBLIC_APP_URL?.trim() || request.nextUrl.origin;
 
-      await Promise.all(
-        Array.from(sellerNotifications.values()).map((notification) =>
-          sendNewOrderSellerEmail({
-            to: notification.to,
-            storeName: notification.storeName,
-            orderNumber,
-            items: notification.items,
-            buyerName,
-            buyerEmail,
-            contactPhone,
-            shippingAddress,
-            notes,
-          }).catch((error: unknown) => {
-            console.error("[Email Delivery Error] new_order_seller", {
-              orderNumber,
-              to: notification.to,
-              error,
-            });
-          }),
-        ),
+    try {
+      const payment = await initiateKhaltiPayment({
+        return_url: `${appUrl}/api/payment/khalti/return`,
+        website_url: appUrl,
+        amount: toPaisa(totalAmount),
+        purchase_order_id: order.id,
+        purchase_order_name: productTitles[0] || orderNumber,
+        customer_info: {
+          name: session.user.name,
+          email: session.user.email,
+          phone: toKhaltiPhone(contactPhone),
+        },
+      });
+
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { paymentRef: payment.pidx },
+      });
+
+      return NextResponse.json(
+        { order, paymentUrl: payment.payment_url, pidx: payment.pidx },
+        { status: 201 },
+      );
+    } catch (paymentError) {
+      // Nothing was charged, so remove the pending order instead of leaving
+      // an unpaid order behind.
+      await prisma.order.delete({ where: { id: order.id } }).catch(() => {});
+
+      console.error("Error initiating Khalti payment:", paymentError);
+      const status = paymentError instanceof KhaltiError ? paymentError.status : 502;
+      return NextResponse.json(
+        { error: "Unable to start payment. Please try again." },
+        { status: status >= 400 && status < 600 ? status : 502 },
       );
     }
-
-    return NextResponse.json(order, { status: 201 });
   } catch (error) {
     console.error("Error creating order:", error);
     return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
