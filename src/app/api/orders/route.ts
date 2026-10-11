@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { validateNepaliPhone } from "@/lib/utils";
+import {
+  sendNewOrderSellerEmail,
+  type SellerOrderEmailItem,
+} from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,10 +41,15 @@ export async function POST(request: NextRequest) {
     // Calculate total amount & verify items
     let totalAmount = 0;
     const orderItemsData = [];
+    const sellerNotifications = new Map<
+      string,
+      { to: string; storeName: string; items: SellerOrderEmailItem[] }
+    >();
 
     for (const item of items) {
       const product = await prisma.product.findUnique({
         where: { id: item.productId },
+        include: { seller: { include: { user: true } } },
       });
 
       if (!product) {
@@ -55,6 +64,24 @@ export async function POST(request: NextRequest) {
         quantity: item.quantity,
         price: product.price,
       });
+
+      // Group purchased items by seller so each seller only hears about their
+      // own products.
+      const seller = product.seller;
+      const recipient = seller.contactEmail || seller.user?.email;
+      if (recipient) {
+        const group = sellerNotifications.get(seller.id) ?? {
+          to: recipient,
+          storeName: seller.storeName,
+          items: [],
+        };
+        group.items.push({
+          title: product.title,
+          quantity: item.quantity,
+          price: product.price,
+        });
+        sellerNotifications.set(seller.id, group);
+      }
     }
 
     const orderNumber = `LUC-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
@@ -82,6 +109,35 @@ export async function POST(request: NextRequest) {
         },
       },
     });
+
+    // Notify each seller that their product was purchased. Failures are
+    // logged but never block the order from being created.
+    if (sellerNotifications.size > 0) {
+      const buyerName = session.user.name || "A customer";
+      const buyerEmail = session.user.email;
+
+      await Promise.all(
+        Array.from(sellerNotifications.values()).map((notification) =>
+          sendNewOrderSellerEmail({
+            to: notification.to,
+            storeName: notification.storeName,
+            orderNumber,
+            items: notification.items,
+            buyerName,
+            buyerEmail,
+            contactPhone,
+            shippingAddress,
+            notes,
+          }).catch((error: unknown) => {
+            console.error("[Email Delivery Error] new_order_seller", {
+              orderNumber,
+              to: notification.to,
+              error,
+            });
+          }),
+        ),
+      );
+    }
 
     return NextResponse.json(order, { status: 201 });
   } catch (error) {
