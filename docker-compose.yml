@@ -49,6 +49,7 @@ services:
         - RESEND_API_KEY=${RESEND_API_KEY}
         - EMAIL_FROM=${EMAIL_FROM}
         - DEV_EMAIL_OVERRIDE=${DEV_EMAIL_OVERRIDE}
+        - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://lucentnepal.com}
     container_name: lucent-nextjs
     restart: unless-stopped
     environment:
@@ -65,6 +66,7 @@ services:
       - EMAIL_FROM=${EMAIL_FROM}
       - TRUSTED_ORIGINS=${TRUSTED_ORIGINS:-https://lucentnepal.com}
       - NEXTAUTH_URL=${BETTER_AUTH_URL:-https://lucentnepal.com}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://lucentnepal.com}
     depends_on:
       db:
         condition: service_healthy
