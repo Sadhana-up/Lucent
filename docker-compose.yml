@@ -50,6 +50,8 @@ services:
         - EMAIL_FROM=${EMAIL_FROM}
         - DEV_EMAIL_OVERRIDE=${DEV_EMAIL_OVERRIDE}
         - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://lucentnepal.com}
+        - KHALTI_SECRET_KEY=${KHALTI_SECRET_KEY}
+        - KHALTI_BASE_URL=${KHALTI_BASE_URL:-https://dev.khalti.com/api/v2}
     container_name: lucent-nextjs
     restart: unless-stopped
     environment:
@@ -67,6 +69,8 @@ services:
       - TRUSTED_ORIGINS=${TRUSTED_ORIGINS:-https://lucentnepal.com}
       - NEXTAUTH_URL=${BETTER_AUTH_URL:-https://lucentnepal.com}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://lucentnepal.com}
+      - KHALTI_SECRET_KEY=${KHALTI_SECRET_KEY}
+      - KHALTI_BASE_URL=${KHALTI_BASE_URL:-https://dev.khalti.com/api/v2}
     depends_on:
       db:
         condition: service_healthy
