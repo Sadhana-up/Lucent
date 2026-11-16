@@ -13,8 +13,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 # Copy dependency files first for caching
 COPY pyproject.toml uv.lock ./
 
-# Install dependencies
-RUN uv sync --frozen --no-dev
+# Install dependencies using system Python (avoid uv downloading an unsupported newer Python)
+RUN uv sync --frozen --no-dev --python /usr/local/bin/python --no-python-downloads
 
 # Copy application code
 COPY . .
