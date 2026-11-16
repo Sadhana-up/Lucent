@@ -25,16 +25,50 @@ const C = {
   successFg: "#1E3D2A",
 };
 
-export function ShopClient() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+type ShopProduct = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  discountPrice?: number | null;
+  skinType?: string | null;
+  skinConcerns?: string | null;
+  status: string;
+  images: { url: string; isPrimary?: boolean }[];
+  category?: { name: string; slug?: string } | null;
+  seller?: {
+    storeName: string;
+    storeSlug: string;
+    logo?: string | null;
+    isVerified?: boolean;
+  } | null;
+  avgRating?: number | null;
+  reviewCount?: number;
+};
+
+type ShopCategory = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type ShopClientProps = {
+  initialProducts?: ShopProduct[];
+  initialCategories?: ShopCategory[];
+};
+
+export function ShopClient({ initialProducts = [], initialCategories = [] }: ShopClientProps) {
+  const [products, setProducts] = useState<ShopProduct[]>(initialProducts);
+  const [categories, setCategories] = useState<ShopCategory[]>(initialCategories);
+  const [loading, setLoading] = useState(initialProducts.length === 0);
 
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSkinType, setSelectedSkinType] = useState("");
 
   useEffect(() => {
+    if (initialProducts.length > 0 || initialCategories.length > 0) return;
     async function loadShopData() {
       try {
         const [prodRes, catRes] = await Promise.all([
@@ -51,7 +85,7 @@ export function ShopClient() {
       }
     }
     loadShopData();
-  }, []);
+  }, [initialProducts.length, initialCategories.length]);
 
   const filteredProducts = products.filter((p) => {
     const matchesSearch =
