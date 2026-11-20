@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Lucent",
+    "slug": "lucent",
+    "version": "1.0.0",
+    "orientation": "default",
+    "scheme": "lucent",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lucentnepal.app"
+    },
+    "android": {
+      "package": "com.lucentnepal.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1912",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-dev-client",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0B1912",
+          "resizeMode": "contain"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "buildArchs": ["arm64-v8a"]
+          }
+        }
+      ],
+      "./plugins/withLowMemoryGradle.js"
+    ],
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "9e6a2c2d-0309-431b-bfe5-10b32e3c51e6"
+      }
+    },
+    "owner": "paurakh_01"
+  }
+}
