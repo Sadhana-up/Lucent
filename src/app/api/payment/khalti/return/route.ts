@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { lookupKhaltiPayment, toPaisa } from "@/lib/khalti";
-import { notifySellersForOrder } from "@/lib/order-notifications";
+import {
+  notifyBuyerOrderConfirmed,
+  notifySellersForOrder,
+} from "@/lib/order-notifications";
 
 /**
  * Khalti redirects the buyer's browser here (GET) after payment. The customer
@@ -75,7 +78,10 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    await notifySellersForOrder(order.id);
+    await Promise.all([
+      notifySellersForOrder(order.id),
+      notifyBuyerOrderConfirmed(order.id),
+    ]);
 
     return redirectToSuccess(order.orderNumber);
   } catch (error) {

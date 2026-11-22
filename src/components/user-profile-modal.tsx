@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/lib/auth-client";
-import { LogOut, User, Mail, X } from "lucide-react";
+import { LogOut, User, Mail, X, Package, Settings } from "lucide-react";
 
 const C = {
   primary: "#2D5A3D",
@@ -131,6 +132,22 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
               {user.role === "seller" ? "Seller" : "Customer"}
             </Badge>
           )}
+        </div>
+
+        {/* Account Links */}
+        <div className="px-6 pb-3 space-y-2">
+          <Link href="/shop/account" className="block" onClick={onClose}>
+            <Button variant="outline" className="w-full text-sm font-medium">
+              <Settings size={14} className="mr-2" />
+              My Account & Addresses
+            </Button>
+          </Link>
+          <Link href="/shop/orders" className="block" onClick={onClose}>
+            <Button variant="outline" className="w-full text-sm font-medium">
+              <Package size={14} className="mr-2" />
+              My Orders
+            </Button>
+          </Link>
         </div>
 
         {/* Sign Out Button */}

@@ -33,6 +33,18 @@ const STEPS = [
   { id: 2, label: "Review", icon: Package },
 ];
 
+interface SavedAddress {
+  id: string;
+  label: string;
+  fullName: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string | null;
+  postalCode: string | null;
+  isDefault: boolean;
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
@@ -42,6 +54,7 @@ export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState(1);
 
   const [form, setForm] = useState({
+    shippingName: "",
     shippingAddress: "",
     shippingCity: "",
     shippingState: "",
@@ -49,6 +62,9 @@ export default function CheckoutPage() {
     contactPhone: "",
     notes: "",
   });
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState("");
+  const [saveAddress, setSaveAddress] = useState(true);
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -62,6 +78,71 @@ export default function CheckoutPage() {
     setCartItems(items);
   }, []);
 
+  useEffect(() => {
+    if (!session?.user) return;
+    setForm((prev) => ({
+      ...prev,
+      shippingName: prev.shippingName || session.user.name || "",
+    }));
+  }, [session]);
+
+  useEffect(() => {
+    if (!session?.user) return;
+
+    let cancelled = false;
+    fetch("/api/addresses", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (cancelled || !Array.isArray(data)) return;
+        setSavedAddresses(data);
+        if (data.length > 0) {
+          const preferred =
+            data.find((address: SavedAddress) => address.isDefault) ?? data[0];
+          setSelectedAddressId(preferred.id);
+          setForm((prev) => ({
+            ...prev,
+            shippingName: preferred.fullName,
+            shippingAddress: preferred.address,
+            shippingCity: preferred.city,
+            shippingState: preferred.state ?? "",
+            shippingZip: preferred.postalCode ?? "",
+            contactPhone: preferred.phone,
+          }));
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session]);
+
+  const handleSelectAddress = (id: string) => {
+    setSelectedAddressId(id);
+    const address = savedAddresses.find((item) => item.id === id);
+
+    if (!address) {
+      setForm((prev) => ({
+        ...prev,
+        shippingAddress: "",
+        shippingCity: "",
+        shippingState: "",
+        shippingZip: "",
+      }));
+      return;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      shippingName: address.fullName,
+      shippingAddress: address.address,
+      shippingCity: address.city,
+      shippingState: address.state ?? "",
+      shippingZip: address.postalCode ?? "",
+      contactPhone: address.phone,
+    }));
+  };
+
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
@@ -69,6 +150,7 @@ export default function CheckoutPage() {
     setError("");
 
     const fullAddress = [
+      form.shippingName,
       form.shippingAddress,
       form.shippingCity,
       form.shippingState,
@@ -111,6 +193,23 @@ export default function CheckoutPage() {
           return;
         }
         throw new Error(data.error || "Failed to place order");
+      }
+
+      if (saveAddress && !selectedAddressId) {
+        await fetch("/api/addresses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            label: "Home",
+            fullName: form.shippingName,
+            phone: form.contactPhone,
+            address: form.shippingAddress,
+            city: form.shippingCity,
+            state: form.shippingState,
+            postalCode: form.shippingZip,
+            isDefault: savedAddresses.length === 0,
+          }),
+        }).catch(() => {});
       }
 
       if (data.paymentUrl) {
@@ -190,6 +289,44 @@ export default function CheckoutPage() {
                     </h2>
 
                     <div className="space-y-4">
+                      {savedAddresses.length > 0 && (
+                        <div>
+                          <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
+                            Use a saved address
+                          </label>
+                          <select
+                            value={selectedAddressId}
+                            onChange={(e) => handleSelectAddress(e.target.value)}
+                            className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none cursor-pointer transition-all duration-300 input-focus-glow"
+                            style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
+                          >
+                            <option value="">Use a new address</option>
+                            {savedAddresses.map((address) => (
+                              <option key={address.id} value={address.id}>
+                                {address.label} — {address.fullName}, {address.city}
+                                {address.isDefault ? " (default)" : ""}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          maxLength={100}
+                          value={form.shippingName}
+                          onChange={(e) => setForm({ ...form, shippingName: e.target.value })}
+                          placeholder="Recipient full name"
+                          className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
+                          style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
+                        />
+                      </div>
+
                       <div>
                         <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                           Delivery Address *

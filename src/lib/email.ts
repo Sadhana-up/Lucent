@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { formatCurrency } from "@/lib/utils";
+import { absoluteUrl } from "@/lib/site";
 
 const resendApiKey = process.env.RESEND_API_KEY?.trim();
 const devEmailOverride = process.env.DEV_EMAIL_OVERRIDE?.trim() || undefined;
@@ -163,6 +164,146 @@ export async function sendNewOrderSellerEmail({
 
         <p style="color:#94a3b8;font-size:12px;margin-top:24px">
           Please sign in to your seller dashboard to review and fulfil this order.
+        </p>
+      </div>
+    `,
+  });
+}
+
+export interface BuyerOrderEmailItem {
+  title: string;
+  quantity: number;
+  price: number;
+}
+
+/**
+ * Send the buyer a receipt once their payment has been verified.
+ */
+export async function sendOrderConfirmationEmail({
+  to,
+  customerName,
+  orderNumber,
+  orderId,
+  items,
+  totalAmount,
+  shippingAddress,
+  contactPhone,
+  paidAt,
+}: {
+  to: string;
+  customerName: string;
+  orderNumber: string;
+  orderId: string;
+  items: BuyerOrderEmailItem[];
+  totalAmount: number;
+  shippingAddress: string;
+  contactPhone: string;
+  paidAt: Date;
+}) {
+  const itemRows = items
+    .map(
+      (item) => `
+        <tr>
+          <td style="padding:8px 0;color:#1e293b">${escapeHtml(item.title)}</td>
+          <td style="padding:8px 0;color:#64748b;text-align:center">${item.quantity}</td>
+          <td style="padding:8px 0;color:#1e293b;text-align:right">${formatCurrency(item.price * item.quantity)}</td>
+        </tr>`,
+    )
+    .join("");
+
+  await sendEmail({
+    to,
+    subject: `Order confirmed — ${orderNumber}`,
+    html: `
+      <div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;padding:32px">
+        <h2 style="color:#1e293b">Thanks for your order, ${escapeHtml(customerName)}</h2>
+        <p style="color:#64748b">
+          We have received your payment. Your order
+          <strong style="color:#1e293b">${escapeHtml(orderNumber)}</strong> is confirmed.
+        </p>
+
+        <table style="width:100%;border-collapse:collapse;margin:16px 0">
+          <thead>
+            <tr style="border-bottom:2px solid #e2e8f0">
+              <th style="text-align:left;padding-bottom:8px;color:#1e293b">Product</th>
+              <th style="text-align:center;padding-bottom:8px;color:#1e293b">Qty</th>
+              <th style="text-align:right;padding-bottom:8px;color:#1e293b">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>${itemRows}</tbody>
+          <tfoot>
+            <tr style="border-top:2px solid #e2e8f0">
+              <td style="padding-top:8px;color:#1e293b;font-weight:700" colspan="2">Total paid</td>
+              <td style="padding-top:8px;color:#2D5A3D;font-weight:700;text-align:right">${formatCurrency(totalAmount)}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div style="background:#f8fafc;border-radius:8px;padding:16px;margin-top:8px">
+          <h3 style="color:#1e293b;margin:0 0 8px;font-size:15px">Delivery details</h3>
+          <p style="color:#64748b;margin:4px 0">Shipping to: <strong style="color:#1e293b">${escapeHtml(shippingAddress)}</strong></p>
+          <p style="color:#64748b;margin:4px 0">Contact phone: <strong style="color:#1e293b">${escapeHtml(contactPhone)}</strong></p>
+          <p style="color:#64748b;margin:4px 0">Paid on: <strong style="color:#1e293b">${paidAt.toLocaleString("en-GB")}</strong></p>
+        </div>
+
+        <p style="margin-top:20px">
+          <a href="${absoluteUrl(`/shop/orders/${orderId}`)}"
+             style="display:inline-block;padding:12px 24px;background:#2D5A3D;color:#fff;
+                    border-radius:8px;text-decoration:none;font-weight:600">
+            View your order
+          </a>
+        </p>
+
+        <p style="color:#94a3b8;font-size:12px;margin-top:24px">
+          You can track delivery, request a return, or contact the seller from your order page.
+        </p>
+      </div>
+    `,
+  });
+}
+
+/**
+ * Notify the buyer when their cancellation, return, or refund request is
+ * recorded.
+ */
+export async function sendBuyerOrderUpdateEmail({
+  to,
+  customerName,
+  orderNumber,
+  orderId,
+  statusLabel,
+  refundStatusLabel,
+  reason,
+}: {
+  to: string;
+  customerName: string;
+  orderNumber: string;
+  orderId: string;
+  statusLabel: string;
+  refundStatusLabel: string;
+  reason?: string | null;
+}) {
+  await sendEmail({
+    to,
+    subject: `Order update — ${orderNumber}`,
+    html: `
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:32px">
+        <h2 style="color:#1e293b">Your order has been updated</h2>
+        <p style="color:#64748b">Hi ${escapeHtml(customerName)}, we have recorded a change to order
+          <strong style="color:#1e293b">${escapeHtml(orderNumber)}</strong>.</p>
+
+        <div style="background:#f8fafc;border-radius:8px;padding:16px;margin:16px 0">
+          <p style="color:#64748b;margin:4px 0">Order status: <strong style="color:#1e293b">${escapeHtml(statusLabel)}</strong></p>
+          <p style="color:#64748b;margin:4px 0">Refund status: <strong style="color:#1e293b">${escapeHtml(refundStatusLabel)}</strong></p>
+          ${reason ? `<p style="color:#64748b;margin:4px 0">Reason: <strong style="color:#1e293b">${escapeHtml(reason)}</strong></p>` : ""}
+        </div>
+
+        <p style="margin-top:20px">
+          <a href="${absoluteUrl(`/shop/orders/${orderId}`)}"
+             style="display:inline-block;padding:12px 24px;background:#2D5A3D;color:#fff;
+                    border-radius:8px;text-decoration:none;font-weight:600">
+            View order details
+          </a>
         </p>
       </div>
     `,

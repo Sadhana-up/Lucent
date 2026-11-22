@@ -32,8 +32,10 @@ model User {
   sellerProfile SellerProfile?
   orders        Order[]
   reviews       Review[]
+  addresses     Address[]
 
   initialRole String? @default("user")
+  phone       String?
 
   skinType            String?
   onboardingCompleted Boolean? @default(false)
@@ -186,6 +188,15 @@ model Order {
   paymentRef      String?
   paymentTxnId    String?
   paidAt          DateTime?
+  trackingNumber  String?
+  carrier         String?
+  cancelledAt     DateTime?
+  cancelReason    String?  @db.Text
+  refundStatus    String   @default("NONE")
+  refundReason    String?  @db.Text
+  refundRequestedAt DateTime?
+  refundedAt      DateTime?
+  returnRequestedAt DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -196,6 +207,26 @@ model Order {
   @@index([orderNumber])
   @@index([status])
   @@index([paymentStatus])
+  @@index([refundStatus])
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  userId     String
+  label      String   @default("Home")
+  fullName   String
+  phone      String
+  address    String   @db.Text
+  city       String
+  state      String?
+  postalCode String?
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model OrderItem {
@@ -213,12 +244,14 @@ model OrderItem {
 }
 
 model Review {
-  id        String   @id @default(cuid())
-  productId String
-  userId    String
-  rating    Int
-  comment   String?  @db.Text
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  productId  String
+  userId     String
+  rating     Int
+  comment    String?  @db.Text
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)

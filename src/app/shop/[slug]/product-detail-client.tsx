@@ -15,6 +15,7 @@ import {
   Leaf,
 } from "lucide-react";
 import { StarRating } from "@/components/star-rating";
+import { ProductReviews } from "@/components/product-reviews";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
@@ -169,9 +170,9 @@ export function ProductDetailClient({ product }: { product: any }) {
                 </h1>
 
                 <div className="flex items-center gap-2 mt-2">
-                  <StarRating rating={product.avgRating || 5} size={18} />
+                  <StarRating rating={product.avgRating ?? 0} size={18} />
                   <span className="font-bold text-sm" style={{ color: C.text }}>
-                    {product.avgRating ? product.avgRating : "5.0"}
+                    {product.avgRating ? product.avgRating.toFixed(1) : "New"}
                   </span>
                   <span className="text-xs" style={{ color: C.textMuted }}>
                     ({product.reviewCount || 0} reviews)
@@ -300,6 +301,8 @@ export function ProductDetailClient({ product }: { product: any }) {
               </div>
             )}
           </div>
+
+          <ProductReviews productSlug={product.slug} />
         </main>
       </div>
     </div>
