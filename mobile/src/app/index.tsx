@@ -14,6 +14,7 @@ import { Button, Icon, Logo } from '../components/lucent/ui';
 import { useBallNav } from '../components/lucent/transition';
 import { C, F } from '../components/lucent/theme';
 import { useSplashDone } from '../features/splash/splashState';
+import { authClient } from '../lib/auth-client';
 
 /**
  * Welcome: a pH instrument you can play with.
@@ -252,6 +253,11 @@ export default function Welcome() {
   const { width, height } = useWindowDimensions();
   const splashDone = useSplashDone();
   const nav = useBallNav();
+  const { data: session } = authClient.useSession();
+
+  useEffect(() => {
+    if (splashDone && session) nav.replace('/(app)/home', { dir: 1 });
+  }, [splashDone, session, nav]);
 
   const x = useSharedValue(START * PER_PH);
   const [ph, setPh] = useState(START);

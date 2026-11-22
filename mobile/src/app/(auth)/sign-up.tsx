@@ -8,6 +8,7 @@ import {
 import type { IconName } from '../../components/lucent/ui';
 import { useBallNav } from '../../components/lucent/transition';
 import { C, F } from '../../components/lucent/theme';
+import { authClient } from '../../lib/auth-client';
 
 type Role = 'customer' | 'seller';
 const ROLES: { key: Role; title: string; note: string; icon: IconName }[] = [
@@ -91,10 +92,42 @@ export default function SignUp() {
     (/[A-Z]/.test(password) ? 1 : 0) + (password.length >= 12 ? 1 : 0));
 
   const submit = async () => {
-    setError(''); setLoading(true);
-    // const { error } = await authClient.signUp.email({ name, email, password, initialRole: role } as any);
-    // if (error) setError(error.message ?? 'Something went wrong. Please try again.');
+    setError('');
+    if (name.trim().length < 2 || !emailOk || password.length < 8) {
+      setError('Enter your name, a valid email and a password of at least 8 characters.');
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await authClient.signUp.email({
+      name: name.trim(),
+      email: email.trim(),
+      password,
+      initialRole: role,
+    });
     setLoading(false);
+
+    if (error) {
+      setError(error.message ?? 'Something went wrong. Please try again.');
+      return;
+    }
+    nav.replace('/(app)/home', { dir: 1 });
+  };
+
+  const google = async () => {
+    setError('');
+    setLoading(true);
+    const { error } = await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/',
+    });
+    setLoading(false);
+
+    if (error) {
+      setError(error.message ?? 'Google sign-up failed. Please try again.');
+      return;
+    }
+    nav.replace('/(app)/home', { dir: 1 });
   };
 
   return (
@@ -135,7 +168,7 @@ export default function SignUp() {
       <View style={{ gap: 18 }}>
         <Button label="Create account" arrow loading={loading} onPress={submit} />
         <Divider text="OR" />
-        <Button label="Continue with Google" variant="outline" icon={<GoogleMark />} />
+        <Button label="Continue with Google" variant="outline" icon={<GoogleMark />} onPress={google} />
         <Text style={s.terms}>By continuing you agree to Lucent’s Terms and Privacy Policy.</Text>
       </View>
     </AuthShell>

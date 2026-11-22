@@ -45,7 +45,9 @@
           }
         }
       ],
-      "./plugins/withLowMemoryGradle.js"
+      "./plugins/withLowMemoryGradle.js",
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "extra": {
       "router": {

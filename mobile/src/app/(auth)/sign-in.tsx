@@ -5,6 +5,7 @@ import {
 } from '../../components/lucent/ui';
 import { useBallNav } from '../../components/lucent/transition';
 import { C, F } from '../../components/lucent/theme';
+import { authClient } from '../../lib/auth-client';
 
 export default function SignIn() {
   const nav = useBallNav();
@@ -16,10 +17,41 @@ export default function SignIn() {
   const emailOk = /^\S+@\S+\.\S+$/.test(email.trim());
 
   const submit = async () => {
-    setError(''); setLoading(true);
-    // const { error } = await authClient.signIn.email({ email, password });
-    // if (error) setError(error.message ?? 'Invalid email or password');
+    setError('');
+    if (!emailOk || !password) {
+      setError('Enter a valid email and your password.');
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await authClient.signIn.email({
+      email: email.trim(),
+      password,
+    });
     setLoading(false);
+
+    if (error) {
+      setError(error.message ?? 'Invalid email or password');
+      return;
+    }
+    nav.replace('/(app)/home', { dir: 1 });
+  };
+
+  const google = async () => {
+    setError('');
+    setLoading(true);
+    const { error } = await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/',
+    });
+    setLoading(false);
+
+    if (error) {
+      setError(error.message ?? 'Google sign-in failed. Please try again.');
+      return;
+    }
+    // On native, signIn.social does not navigate for you.
+    nav.replace('/(app)/home', { dir: 1 });
   };
 
   return (
@@ -56,7 +88,7 @@ export default function SignIn() {
       <View style={{ gap: 18 }}>
         <Button label="Sign in" arrow loading={loading} onPress={submit} />
         <Divider text="OR" />
-        <Button label="Continue with Google" variant="outline" icon={<GoogleMark />} />
+        <Button label="Continue with Google" variant="outline" icon={<GoogleMark />} onPress={google} />
       </View>
     </AuthShell>
   );
