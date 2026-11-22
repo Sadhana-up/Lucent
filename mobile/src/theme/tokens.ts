@@ -1,9 +1,12 @@
 // Subpath imports ship only the five weights we use (the package roots ship every variant).
 import { CormorantGaramond_300Light } from '@expo-google-fonts/cormorant-garamond/300Light';
 import { CormorantGaramond_300Light_Italic } from '@expo-google-fonts/cormorant-garamond/300Light_Italic';
+import { CormorantGaramond_600SemiBold } from '@expo-google-fonts/cormorant-garamond/600SemiBold';
+import { CormorantGaramond_500Medium_Italic } from '@expo-google-fonts/cormorant-garamond/500Medium_Italic';
 import { PlusJakartaSans_400Regular } from '@expo-google-fonts/plus-jakarta-sans/400Regular';
 import { PlusJakartaSans_600SemiBold } from '@expo-google-fonts/plus-jakarta-sans/600SemiBold';
 import { GeistMono_400Regular } from '@expo-google-fonts/geist-mono/400Regular';
+import { GeistMono_500Medium } from '@expo-google-fonts/geist-mono/500Medium';
 
 /** Lucent design tokens — mirrored from lucent-splash.css. */
 export const colors = {
@@ -32,12 +35,16 @@ export const fonts = {
   sans: 'PlusJakartaSans_600SemiBold',
   sansRegular: 'PlusJakartaSans_400Regular',
   mono: 'GeistMono_400Regular',
+  monoMedium: 'GeistMono_500Medium',
 } as const;
 
 export const FONT_MAP = {
   CormorantGaramond_300Light,
   CormorantGaramond_300Light_Italic,
+  CormorantGaramond_600SemiBold,
+  CormorantGaramond_500Medium_Italic,
   PlusJakartaSans_400Regular,
   PlusJakartaSans_600SemiBold,
   GeistMono_400Regular,
+  GeistMono_500Medium,
 };

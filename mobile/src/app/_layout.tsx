@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
@@ -10,6 +10,7 @@ import { useFonts } from 'expo-font';
 import { FONT_MAP, colors } from '../theme/tokens';
 import { LucentSplash } from '../features/splash';
 import { SplashDoneContext } from '../features/splash/splashState';
+import { BallTransitionProvider } from '../components/lucent/transition';
 
 // Keep the native splash up until fonts are ready; fade it into our first frame.
 SplashScreen.preventAutoHideAsync();
@@ -23,6 +24,16 @@ export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(() => !consumedThisColdStart);
   const [appReady, setAppReady] = useState(false);
   const [splashDone, setSplashDone] = useState(false);
+  // I1: resolve reduce-motion before mounting so the animation never flashes.
+  const [motion, setMotion] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    AccessibilityInfo.isReduceMotionEnabled().then((v) => {
+      if (alive) setMotion(v);
+    });
+    return () => { alive = false; };
+  }, []);
 
   useEffect(() => {
     if (!fontsLoaded) return;
@@ -32,18 +43,30 @@ export default function RootLayout() {
     return () => clearTimeout(id);
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded || motion === null) return (
+    <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.night }]} />
+  );
 
   return (
     <GestureHandlerRootView style={styles.flex}>
       <SafeAreaProvider>
         <StatusBar style="dark" />
-        <View style={styles.app}>
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.cream } }} />
-        </View>
         <SplashDoneContext.Provider value={splashDone}>
+          {/* The rolling ball plays the transition, so the native stack animation is off. */}
+          <BallTransitionProvider>
+            <View style={styles.app}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  animation: 'none',
+                  contentStyle: { backgroundColor: colors.cream },
+                }}
+              />
+            </View>
+          </BallTransitionProvider>
           {showSplash && (
             <LucentSplash
+              reduceMotion={motion}
               ready={appReady}
               minDuration={5600}
               skippable
