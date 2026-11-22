@@ -9,12 +9,14 @@
     "icon": "./assets/icon.png",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lucentnepal.app"
+      "bundleIdentifier": "com.lucentnepal.app",
+      "icon": "./assets/icon.png"
     },
     "android": {
       "package": "com.lucentnepal.app",
+      "icon": "./assets/icon.png",
       "adaptiveIcon": {
-        "backgroundColor": "#0B1912",
+        "backgroundColor": "#FDF7EB",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -30,6 +32,8 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#0B1912",
+          "image": "./assets/logo-transparent.png",
+          "imageWidth": 160,
           "resizeMode": "contain"
         }
       ],
