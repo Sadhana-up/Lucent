@@ -13,6 +13,10 @@ export interface SceneContextValue {
   /** 0..1 for the reduced-motion fade-to-app. */
   liteOut: SharedValue<number>;
   ready: SharedValue<boolean>;
+  /** Shared camera scale: push + impact thump, applied to canvas AND capsule. */
+  camScale: SharedValue<number>;
+  /** True once the night world is fully covered — stop drawing it. */
+  nightGone: boolean;
 }
 
 export const SceneContext = createContext<SceneContextValue | null>(null);

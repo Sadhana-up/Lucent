@@ -1,30 +1,31 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import Animated, {
+  runOnJS,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { SceneContext } from './context';
 import { T } from './constants';
-import { clamp01, smoothstep } from './easing';
+import { clamp01, easePush, easeThump, lerp, smoothstep } from './easing';
 import { useMasterClock } from './useMasterClock';
 import { useParallax } from './useParallax';
 import { useReducedMotion } from './useReducedMotion';
 import { useSceneLayout } from './useSceneLayout';
-import { useSharedValue } from 'react-native-reanimated';
 import { colors } from '../../theme/tokens';
 import { SplashCanvas } from './components/SplashCanvas';
-import { Overlay } from './components/Overlay';
 import { PhCapsule } from './components/PhCapsule';
 import { DebugOverlay } from './components/DebugOverlay';
 
 export interface LucentSplashProps {
-  /** Hold the exit (and the pH capsule at 94%) until app data is loaded. */
   ready?: boolean;
-  /** Earliest time the exit may start, in ms. Default 5600. */
   minDuration?: number;
-  /** Tap after 1.5s to skip to the exit. Default true. */
   skippable?: boolean;
   onDone?: () => void;
-  /** Force the static reduced-motion composition (otherwise read from the OS). */
   reduceMotion?: boolean;
 }
 
@@ -43,6 +44,19 @@ export function LucentSplash({
   const leaveT = useSharedValue(Infinity);
   const liteOut = useSharedValue(0);
   const readySV = useSharedValue(ready);
+  const [nightGone, setNightGone] = useState(false);
+
+  // Camera push + impact thump — shared by the canvas AND the pH capsule.
+  const camScale = useDerivedValue(() => {
+    if (reduced) return 1;
+    const push = lerp(1, T.pushTo, easePush(clamp01(clock.t.value / T.pushDur)));
+    const u = clamp01((clock.t.value - T.impact) / T.thumpDur);
+    const pk = T.thumpPeak;
+    const thump = u < pk
+      ? lerp(1, T.thumpTo, easeThump(u / pk))
+      : lerp(T.thumpTo, 1, easeThump((u - pk) / (1 - pk)));
+    return push * thump;
+  }, [clock.t, reduced]);
 
   const leaving = useRef(false);
   const finished = useRef(false);
@@ -62,6 +76,11 @@ export function LucentSplash({
     onDone?.();
   }, [onDone]);
 
+  // Defined on the RN runtime so runOnJS can schedule it by reference.
+  const hapticImpact = useCallback(() => {
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+  }, []);
+
   const leave = useCallback((lite = false) => {
     if (leaving.current) return;
     leaving.current = true;
@@ -70,11 +89,32 @@ export function LucentSplash({
       later(finish, 470);
     } else {
       leaveT.value = clock.t.value;
-      later(finish, T.floodDur * 1000 + 60);
     }
   }, [clock.t, leaveT, liteOut, later, finish]);
 
-  /* Static finished composition for reduced motion, then a plain fade. */
+  /* Clock-synced haptic at impact (H5). */
+  useAnimatedReaction(
+    () => !reduced && clock.t.value >= T.impact,
+    (now, prev) => {
+      if (now && !prev) runOnJS(hapticImpact)();
+    },
+    [reduced, hapticImpact],
+  );
+
+  /* Clock-synced exit completion (H5). */
+  useAnimatedReaction(
+    () => leaveT.value !== Infinity && clock.t.value - leaveT.value >= T.floodDur,
+    (now, prev) => { if (now && !prev) runOnJS(finish)(); },
+    [finish],
+  );
+
+  /* Stop drawing the night world once the dawn wipe covers it (I2). */
+  useAnimatedReaction(
+    () => clock.t.value > T.nightHide,
+    (now, prev) => { if (now && !prev) runOnJS(setNightGone)(true); },
+    [],
+  );
+
   useEffect(() => {
     if (!reduced) return;
     clock.setStatic(99);
@@ -83,15 +123,6 @@ export function LucentSplash({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduced]);
 
-  /* One light haptic at the moment of impact. */
-  useEffect(() => {
-    if (reduced) return;
-    const id = later(() => { void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); }, T.impact * 1000);
-    return () => clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reduced]);
-
-  /* Earliest exit: minDuration elapsed AND the app says ready. */
   useEffect(() => {
     if (reduced) return;
     const id = later(() => {
@@ -125,8 +156,13 @@ export function LucentSplash({
     return { opacity: smoothstep((p - 0.72) / 0.28) };
   }, [liteOut, leaveT, clock.t, reduced]);
 
+  const camStyle = useAnimatedStyle(
+    () => ({ transform: [{ scale: camScale.value }] }),
+    [camScale],
+  );
+
   return (
-    <SceneContext.Provider value={{ t: clock.t, px, py, layout, reduced, leaveT, liteOut, ready: readySV }}>
+    <SceneContext.Provider value={{ t: clock.t, px, py, layout, reduced, leaveT, liteOut, ready: readySV, camScale, nightGone }}>
       <View
         accessible
         accessibilityRole="progressbar"
@@ -138,10 +174,11 @@ export function LucentSplash({
         <View style={styles.canvasHost} accessible={false} importantForAccessibility="no-hide-descendants">
           <SplashCanvas />
         </View>
-        <Overlay />
-        <PhCapsule />
+        <Animated.View pointerEvents="none" style={[styles.capsuleCam, { transformOrigin: `50% ${layout.sunY}px` }, camStyle]}>
+          <PhCapsule />
+        </Animated.View>
         <Animated.View pointerEvents="none" style={[styles.cream, creamOverlay]} />
-        {__DEV__ && <DebugOverlay clock={clock} onExit={() => leave(reduced)} />}
+        {__DEV__ && <DebugOverlay clock={clock} onExit={() => leave(reduced)} reduced={reduced} />}
       </View>
     </SceneContext.Provider>
   );
@@ -150,6 +187,7 @@ export function LucentSplash({
 const styles = StyleSheet.create({
   root: { position: 'absolute', inset: 0, backgroundColor: colors.night, overflow: 'hidden' },
   canvasHost: { position: 'absolute', inset: 0 },
+  capsuleCam: { position: 'absolute', inset: 0 },
   cream: { position: 'absolute', inset: 0, backgroundColor: colors.cream },
 });
 

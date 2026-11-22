@@ -35,7 +35,7 @@ export function useSceneLayout(): SceneLayout {
     const vmin = Math.min(width, height) / 100;
     const sunFrac = short ? 0.7 : 0.66;
     const sunY = height * sunFrac;
-    const sunSize = clamp(0.27 * vmin, 150, 320);
+    const sunSize = clamp(27 * vmin, 150, 320);
     const ridgeHeight = height * 0.62;
     const mapScale = Math.max(width / 1600, ridgeHeight / 560);
     return {

@@ -137,3 +137,16 @@ export function easeEase(x: number): number {
   'worklet';
   return solve(x, 0.25, 0.1, 0.25, 1);
 }
+
+/** CSS ease-in-out — distinct from easeEase (which is CSS `ease`). */
+export function easeInOutCss(x: number): number {
+  'worklet';
+  return solve(x, 0.42, 0, 0.58, 1);
+}
+
+/** Triangle wave 0→1→0 for infinite alternate CSS animations. */
+export function pingPong(x: number): number {
+  'worklet';
+  const m = ((x % 2) + 2) % 2;
+  return m < 1 ? m : 2 - m;
+}

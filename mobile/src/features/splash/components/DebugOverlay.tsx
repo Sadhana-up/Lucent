@@ -1,12 +1,23 @@
 import { useRef, useState } from 'react';
 import { LayoutChangeEvent, PanResponder, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { runOnJS, useFrameCallback } from 'react-native-reanimated';
 import type { MasterClock } from '../useMasterClock';
 
 /** __DEV__ only: replay, scrub the master clock, or force the exit. */
-export function DebugOverlay({ clock, onExit }: { clock: MasterClock; onExit: () => void }) {
+export function DebugOverlay({ clock, onExit, reduced }: { clock: MasterClock; onExit: () => void; reduced: boolean }) {
   const [scrubbing, setScrubbing] = useState(false);
   const [label, setLabel] = useState('0.00s');
   const [barWidth, setBarWidth] = useState(0);
+  const [liveT, setLiveT] = useState(0);
+  const lastT = useRef(-1);
+
+  useFrameCallback(() => {
+    const v = Math.round(clock.t.value * 10) / 10;
+    if (v !== lastT.current) {
+      lastT.current = v;
+      runOnJS(setLiveT)(v);
+    }
+  });
 
   const setFromX = (x: number) => {
     if (barWidth <= 0) return;
@@ -30,7 +41,7 @@ export function DebugOverlay({ clock, onExit }: { clock: MasterClock; onExit: ()
 
   return (
     <View style={styles.root} pointerEvents="auto">
-      <Text style={styles.title}>LUCENT · {label}{scrubbing ? ' ⏸' : ''}</Text>
+      <Text style={styles.title}>t={liveT.toFixed(1)}s · {reduced ? 'STATIC' : 'MOTION'} · {label}{scrubbing ? ' ⏸' : ''}</Text>
       <View
         style={styles.bar}
         onLayout={(e: LayoutChangeEvent) => setBarWidth(e.nativeEvent.layout.width)}

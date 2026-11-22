@@ -1,5 +1,9 @@
+import { Platform } from 'react-native';
 import { Skia } from '@shopify/react-native-skia';
 import { RIDGES } from './constants';
+
+// Skia's SVG path factory needs native CanvasKit; the browser build has none.
+const NATIVE = Platform.OS !== 'web';
 import { lerp, smoothstep, TAU } from './easing';
 
 /** Deterministic RNG — identical to lucent-splash-engine.js. */
@@ -78,23 +82,37 @@ export interface RidgeGeometry {
 }
 
 /** Computed once at module load. Paths are immutable SkPaths — never rebuilt per frame. */
-export const RIDGE_GEOMETRY: RidgeGeometry[] = RIDGES.map((spec) => {
-  const pts = displace(spec.pts, spec.rough, spec.seed, spec.depth);
-  const line = 'M' + pts.map((p) => fx1(p[0]) + ',' + fx1(p[1])).join(' L');
-  let minY = 1e9;
-  for (const p of pts) if (p[1] < minY) minY = p[1];
-  return {
-    fill: Skia.Path.MakeFromSVGString(line + ' L1920,720 L-320,720 Z'),
-    line: Skia.Path.MakeFromSVGString(line),
-    snow: spec.snowY ? Skia.Path.MakeFromSVGString(snowPath(pts, spec.snowY, spec.seed)) : null,
-    minY: fx1(minY),
-  };
-});
+function polyline(pts: number[][], closeToBase = false) {
+  const b = Skia.PathBuilder.Make();
+  pts.forEach((p, i) => (i === 0 ? b.moveTo(p[0], p[1]) : b.lineTo(p[0], p[1])));
+  if (closeToBase) {
+    b.lineTo(1920, 720);
+    b.lineTo(-320, 720);
+    b.close();
+  }
+  return b.build();
+}
+
+export const RIDGE_GEOMETRY: RidgeGeometry[] = NATIVE
+  ? RIDGES.map((spec) => {
+      const pts = displace(spec.pts, spec.rough, spec.seed, spec.depth);
+      let minY = 1e9;
+      for (const p of pts) if (p[1] < minY) minY = p[1];
+      const snowSvg = spec.snowY ? snowPath(pts, spec.snowY, spec.seed) : null;
+      return {
+        // Built from the displaced points directly — no SVG parser dependency.
+        fill: polyline(pts, true),
+        line: polyline(pts),
+        snow: snowSvg ? Skia.Path.MakeFromSVGString(snowSvg) : null,
+        minY: fx1(minY),
+      };
+    })
+  : [];
 
 /** The teardrop silhouette from the engine's inline SVG. */
-export const DROP_PATH = Skia.Path.MakeFromSVGString(
-  'M12 1 C12 1 23 16 23 26 A11 11 0 0 1 1 26 C1 16 12 1 12 1 Z',
-)!;
+export const DROP_PATH = NATIVE
+  ? Skia.Path.MakeFromSVGString('M12 1 C12 1 23 16 23 26 A11 11 0 0 1 1 26 C1 16 12 1 12 1 Z')
+  : null;
 
 /** Precomputed god-ray stops (one conic-gradient, 22 wedges). */
 export function makeRayStops(rgb: string, alpha: number, seed: number) {
