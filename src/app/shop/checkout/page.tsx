@@ -51,6 +51,7 @@ export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [phoneTouched, setPhoneTouched] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
   const [form, setForm] = useState({
@@ -144,6 +145,7 @@ export default function CheckoutPage() {
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const contactPhoneError = getPhoneValidationError(form.contactPhone);
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,9 +164,9 @@ export default function CheckoutPage() {
       return;
     }
 
-    const phoneError = getPhoneValidationError(form.contactPhone);
-    if (phoneError) {
-      setError(phoneError);
+    if (contactPhoneError) {
+      setPhoneTouched(true);
+      setError(contactPhoneError);
       return;
     }
 
@@ -395,11 +397,30 @@ export default function CheckoutPage() {
                           type="tel"
                           required
                           value={form.contactPhone}
-                          onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
+                          onChange={(e) => {
+                            setForm({ ...form, contactPhone: e.target.value });
+                            setPhoneTouched(true);
+                          }}
+                          onBlur={() => setPhoneTouched(true)}
                           placeholder="+977-98XXXXXXXX"
                           className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
-                          style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
+                          style={{
+                            border: `1px solid ${
+                              contactPhoneError && phoneTouched ? "#b54a4a" : C.border
+                            }`,
+                            background: C.bgCard,
+                            color: C.text,
+                          }}
                         />
+                        {contactPhoneError && (phoneTouched || form.contactPhone.length > 0) ? (
+                          <p className="text-xs mt-1" style={{ color: "#b54a4a" }}>
+                            {contactPhoneError}
+                          </p>
+                        ) : (
+                          <p className="text-xs mt-1" style={{ color: C.textMuted }}>
+                            Nepali numbers only (e.g., +977-98XXXXXXXX)
+                          </p>
+                        )}
                       </div>
 
                       <div>
@@ -453,7 +474,7 @@ export default function CheckoutPage() {
                   <Button
                     type="submit"
                     variant="premium"
-                    disabled={loading || cartItems.length === 0}
+                    disabled={loading || cartItems.length === 0 || Boolean(contactPhoneError)}
                     className="w-full py-6 rounded-xl shadow-sm font-semibold transition-all duration-300"
                   >
                     {loading ? (
