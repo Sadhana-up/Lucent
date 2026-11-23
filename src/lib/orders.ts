@@ -48,3 +48,74 @@ export function canRequestRefund(order: {
 export function isTerminalOrderStatus(status: string): boolean {
   return ["CANCELLED", "REFUNDED"].includes(status);
 }
+
+export const SELLER_STATUS_TRANSITIONS: Record<string, string[]> = {
+  PENDING: ["CONFIRMED", "CANCELLED"],
+  CONFIRMED: ["PROCESSING", "CANCELLED"],
+  PROCESSING: ["SHIPPED", "CANCELLED"],
+  SHIPPED: ["DELIVERED"],
+  DELIVERED: [],
+  RETURN_REQUESTED: ["RETURNED"],
+  RETURNED: ["REFUNDED"],
+  CANCELLED: [],
+  REFUNDED: [],
+};
+
+export const REFUND_STATUSES = [
+  "NONE",
+  "REQUESTED",
+  "APPROVED",
+  "PROCESSING",
+  "REFUNDED",
+  "REJECTED",
+];
+
+export function canSellerSetStatus(current: string, next: string): boolean {
+  return (SELLER_STATUS_TRANSITIONS[current] ?? []).includes(next);
+}
+
+export function canSellerReviewRefund(refundStatus: string): boolean {
+  return refundStatus === "REQUESTED";
+}
+
+export function canSellerMarkRefunded(refundStatus: string): boolean {
+  return refundStatus === "APPROVED" || refundStatus === "PROCESSING";
+}
+
+export type SellerOrderItem = {
+  id: string;
+  quantity: number;
+  price: number;
+  product: {
+    id: string;
+    title: string;
+    slug: string;
+    images: { url: string }[];
+  };
+};
+
+export type SellerOrder = {
+  id: string;
+  orderNumber: string;
+  status: string;
+  paymentStatus: string;
+  paymentProvider: string | null;
+  totalAmount: number;
+  sellerSubtotal: number;
+  shippingAddress: string;
+  contactPhone: string;
+  notes: string | null;
+  trackingNumber: string | null;
+  carrier: string | null;
+  cancelledAt: string | null;
+  cancelReason: string | null;
+  refundStatus: string;
+  refundReason: string | null;
+  refundRequestedAt: string | null;
+  refundedAt: string | null;
+  returnRequestedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  customer: { name: string; email: string };
+  items: SellerOrderItem[];
+};

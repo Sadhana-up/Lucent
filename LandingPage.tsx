@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Sun,
   Moon,
+  Star,
 } from "lucide-react";
 
 /* ─── Design tokens (sage green palette) ─── */

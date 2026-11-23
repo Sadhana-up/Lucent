@@ -170,6 +170,54 @@ export async function sendNewOrderSellerEmail({
   });
 }
 
+/**
+ * Notify a seller when a buyer cancels an order or requests a return/refund.
+ */
+export async function sendSellerOrderUpdateEmail({
+  to,
+  storeName,
+  orderNumber,
+  orderId,
+  statusLabel,
+  refundStatusLabel,
+  reason,
+}: {
+  to: string;
+  storeName: string;
+  orderNumber: string;
+  orderId: string;
+  statusLabel: string;
+  refundStatusLabel: string;
+  reason?: string | null;
+}) {
+  await sendEmail({
+    to,
+    subject: `Order update ${orderNumber} — ${storeName}`,
+    html: `
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:32px">
+        <h2 style="color:#1e293b">An order needs your attention</h2>
+        <p style="color:#64748b">Hi ${escapeHtml(storeName)}, there is a change to order
+          <strong style="color:#1e293b">${escapeHtml(orderNumber)}</strong>.</p>
+
+        <div style="background:#f8fafc;border-radius:8px;padding:16px;margin:16px 0">
+          <p style="color:#64748b;margin:4px 0">Order status: <strong style="color:#1e293b">${escapeHtml(statusLabel)}</strong></p>
+          <p style="color:#64748b;margin:4px 0">Refund status: <strong style="color:#1e293b">${escapeHtml(refundStatusLabel)}</strong></p>
+          ${reason ? `<p style="color:#64748b;margin:4px 0">Reason: <strong style="color:#1e293b">${escapeHtml(reason)}</strong></p>` : ""}
+        </div>
+
+        <p style="margin-top:20px">
+          <a href="${absoluteUrl("/seller/orders")}"
+             style="display:inline-block;padding:12px 24px;background:#2D5A3D;color:#fff;
+                    border-radius:8px;text-decoration:none;font-weight:600">
+            Review in seller dashboard
+          </a>
+        </p>
+        <p style="color:#94a3b8;font-size:12px;margin-top:24px">Order ID: ${escapeHtml(orderId)}</p>
+      </div>
+    `,
+  });
+}
+
 export interface BuyerOrderEmailItem {
   title: string;
   quantity: number;

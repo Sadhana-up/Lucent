@@ -46,6 +46,14 @@ export async function POST(request: NextRequest) {
     const productTitles: string[] = [];
 
     for (const item of items) {
+      const quantity = Number(item?.quantity);
+      if (!Number.isInteger(quantity) || quantity <= 0) {
+        return NextResponse.json(
+          { error: "Each item must have a valid quantity" },
+          { status: 400 },
+        );
+      }
+
       const product = await prisma.product.findUnique({
         where: { id: item.productId },
       });
@@ -54,13 +62,14 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: `Product not found: ${item.productId}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      const price = product.discountPrice ?? product.price;
+      totalAmount += price * quantity;
       productTitles.push(product.title);
 
       orderItemsData.push({
         productId: product.id,
-        quantity: item.quantity,
-        price: product.price,
+        quantity,
+        price,
       });
     }
 

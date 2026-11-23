@@ -3,6 +3,7 @@ import {
   sendNewOrderSellerEmail,
   sendOrderConfirmationEmail,
   sendBuyerOrderUpdateEmail,
+  sendSellerOrderUpdateEmail,
   type SellerOrderEmailItem,
 } from "@/lib/email";
 
@@ -116,6 +117,60 @@ export async function notifyBuyerOrderConfirmed(orderId: string): Promise<void> 
 /**
  * Notify the buyer about a cancellation, return, or refund request.
  */
+/**
+ * Notify every seller with items in an order about a cancellation, return, or
+ * refund request. Failures are logged and never thrown.
+ */
+export async function notifySellersOrderUpdated(
+  orderId: string,
+  statusLabel: string,
+  refundStatusLabel: string,
+): Promise<void> {
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: {
+      items: {
+        include: {
+          product: {
+            include: { seller: { include: { user: true } } },
+          },
+        },
+      },
+    },
+  });
+
+  if (!order) return;
+
+  const groups = new Map<string, { to: string; storeName: string }>();
+
+  for (const item of order.items) {
+    const seller = item.product.seller;
+    const recipient = seller.contactEmail || seller.user?.email;
+    if (!recipient || groups.has(seller.id)) continue;
+    groups.set(seller.id, { to: recipient, storeName: seller.storeName });
+  }
+
+  await Promise.all(
+    Array.from(groups.values()).map((notification) =>
+      sendSellerOrderUpdateEmail({
+        to: notification.to,
+        storeName: notification.storeName,
+        orderNumber: order.orderNumber,
+        orderId: order.id,
+        statusLabel,
+        refundStatusLabel,
+        reason: order.cancelReason ?? order.refundReason,
+      }).catch((error: unknown) => {
+        console.error("[Email Delivery Error] order_update_seller", {
+          orderNumber: order.orderNumber,
+          to: notification.to,
+          error,
+        });
+      }),
+    ),
+  );
+}
+
 export async function notifyBuyerOrderUpdated(
   orderId: string,
   statusLabel: string,

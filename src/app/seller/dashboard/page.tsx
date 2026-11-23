@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
@@ -15,6 +14,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import type { SellerOrder } from "@/lib/orders";
 
 const C = {
   primary: "#2D5A3D",
@@ -36,30 +36,68 @@ const C = {
 
 export default function SellerDashboard() {
   const { data: session } = authClient.useSession();
-  const [stats, setStats] = useState({ revenue: 0, orders: 0, products: 0 });
-  const [recentOrders, setRecentOrders] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    revenue: 0,
+    orders: 0,
+    products: 0,
+    monthRevenue: 0,
+    monthOrders: 0,
+  });
+  const [recentOrders, setRecentOrders] = useState<SellerOrder[]>([]);
+  const [products, setProducts] = useState<
+    { id: string; title: string; price: number; status: string; images?: { url: string }[] }[]
+  >([]);
+  const [storeName, setStoreName] = useState<string | null>(null);
+  const [hasStore, setHasStore] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadDashboard() {
       try {
-        const [ordersRes, productsRes] = await Promise.all([
+        const [ordersRes, productsRes, profileRes] = await Promise.all([
           fetch("/api/seller/orders"),
           fetch("/api/seller/products"),
+          fetch("/api/seller/profile"),
         ]);
 
+        if (profileRes.ok) {
+          const profile = await profileRes.json();
+          setStoreName(profile?.storeName ?? null);
+          setHasStore(Boolean(profile?.id));
+        } else {
+          setHasStore(false);
+        }
+
         if (ordersRes.ok) {
-          const orders = await ordersRes.json();
+          const orders: SellerOrder[] = await ordersRes.json();
           setRecentOrders(orders.slice(0, 5));
-          const totalRevenue = orders.reduce((sum: number, o: any) => sum + (o.total || 0), 0);
-          setStats((prev) => ({ ...prev, revenue: totalRevenue, orders: orders.length }));
+
+          const isBillable = (order: SellerOrder) =>
+            order.paymentStatus === "PAID" &&
+            order.status !== "CANCELLED" &&
+            order.status !== "REFUNDED";
+          const monthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+          const billable = orders.filter(isBillable);
+          const recent = billable.filter(
+            (order) => new Date(order.createdAt).getTime() >= monthAgo,
+          );
+
+          setStats((previous) => ({
+            ...previous,
+            revenue: billable.reduce((sum, order) => sum + order.sellerSubtotal, 0),
+            orders: orders.length,
+            monthRevenue: recent.reduce(
+              (sum, order) => sum + order.sellerSubtotal,
+              0,
+            ),
+            monthOrders: recent.length,
+          }));
         }
 
         if (productsRes.ok) {
           const prods = await productsRes.json();
           setProducts(prods.slice(0, 5));
-          setStats((prev) => ({ ...prev, products: prods.length }));
+          setStats((previous) => ({ ...previous, products: prods.length }));
         }
       } catch (err) {
         console.error("Failed to load dashboard:", err);
@@ -67,12 +105,10 @@ export default function SellerDashboard() {
         setLoading(false);
       }
     }
-    loadDashboard();
+    void loadDashboard();
   }, []);
 
-  const hasStoreName = (session?.user as any)?.name;
-
-  if (!hasStoreName && !loading) {
+  if (hasStore === false && !loading) {
     return (
       <div className="flex-1 p-8">
         <div className="max-w-2xl mx-auto text-center py-20">
@@ -96,8 +132,18 @@ export default function SellerDashboard() {
   }
 
   const metricCards = [
-    { label: "Total Revenue", value: formatCurrency(stats.revenue), icon: DollarSign, change: "+12%" },
-    { label: "Total Orders", value: stats.orders.toString(), icon: ShoppingBag, change: "+5%" },
+    {
+      label: "Total Revenue",
+      value: formatCurrency(stats.revenue),
+      icon: DollarSign,
+      change: stats.monthRevenue > 0 ? formatCurrency(stats.monthRevenue) : "",
+    },
+    {
+      label: "Total Orders",
+      value: stats.orders.toString(),
+      icon: ShoppingBag,
+      change: stats.monthOrders > 0 ? stats.monthOrders.toString() : "",
+    },
     { label: "Active Products", value: stats.products.toString(), icon: Package, change: "" },
     { label: "Store Status", value: "Active", icon: TrendingUp, change: "" },
   ];
@@ -110,7 +156,7 @@ export default function SellerDashboard() {
             Dashboard
           </h1>
           <p className="text-sm mt-1" style={{ color: C.textSecondary }}>
-            Welcome back, {session?.user?.name || "Seller"}
+            Welcome back, {storeName || session?.user?.name || "Seller"}
           </p>
         </div>
 
@@ -175,7 +221,7 @@ export default function SellerDashboard() {
                 <p className="text-sm text-center py-6" style={{ color: C.textMuted }}>No orders yet</p>
               ) : (
                 <div className="space-y-3">
-                  {recentOrders.map((order: any) => (
+                  {recentOrders.map((order) => (
                     <div key={order.id} className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200 hover:bg-[rgba(45,90,61,0.04)]">
                       <div>
                         <p className="text-sm font-semibold" style={{ color: C.text }}>
@@ -187,7 +233,7 @@ export default function SellerDashboard() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold" style={{ color: C.text }}>
-                          {formatCurrency(order.total ?? 0)}
+                          {formatCurrency(order.sellerSubtotal)}
                         </p>
                         <span
                           className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
@@ -235,7 +281,7 @@ export default function SellerDashboard() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {products.map((product: any) => (
+                  {products.map((product) => (
                     <div key={product.id} className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200">
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden" style={{ background: C.bgWarm }}>

@@ -8,7 +8,10 @@ import {
   canRequestRefund,
   canRequestReturn,
 } from "@/lib/orders";
-import { notifyBuyerOrderUpdated } from "@/lib/order-notifications";
+import {
+  notifyBuyerOrderUpdated,
+  notifySellersOrderUpdated,
+} from "@/lib/order-notifications";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -101,6 +104,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         ORDER_STATUS_LABELS[updated.status] ?? updated.status,
         REFUND_STATUS_LABELS[updated.refundStatus] ?? updated.refundStatus,
       );
+      await notifySellersOrderUpdated(
+        updated.id,
+        ORDER_STATUS_LABELS[updated.status] ?? updated.status,
+        REFUND_STATUS_LABELS[updated.refundStatus] ?? updated.refundStatus,
+      );
 
       return NextResponse.json(updated);
     }
@@ -129,6 +137,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         ORDER_STATUS_LABELS[updated.status] ?? updated.status,
         REFUND_STATUS_LABELS[updated.refundStatus] ?? updated.refundStatus,
       );
+      await notifySellersOrderUpdated(
+        updated.id,
+        ORDER_STATUS_LABELS[updated.status] ?? updated.status,
+        REFUND_STATUS_LABELS[updated.refundStatus] ?? updated.refundStatus,
+      );
 
       return NextResponse.json(updated);
     }
@@ -151,6 +164,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       });
 
       await notifyBuyerOrderUpdated(
+        updated.id,
+        ORDER_STATUS_LABELS[updated.status] ?? updated.status,
+        REFUND_STATUS_LABELS[updated.refundStatus] ?? updated.refundStatus,
+      );
+      await notifySellersOrderUpdated(
         updated.id,
         ORDER_STATUS_LABELS[updated.status] ?? updated.status,
         REFUND_STATUS_LABELS[updated.refundStatus] ?? updated.refundStatus,
