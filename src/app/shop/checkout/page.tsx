@@ -7,7 +7,7 @@ import { ArrowLeft, Loader2, Package, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
-import { formatCurrency, getPhoneValidationError } from "@/lib/utils";
+import { formatCurrency, getPhoneValidationError, getProvinceOptions } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -363,15 +363,20 @@ export default function CheckoutPage() {
                           <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
                             Province *
                           </label>
-                          <input
-                            type="text"
+                          <select
                             required
                             value={form.shippingState}
                             onChange={(e) => setForm({ ...form, shippingState: e.target.value })}
-                            placeholder="Province"
-                            className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
+                            className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none cursor-pointer transition-all duration-300 input-focus-glow"
                             style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
-                          />
+                          >
+                            <option value="">Select province</option>
+                            {getProvinceOptions(form.shippingState).map((province) => (
+                              <option key={province} value={province}>
+                                {province}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                         <div>
                           <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>

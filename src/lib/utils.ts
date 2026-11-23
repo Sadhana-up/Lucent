@@ -23,6 +23,22 @@ export function getPhoneValidationError(phone: string): string | null {
   return null
 }
 
+export const NEPAL_PROVINCES = [
+  "Koshi",
+  "Madhesh",
+  "Bagmati",
+  "Gandaki",
+  "Lumbini",
+  "Karnali",
+  "Sudurpashchim",
+];
+
+export function getProvinceOptions(value?: string | null): string[] {
+  const provinces: string[] = [...NEPAL_PROVINCES];
+  if (value && !provinces.includes(value)) return [value, ...provinces];
+  return provinces;
+}
+
 export function parseStockQuantity(value: unknown): number | null {
   if (typeof value === "number") {
     return Number.isInteger(value) && value >= 0 ? value : null

@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
+import { getProvinceOptions } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -428,13 +429,23 @@ export default function AccountPage() {
                   </div>
                   <div>
                     <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>Province</label>
-                    <input
-                      type="text"
+                    <select
                       value={form.state}
                       onChange={(e) => setForm({ ...form, state: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg text-sm outline-none"
-                      style={{ border: `1px solid ${C.border}`, color: C.text }}
-                    />
+                      className="w-full px-3 py-2 rounded-lg text-sm outline-none cursor-pointer"
+                      style={{
+                        border: `1px solid ${C.border}`,
+                        color: C.text,
+                        background: "rgba(255,255,255,0.72)",
+                      }}
+                    >
+                      <option value="">Select province</option>
+                      {getProvinceOptions(form.state).map((province) => (
+                        <option key={province} value={province}>
+                          {province}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>Postal code</label>
