@@ -19,6 +19,26 @@ import { ProductReviews } from "@/components/product-reviews";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+import { MAX_QUANTITY_PER_PRODUCT } from "@/lib/orders";
+
+type ProductImage = { id: string; url: string; isPrimary?: boolean };
+
+type ProductData = {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string | null;
+  price: number;
+  discountPrice?: number | null;
+  stock: number;
+  skinConcerns?: string | null;
+  ingredients?: string | null;
+  usageInstructions?: string | null;
+  avgRating?: number | null;
+  reviewCount?: number;
+  seller?: { storeName: string; isVerified?: boolean };
+  images: ProductImage[];
+};
 
 const C = {
   primary: "#2D5A3D",
@@ -39,28 +59,38 @@ const C = {
   successFg: "#1E3D2A",
 };
 
-export function ProductDetailClient({ product }: { product: any }) {
+export function ProductDetailClient({ product }: { product: ProductData }) {
   const [selectedImage, setSelectedImage] = useState<string>(() => {
-    const primary = product.images?.find((img: any) => img.isPrimary);
+    const primary = product.images?.find((img) => img.isPrimary);
     return primary?.url ?? product.images?.[0]?.url ?? "";
   });
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const maxQuantity = Math.min(
+    MAX_QUANTITY_PER_PRODUCT,
+    Math.max(0, Number(product?.stock) || 0),
+  );
 
   const handleAddToCart = () => {
-    if (!product) return;
+    if (!product || maxQuantity < 1) return;
 
     const cart = JSON.parse(localStorage.getItem("lucent_cart") || "[]");
-    const existingIndex = cart.findIndex((item: any) => item.productId === product.id);
+    const existingIndex = cart.findIndex(
+      (item: { productId: string }) => item.productId === product.id,
+    );
 
     if (existingIndex > -1) {
-      cart[existingIndex].quantity += quantity;
+      cart[existingIndex].quantity = Math.min(
+        Number(cart[existingIndex].quantity) + quantity,
+        maxQuantity,
+      );
     } else {
       cart.push({
         productId: product.id,
         title: product.title,
-        price: product.discountPrice || product.price,
+        price: product.discountPrice ?? product.price,
         image: selectedImage || (product.images[0] ? product.images[0].url : ""),
+        stock: product.stock,
         quantity,
       });
     }
@@ -125,7 +155,7 @@ export function ProductDetailClient({ product }: { product: any }) {
 
               {product.images && product.images.length > 1 && (
                 <div className="flex gap-3 overflow-x-auto pb-2">
-                  {product.images.map((img: any) => (
+                  {product.images.map((img) => (
                     <button
                       key={img.id}
                       type="button"
@@ -236,7 +266,8 @@ export function ProductDetailClient({ product }: { product: any }) {
                     <button
                       type="button"
                       onClick={() => setQuantity(quantity + 1)}
-                      className="px-3 py-1.5 font-bold transition-colors duration-200"
+                      disabled={quantity >= maxQuantity}
+                      className="px-3 py-1.5 font-bold transition-colors duration-200 disabled:opacity-40"
                       style={{ color: C.textMuted }}
                     >
                       +
@@ -246,9 +277,12 @@ export function ProductDetailClient({ product }: { product: any }) {
                   <Button
                     variant={added ? "default" : "premium"}
                     onClick={handleAddToCart}
-                    className="flex-1 py-6 rounded-xl font-bold text-base shadow-md transition-all duration-300"
+                    disabled={maxQuantity < 1}
+                    className="flex-1 py-6 rounded-xl font-bold text-base shadow-md transition-all duration-300 disabled:opacity-50"
                   >
-                    {added ? (
+                    {maxQuantity < 1 ? (
+                      "Out of stock"
+                    ) : added ? (
                       <>
                         <Check className="w-5 h-5 mr-2 animate-success-pop" /> Added to Cart!
                       </>

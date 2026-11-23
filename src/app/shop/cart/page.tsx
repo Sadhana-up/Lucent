@@ -1,11 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, Trash2, ShoppingBag, ArrowRight, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+import { MAX_QUANTITY_PER_PRODUCT } from "@/lib/orders";
+
+type CartItem = {
+  productId: string;
+  title: string;
+  price: number;
+  image: string;
+  quantity: number;
+  stock?: number;
+};
 
 const C = {
   primary: "#2D5A3D",
@@ -27,26 +37,35 @@ const C = {
 };
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [removing, setRemoving] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
-    const items = JSON.parse(localStorage.getItem("lucent_cart") || "[]");
-    setCartItems(items);
-    setLoaded(true);
+    startTransition(() => {
+      const items = JSON.parse(
+        localStorage.getItem("lucent_cart") || "[]",
+      ) as CartItem[];
+      setCartItems(items);
+      setLoaded(true);
+    });
   }, []);
 
   const updateQuantity = (productId: string, delta: number) => {
     const updated = cartItems
       .map((item) => {
         if (item.productId === productId) {
-          const newQty = item.quantity + delta;
+          const limit = Math.min(
+            MAX_QUANTITY_PER_PRODUCT,
+            Math.max(1, Number(item.stock) || MAX_QUANTITY_PER_PRODUCT),
+          );
+          const newQty = Math.min(item.quantity + delta, limit);
           return newQty > 0 ? { ...item, quantity: newQty } : null;
         }
         return item;
       })
-      .filter(Boolean);
+      .filter((item): item is CartItem => item !== null);
 
     setCartItems(updated);
     localStorage.setItem("lucent_cart", JSON.stringify(updated));
