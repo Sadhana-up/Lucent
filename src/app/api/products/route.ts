@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { parseStockQuantity } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   try {
@@ -125,8 +126,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title, description, and price are required" }, { status: 400 });
     }
 
+    const parsedStock =
+      stock === undefined || stock === null || stock === ""
+        ? 0
+        : parseStockQuantity(stock);
+
+    if (parsedStock === null) {
+      return NextResponse.json(
+        { error: "Stock quantity must be a whole number of 0 or more" },
+        { status: 400 }
+      );
+    }
+
     // Generate unique slug
-    let baseSlug = title
+    const baseSlug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
@@ -145,7 +158,7 @@ export async function POST(request: NextRequest) {
         description,
         price: parseFloat(price),
         discountPrice: discountPrice ? parseFloat(discountPrice) : null,
-        stock: parseInt(stock || "0", 10),
+        stock: parsedStock,
         skinType,
         skinConcerns,
         ingredients,
