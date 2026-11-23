@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,13 @@ const C = {
   border: "#EAE2D9",
   borderLight: "#F4EFE7",
 };
+
+const NAV_LINKS = [
+  { label: "How it works", href: "#how-it-works" },
+  { label: "What we check", href: "#what-we-check" },
+  { label: "Tools", href: "#tools" },
+  { label: "Shop", href: "/shop" },
+];
 
 /* ─── Data ─── */
 const STEPS = [
@@ -110,17 +118,17 @@ export function HomeClient() {
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
-            {["How it works", "What we check", "Tools", "Shop"].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase().replace(/ /g, "-")}`}
+            {NAV_LINKS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
                 className="text-sm transition-colors duration-200"
                 style={{ color: C.textSecondary }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = C.primary)}
                 onMouseLeave={(e) => (e.currentTarget.style.color = C.textSecondary)}
               >
-                {item}
-              </a>
+                {item.label}
+              </Link>
             ))}
           </nav>
 
