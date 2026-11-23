@@ -12,6 +12,7 @@ import {
   notifyBuyerOrderUpdated,
   notifySellersOrderUpdated,
 } from "@/lib/order-notifications";
+import { releaseOrderStock } from "@/lib/inventory";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -99,6 +100,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         },
       });
 
+      await releaseOrderStock(updated.id);
       await notifyBuyerOrderUpdated(
         updated.id,
         ORDER_STATUS_LABELS[updated.status] ?? updated.status,

@@ -12,6 +12,7 @@ import {
   type SellerOrder,
 } from "@/lib/orders";
 import { notifyBuyerOrderUpdated } from "@/lib/order-notifications";
+import { releaseOrderStock } from "@/lib/inventory";
 
 async function authorizeSeller(request: NextRequest) {
   const session = await auth.api.getSession({ headers: request.headers });
@@ -156,6 +157,7 @@ export async function PATCH(request: NextRequest) {
     const trackingNumber = cleanString(body?.trackingNumber, 200);
     const carrier = cleanString(body?.carrier, 100);
     const data: Prisma.OrderUpdateInput = {};
+    let shouldReleaseStock = false;
 
     if (action === "set_status") {
       const status = cleanString(body?.status, 40) ?? "";
@@ -168,6 +170,7 @@ export async function PATCH(request: NextRequest) {
 
       data.status = status;
       if (status === "CANCELLED") {
+        shouldReleaseStock = true;
         data.cancelledAt = new Date();
         data.cancelReason = reason ?? "Cancelled by seller";
         if (order.paymentStatus === "PAID") {
@@ -200,6 +203,7 @@ export async function PATCH(request: NextRequest) {
           { status: 400 },
         );
       }
+      shouldReleaseStock = true;
       data.status = "RETURNED";
       if (canSellerReviewRefund(order.refundStatus)) {
         data.refundStatus = "APPROVED";
@@ -251,6 +255,10 @@ export async function PATCH(request: NextRequest) {
       where: { id: order.id },
       data,
     });
+
+    if (shouldReleaseStock) {
+      await releaseOrderStock(updated.id, authResult.sellerProfile.id);
+    }
 
     await notifyBuyerOrderUpdated(
       updated.id,

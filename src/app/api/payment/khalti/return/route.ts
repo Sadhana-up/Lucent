@@ -5,6 +5,7 @@ import {
   notifyBuyerOrderConfirmed,
   notifySellersForOrder,
 } from "@/lib/order-notifications";
+import { releaseOrderStock } from "@/lib/inventory";
 
 /**
  * Khalti redirects the buyer's browser here (GET) after payment. The customer
@@ -61,22 +62,36 @@ export async function GET(request: NextRequest) {
     const referenceMatches = !order.paymentRef || order.paymentRef === lookup.pidx;
 
     if (!isCompleted || !amountMatches || !referenceMatches) {
-      await prisma.order.update({
-        where: { id: order.id },
+      const failed = await prisma.order.updateMany({
+        where: {
+          id: order.id,
+          paymentStatus: { notIn: ["PAID", "FAILED"] },
+        },
         data: { paymentStatus: "FAILED" },
       });
+      if (failed.count > 0) {
+        await releaseOrderStock(order.id);
+      }
       return redirectToFailure(order.orderNumber, lookup.status);
     }
 
-    await prisma.order.update({
-      where: { id: order.id },
+    const confirmed = await prisma.order.updateMany({
+      where: {
+        id: order.id,
+        paymentStatus: { not: "PAID" },
+      },
       data: {
         paymentStatus: "PAID",
         status: "CONFIRMED",
         paymentTxnId: lookup.transaction_id ?? undefined,
         paidAt: new Date(),
+        reservationExpiresAt: null,
       },
     });
+
+    if (confirmed.count === 0) {
+      return redirectToSuccess(order.orderNumber);
+    }
 
     await Promise.all([
       notifySellersForOrder(order.id),
