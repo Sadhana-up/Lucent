@@ -197,6 +197,7 @@ model Order {
   refundRequestedAt DateTime?
   refundedAt      DateTime?
   returnRequestedAt DateTime?
+  reservationExpiresAt DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -208,6 +209,7 @@ model Order {
   @@index([status])
   @@index([paymentStatus])
   @@index([refundStatus])
+  @@index([reservationExpiresAt])
 }
 
 model Address {
@@ -230,11 +232,12 @@ model Address {
 }
 
 model OrderItem {
-  id        String @id @default(cuid())
-  orderId   String
-  productId String
-  quantity  Int
-  price     Float
+  id            String  @id @default(cuid())
+  orderId       String
+  productId     String
+  quantity      Int
+  price         Float
+  stockReserved Boolean @default(false)
 
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)

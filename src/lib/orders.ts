@@ -1,3 +1,5 @@
+export const MAX_QUANTITY_PER_PRODUCT = 10;
+
 export const ORDER_STATUS_LABELS: Record<string, string> = {
   PENDING: "Pending",
   CONFIRMED: "Confirmed",
