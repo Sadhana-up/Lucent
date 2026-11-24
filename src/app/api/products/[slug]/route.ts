@@ -11,7 +11,7 @@ export async function GET(
     const { slug } = await params;
 
     const product = await prisma.product.findUnique({
-      where: { slug },
+      where: { slug, status: "ACTIVE" },
       include: {
         images: true,
         category: true,
