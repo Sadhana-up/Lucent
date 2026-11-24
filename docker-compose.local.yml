@@ -1,0 +1,50 @@
+# Local, production-like setup.
+# Only infrastructure (Postgres + nginx) runs in Docker.
+# Next.js and FastAPI run on the HOST as built servers, behind this nginx.
+#
+#   docker compose -f docker-compose.local.yml up -d
+#   # then, on the host:
+#   npm run start
+#   cd server && uv run uvicorn main:app --host 0.0.0.0 --port 8000
+
+services:
+  # ── PostgreSQL (published so host Next.js can connect) ─────
+  db:
+    image: postgres:16-alpine
+    container_name: lucent-db-local
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lucent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lucent_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-lucent_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lucent} -d ${POSTGRES_DB:-lucent_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Nginx: HTTPS -> host Next.js (host.docker.internal:3000) ─
+  nginx:
+    image: nginx:alpine
+    container_name: lucent-nginx-local
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.local.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    # hosts-only name -> IPv4 gateway; avoids Docker DNS handing nginx an
+    # unreachable IPv6 address for host.docker.internal on Docker Desktop
+    extra_hosts:
+      - "lucent-host:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

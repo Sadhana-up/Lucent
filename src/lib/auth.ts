@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { emailOTP, admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import { expo } from "@better-auth/expo";
 import { prisma as db } from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
 
@@ -109,6 +110,13 @@ export const auth = betterAuth({
     new Set([
       ...(process.env.NODE_ENV === "production" ? [] : ["http://localhost:3000"]),
       appURL,
+      // Mobile app deep link (app.json "scheme": "lucent")
+      "lucent://",
+      "lucent://*",
+      // Expo Go / dev client origins only in development
+      ...(process.env.NODE_ENV === "production"
+        ? []
+        : ["exp://", "exp://**"]),
       ...(getEnv("TRUSTED_ORIGINS", false)
         ?.split(",")
         .map((o) => o.trim())
@@ -243,6 +251,9 @@ export const auth = betterAuth({
       bannedUserMessage:
         "Your account has been suspended. Contact support if you believe this is an error.",
     }),
+
+    // ── Expo (mobile deep links + SecureStore cookies) ───────
+    expo(),
 
     // ── Next.js cookies (must be last) ───────────────────────
     nextCookies(),

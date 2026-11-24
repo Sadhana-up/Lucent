@@ -1,0 +1,23 @@
+# Byte-compiled & Virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Environment variables & distribution
+.env
+build/
+dist/
+*.egg-info/
+
+# Testing, Linters & IDEs
+.pytest_cache/
+.coverage
+.mypy_cache/
+.vscode/
+.idea/
+.DS_Store
+
+#logs
+*.log      
