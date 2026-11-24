@@ -2,7 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Package, Leaf, Clock, CheckCircle, Truck } from "lucide-react";
+import {
+  ArrowLeft,
+  Package,
+  Leaf,
+  Clock,
+  CheckCircle,
+  Truck,
+  XCircle,
+  RotateCcw,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 
@@ -22,8 +32,13 @@ const C = {
 const STATUS_CONFIG: Record<string, { icon: typeof Clock; color: string; label: string }> = {
   PENDING: { icon: Clock, color: "#F59E0B", label: "Pending" },
   CONFIRMED: { icon: CheckCircle, color: "#3B82F6", label: "Confirmed" },
+  PROCESSING: { icon: Package, color: "#2D5A3D", label: "Processing" },
   SHIPPED: { icon: Truck, color: "#8B5CF6", label: "Shipped" },
   DELIVERED: { icon: CheckCircle, color: C.primary, label: "Delivered" },
+  CANCELLED: { icon: XCircle, color: "#b54a4a", label: "Cancelled" },
+  RETURN_REQUESTED: { icon: RotateCcw, color: "#D97706", label: "Return requested" },
+  RETURNED: { icon: RotateCcw, color: "#6B7280", label: "Returned" },
+  REFUNDED: { icon: CheckCircle, color: "#059669", label: "Refunded" },
 };
 
 export default function OrdersPage() {
@@ -108,9 +123,31 @@ export default function OrdersPage() {
                     ))}
                   </div>
 
-                  <div className="mt-4 pt-3 flex justify-between" style={{ borderTop: `1px solid ${C.borderLight}` }}>
-                    <span className="text-xs" style={{ color: C.textMuted }}>{order.items?.length || 0} item(s)</span>
-                    <span className="text-sm font-bold" style={{ color: C.primary }}>{formatCurrency(order.totalAmount ?? 0)}</span>
+                  <div
+                    className="mt-4 pt-3 flex flex-wrap items-center justify-between gap-3"
+                    style={{ borderTop: `1px solid ${C.borderLight}` }}
+                  >
+                    <div className="flex flex-wrap items-center gap-3 text-xs" style={{ color: C.textMuted }}>
+                      <span>{order.items?.length || 0} item(s)</span>
+                      {order.trackingNumber && (
+                        <span>
+                          Tracking: {order.carrier ? `${order.carrier} · ` : ""}
+                          {order.trackingNumber}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-bold" style={{ color: C.primary }}>
+                        {formatCurrency(order.totalAmount ?? 0)}
+                      </span>
+                      <Link
+                        href={`/shop/orders/${order.id}`}
+                        className="flex items-center gap-1 text-xs font-semibold hover:opacity-70"
+                        style={{ color: C.primary }}
+                      >
+                        View details <ChevronRight size={14} />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               );

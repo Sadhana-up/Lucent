@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Loader2, Leaf } from "lucide-react";
 import Link from "next/link";
+import { parseStockQuantity } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -91,6 +92,12 @@ export default function EditProductPage({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (parseStockQuantity(form.stock) === null) {
+      setError("Stock quantity must be a whole number of 0 or more.");
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -305,12 +312,17 @@ export default function EditProductPage({
               </label>
               <input
                 type="number"
+                min={0}
+                step={1}
                 required
                 value={form.stock}
                 onChange={(e) => setForm({ ...form, stock: e.target.value })}
                 className={inputClass}
                 style={inputStyle}
               />
+              <p className="text-xs mt-1" style={{ color: C.textMuted }}>
+                Buyers cannot order more than this amount.
+              </p>
             </div>
 
             <div className="md:col-span-2">

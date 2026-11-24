@@ -152,6 +152,10 @@ export const auth = betterAuth({
         type: "string", // oily, dry, combination, sensitive, normal
         required: false,
       },
+      phone: {
+        type: "string",
+        required: false,
+      },
       onboardingCompleted: {
         type: "boolean",
         required: false,

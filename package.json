@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "npx tsx prisma/seed.ts",
+    "db:seed:catalog": "npx tsx prisma/seed-catalog.ts",
     "db:seed:images": "npx tsx prisma/seeders/image-seeder.ts",
     "db:set-password": "npx tsx scripts/set-admin-password.ts"
   },
