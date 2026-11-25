@@ -89,6 +89,16 @@ export default function ShopPage() {
           </Link>
 
           <div className="flex items-center gap-3">
+            <Link href="/shops">
+              <Button variant="ghost" size="sm" className="rounded-xl font-medium text-xs" style={{ color: C.textSecondary }}>
+                Apothecaries & Brands
+              </Button>
+            </Link>
+            <Link href="/shop/orders">
+              <Button variant="ghost" size="sm" className="rounded-xl font-medium text-xs" style={{ color: C.textSecondary }}>
+                My Orders
+              </Button>
+            </Link>
             <Link href="/shop/cart">
               <Button variant="outline" size="sm" className="rounded-xl transition-all duration-300 hover:bg-[rgba(45,90,61,0.04)]" style={{ borderColor: C.border, color: C.text }}>
                 <ShoppingBag className="w-4 h-4 mr-1.5" />
