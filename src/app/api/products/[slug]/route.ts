@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { parseStockQuantity } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
@@ -10,7 +11,7 @@ export async function GET(
     const { slug } = await params;
 
     const product = await prisma.product.findUnique({
-      where: { slug },
+      where: { slug, status: "ACTIVE" },
       include: {
         images: true,
         category: true,
@@ -94,6 +95,20 @@ export async function PUT(
       status,
     } = body;
 
+    const parsedStock =
+      stock === undefined
+        ? existing.stock
+        : stock === null || stock === ""
+          ? 0
+          : parseStockQuantity(stock);
+
+    if (parsedStock === null) {
+      return NextResponse.json(
+        { error: "Stock quantity must be a whole number of 0 or more" },
+        { status: 400 }
+      );
+    }
+
     // Handle images update if provided
     if (images && Array.isArray(images)) {
       await prisma.productImage.deleteMany({
@@ -115,7 +130,7 @@ export async function PUT(
         description: description !== undefined ? description : existing.description,
         price: price !== undefined ? parseFloat(price) : existing.price,
         discountPrice: discountPrice !== undefined ? (discountPrice ? parseFloat(discountPrice) : null) : existing.discountPrice,
-        stock: stock !== undefined ? parseInt(stock, 10) : existing.stock,
+        stock: parsedStock,
         categoryId: categoryId !== undefined ? categoryId : existing.categoryId,
         skinType: skinType !== undefined ? skinType : existing.skinType,
         skinConcerns: skinConcerns !== undefined ? skinConcerns : existing.skinConcerns,

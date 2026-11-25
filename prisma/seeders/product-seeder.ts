@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { SeededUser } from "./user-seeder";
 
-interface ProductData {
+export interface ProductData {
   title: string;
   slug: string;
   description: string;
@@ -17,7 +17,7 @@ interface ProductData {
   sellerEmail: string;
 }
 
-const PRODUCTS: ProductData[] = [
+export const PRODUCTS: ProductData[] = [
   // Glow Lab Skincare products
   {
     title: "Gentle Foam Cleanser",

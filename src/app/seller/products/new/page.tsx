@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Loader2, Leaf } from "lucide-react";
 import Link from "next/link";
+import { parseStockQuantity } from "@/lib/utils";
 
 const C = {
   primary: "#2D5A3D",
@@ -71,6 +72,11 @@ export default function AddProductPage() {
 
     if (!form.title || !form.description || !form.price) {
       setError("Please fill in all required fields.");
+      return;
+    }
+
+    if (parseStockQuantity(form.stock) === null) {
+      setError("Stock quantity must be a whole number of 0 or more.");
       return;
     }
 
@@ -311,6 +317,8 @@ export default function AddProductPage() {
                 </label>
                 <input
                   type="number"
+                  min={0}
+                  step={1}
                   required
                   value={form.stock}
                   onChange={(e) =>
@@ -319,6 +327,9 @@ export default function AddProductPage() {
                   className={inputClass}
                   style={inputStyle}
                 />
+                <p className="text-xs mt-1" style={{ color: C.textMuted }}>
+                  Buyers cannot order more than this amount.
+                </p>
               </div>
 
               <div className="md:col-span-2">

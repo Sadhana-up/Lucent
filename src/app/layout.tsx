@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_TITLE,
+  getSiteUrl,
+} from "@/lib/site";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -15,24 +22,33 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Lucent — AI Skincare Advisor",
-  description: "Your skin, finally understood. AI-powered skincare analysis, personalized routines, and curated products — all in one place.",
-  keywords: ["skincare", "AI", "skin analysis", "personalized routine", "dermatologist", "beauty"],
+  metadataBase: getSiteUrl(),
+  applicationName: SITE_NAME,
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   icons: {
     icon: "/lucene.ico",
+    apple: "/logo.jpeg",
   },
   openGraph: {
-    title: "Lucent — AI Skincare Advisor",
-    description: "AI-powered skincare analysis and personalized routines.",
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Lucent — AI Skincare Advisor",
-      },
-    ],
+    locale: "en_US",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
 };
 

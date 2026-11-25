@@ -128,9 +128,9 @@ export function ProductCard({ product }: ProductCardProps) {
           </h3>
 
           <div className="flex items-center gap-1.5 mt-1.5">
-            <StarRating rating={product.avgRating || 5} size={13} />
+            <StarRating rating={product.avgRating ?? 0} size={13} />
             <span className="text-xs font-medium" style={{ color: C.textSecondary }}>
-              {product.avgRating ? product.avgRating : "5.0"}
+              {product.avgRating ? product.avgRating.toFixed(1) : "New"}
             </span>
             <span className="text-[11px]" style={{ color: C.textMuted }}>
               ({product.reviewCount || 0})

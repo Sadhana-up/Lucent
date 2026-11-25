@@ -33,8 +33,6 @@ function SuccessContent() {
   const [state, setState] = useState<State>(orderNumber ? "loading" : "missing");
 
   useEffect(() => {
-    // Payment is confirmed at this point, so the cart can be cleared.
-    localStorage.removeItem("lucent_cart");
     if (!orderNumber) return;
 
     let cancelled = false;
@@ -61,6 +59,12 @@ function SuccessContent() {
     };
   }, [orderNumber]);
 
+  useEffect(() => {
+    if (state === "found") {
+      localStorage.removeItem("lucent_cart");
+    }
+  }, [state]);
+
   return (
     <Card className="glass-card max-w-lg w-full p-8 text-center space-y-6 shadow-lg rounded-2xl relative">
       <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto" style={{ background: C.primaryGhost }}>
@@ -69,14 +73,18 @@ function SuccessContent() {
 
       <div>
         <h1 className="text-2xl font-semibold" style={{ color: C.text }}>
-          Payment Successful!
+          {state === "found"
+            ? "Payment Successful!"
+            : state === "loading"
+              ? "Confirming your payment..."
+              : "Payment Unconfirmed"}
         </h1>
         <p className="text-sm mt-1" style={{ color: C.textMuted }}>
           {state === "loading"
             ? "Confirming your payment..."
             : state === "found" && order
               ? `Thank you for your order #${order.orderNumber}`
-              : "Your payment was received."}
+              : "We couldn't confirm your payment. If you were charged, please contact support."}
         </p>
       </div>
 
