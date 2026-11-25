@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Package, MapPin } from "lucide-react";
+import { ArrowLeft, Loader2, Package, MapPin, CreditCard, Truck, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
@@ -40,6 +40,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState<"khalti" | "cod">("cod");
 
   const [form, setForm] = useState({
     shippingAddress: "",
@@ -100,6 +101,7 @@ export default function CheckoutPage() {
           shippingAddress: fullAddress,
           contactPhone: form.contactPhone,
           notes: form.notes,
+          paymentMethod,
         }),
       });
 
@@ -113,14 +115,16 @@ export default function CheckoutPage() {
         throw new Error(data.error || "Failed to place order");
       }
 
+      localStorage.removeItem("lucent_cart");
+
       if (data.paymentUrl) {
-        // Redirect to Khalti's hosted checkout. The cart is cleared on the
-        // success page once payment is verified.
+        // Redirect to Khalti's hosted checkout.
         window.location.href = data.paymentUrl;
         return;
       }
 
-      throw new Error("Payment could not be started. Please try again.");
+      // COD or fallback success
+      router.push("/shop/orders");
     } catch (err: any) {
       setError(err.message || "Failed to place order");
       setLoading(false);
@@ -277,6 +281,45 @@ export default function CheckoutPage() {
                           className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-300 input-focus-glow"
                           style={{ border: `1px solid ${C.border}`, background: C.bgCard, color: C.text }}
                         />
+                      </div>
+
+                      <div className="pt-2">
+                        <label className="text-sm font-semibold block mb-2" style={{ color: C.textSecondary }}>
+                          Payment Method *
+                        </label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod("cod")}
+                            className="p-4 rounded-xl border text-left flex items-start gap-3 transition-all"
+                            style={{
+                              borderColor: paymentMethod === "cod" ? C.primary : C.border,
+                              background: paymentMethod === "cod" ? C.primaryGhost : C.bgCard,
+                            }}
+                          >
+                            <Truck className="w-5 h-5 shrink-0 mt-0.5" style={{ color: paymentMethod === "cod" ? C.primary : C.textMuted }} />
+                            <div>
+                              <span className="font-semibold text-sm block" style={{ color: C.text }}>Cash on Delivery</span>
+                              <span className="text-xs" style={{ color: C.textSecondary }}>Pay when receiving your parcel in Nepal</span>
+                            </div>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod("khalti")}
+                            className="p-4 rounded-xl border text-left flex items-start gap-3 transition-all"
+                            style={{
+                              borderColor: paymentMethod === "khalti" ? C.primary : C.border,
+                              background: paymentMethod === "khalti" ? C.primaryGhost : C.bgCard,
+                            }}
+                          >
+                            <CreditCard className="w-5 h-5 shrink-0 mt-0.5" style={{ color: paymentMethod === "khalti" ? C.primary : C.textMuted }} />
+                            <div>
+                              <span className="font-semibold text-sm block" style={{ color: C.text }}>Khalti ePayment</span>
+                              <span className="text-xs" style={{ color: C.textSecondary }}>Instant wallet / e-banking checkout</span>
+                            </div>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </CardContent>

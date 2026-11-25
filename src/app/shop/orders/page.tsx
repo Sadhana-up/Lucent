@@ -21,22 +21,50 @@ const C = {
 
 const STATUS_CONFIG: Record<string, { icon: typeof Clock; color: string; label: string }> = {
   PENDING: { icon: Clock, color: "#F59E0B", label: "Pending" },
+  PROCESSING: { icon: Clock, color: "#3B82F6", label: "Processing" },
   CONFIRMED: { icon: CheckCircle, color: "#3B82F6", label: "Confirmed" },
   SHIPPED: { icon: Truck, color: "#8B5CF6", label: "Shipped" },
   DELIVERED: { icon: CheckCircle, color: C.primary, label: "Delivered" },
+  CANCELLED: { icon: Clock, color: "#EF4444", label: "Cancelled" },
 };
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchOrders = () => {
     fetch("/api/orders")
       .then((res) => res.json())
       .then((data) => setOrders(Array.isArray(data) ? data : []))
       .catch(() => setOrders([]))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchOrders();
   }, []);
+
+  const handleCancelOrder = async (orderId: string) => {
+    if (!confirm("Are you sure you want to cancel this order?")) return;
+    setCancellingId(orderId);
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "CANCELLED" }),
+      });
+      if (res.ok) {
+        setOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? { ...o, status: "CANCELLED" } : o))
+        );
+      }
+    } catch (err) {
+      console.error("Failed to cancel order:", err);
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen" style={{ background: C.bg }}>
@@ -108,9 +136,31 @@ export default function OrdersPage() {
                     ))}
                   </div>
 
-                  <div className="mt-4 pt-3 flex justify-between" style={{ borderTop: `1px solid ${C.borderLight}` }}>
-                    <span className="text-xs" style={{ color: C.textMuted }}>{order.items?.length || 0} item(s)</span>
-                    <span className="text-sm font-bold" style={{ color: C.primary }}>{formatCurrency(order.totalAmount ?? 0)}</span>
+                  <div className="mt-4 pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs" style={{ borderTop: `1px solid ${C.borderLight}` }}>
+                    <div style={{ color: C.textSecondary }}>
+                      <span>Address: {order.shippingAddress}</span>
+                      <span className="mx-2">·</span>
+                      <span>Phone: {order.contactPhone}</span>
+                      <span className="mx-2">·</span>
+                      <span className="font-mono uppercase font-semibold" style={{ color: order.paymentStatus === "PAID" ? C.primary : "#D97706" }}>
+                        Payment: {order.paymentProvider?.toUpperCase() || "COD"} ({order.paymentStatus})
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between sm:justify-end gap-4">
+                      <span className="text-sm font-bold" style={{ color: C.primary }}>
+                        {formatCurrency(order.totalAmount ?? 0)}
+                      </span>
+                      {order.status === "PENDING" && (
+                        <button
+                          onClick={() => handleCancelOrder(order.id)}
+                          disabled={cancellingId === order.id}
+                          className="px-2.5 py-1 rounded-lg text-xs font-semibold text-red-600 border border-red-200 hover:bg-red-50 transition-colors"
+                        >
+                          {cancellingId === order.id ? "Cancelling..." : "Cancel Order"}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
