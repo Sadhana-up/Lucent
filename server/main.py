@@ -31,6 +31,7 @@ from google.genai import types
 from tools import search_products
 
 load_dotenv()
+
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
 # ---------------------------------------------------------------------------

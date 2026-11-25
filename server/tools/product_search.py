@@ -7,6 +7,7 @@ skin type, ingredients, and other criteria.
 
 from __future__ import annotations
 
+import asyncio
 import os
 import re
 from typing import Any, Optional
@@ -14,34 +15,45 @@ from typing import Any, Optional
 import psycopg
 import psycopg.rows
 from dotenv import load_dotenv
-from psycopg_pool import AsyncConnectionPool
+from psycopg_pool import ConnectionPool
 
 load_dotenv()
 
 # ---------------------------------------------------------------------------
 # Database connection (read-only)
 # ---------------------------------------------------------------------------
-
+# Sync pool, queried from a worker thread: psycopg's async mode refuses the
+# ProactorEventLoop that uvicorn uses on Windows.
 _DSN = os.environ.get("DATABASE_URL")
-_pool: AsyncConnectionPool | None = None
+_pool: ConnectionPool | None = None
 
 
-async def _get_pool() -> AsyncConnectionPool:
-    """Lazily initialise a read-only async connection pool."""
+def _get_pool() -> ConnectionPool:
+    """Lazily initialise a read-only connection pool."""
     global _pool
     if _pool is None:
         if not _DSN:
             raise RuntimeError("DATABASE_URL is not set")
-        _pool = AsyncConnectionPool(
+        _pool = ConnectionPool(
             conninfo=_DSN,
             min_size=1,
             max_size=5,
+            open=False,
             kwargs={
                 "row_factory": psycopg.rows.dict_row,
             },
         )
-        await _pool.open()
+        _pool.open()
     return _pool
+
+
+def _run_query(sql: str, params: dict[str, Any]) -> list[dict[str, Any]]:
+    with _get_pool().connection() as conn:
+        with conn.cursor() as cur:
+            # Enforce read-only at the transaction level as a safety net
+            cur.execute("SET TRANSACTION READ ONLY")
+            cur.execute(sql, params)
+            return cur.fetchall()
 
 
 # ---------------------------------------------------------------------------
@@ -143,7 +155,6 @@ async def search_products(
     # Clamp limit
     limit = max(1, min(limit, 20))
 
-    pool = await _get_pool()
     params: dict[str, Any] = {}
     where_clauses: list[str] = []
 
@@ -278,12 +289,7 @@ async def search_products(
         LIMIT %({lim_key})s
     """
 
-    async with pool.connection() as conn:
-        # Enforce read-only at the transaction level as a safety net
-        async with conn.cursor() as cur:
-            await cur.execute("SET TRANSACTION READ ONLY")
-            await cur.execute(sql, params)
-            rows = await cur.fetchall()
+    rows = await asyncio.to_thread(_run_query, sql, params)
 
     products = []
     for row in rows:

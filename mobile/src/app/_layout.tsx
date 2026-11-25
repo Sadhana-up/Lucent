@@ -11,6 +11,7 @@ import { FONT_MAP, colors } from '../theme/tokens';
 import { LucentSplash } from '../features/splash';
 import { SplashDoneContext } from '../features/splash/splashState';
 import { BallTransitionProvider } from '../components/lucent/transition';
+import { CartProvider } from '../lib/cart-context';
 
 // Keep the native splash up until fonts are ready; fade it into our first frame.
 SplashScreen.preventAutoHideAsync();
@@ -54,15 +55,17 @@ export default function RootLayout() {
         <SplashDoneContext.Provider value={splashDone}>
           {/* The rolling ball plays the transition, so the native stack animation is off. */}
           <BallTransitionProvider>
-            <View style={styles.app}>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  animation: 'none',
-                  contentStyle: { backgroundColor: colors.cream },
-                }}
-              />
-            </View>
+            <CartProvider>
+              <View style={styles.app}>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    animation: 'none',
+                    contentStyle: { backgroundColor: colors.cream },
+                  }}
+                />
+              </View>
+            </CartProvider>
           </BallTransitionProvider>
           {showSplash && (
             <LucentSplash

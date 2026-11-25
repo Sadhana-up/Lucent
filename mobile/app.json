@@ -41,13 +41,22 @@
         "expo-build-properties",
         {
           "android": {
-            "buildArchs": ["arm64-v8a"]
+            "buildArchs": ["arm64-v8a"],
+            "usesCleartextTraffic": true
           }
         }
       ],
       "./plugins/withLowMemoryGradle.js",
       "expo-secure-store",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Lucent needs access to your photos so you can share skin photos with the AI skin advisor.",
+          "cameraPermission": "Lucent needs access to your camera so you can take a photo for the AI skin advisor.",
+          "microphonePermission": false
+        }
+      ]
     ],
     "extra": {
       "router": {
