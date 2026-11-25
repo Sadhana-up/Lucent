@@ -50,6 +50,46 @@ export default function ProductDetailPage({
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
+  // Review states
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewMsg, setReviewMsg] = useState("");
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!product) return;
+    setSubmittingReview(true);
+    setReviewMsg("");
+
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: product.id,
+          rating,
+          comment: comment.trim() || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        setReviewMsg("Thank you! Your verification review has been published.");
+        setComment("");
+        // Reload product details to update reviews & average rating
+        const refreshed = await fetch(`/api/products/${slug}`).then((r) => r.json());
+        setProduct(refreshed);
+      } else {
+        const d = await res.json();
+        setReviewMsg(d.error || "Please sign in to submit a review.");
+      }
+    } catch (err) {
+      setReviewMsg("Failed to submit review.");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
   useEffect(() => {
     async function loadProduct() {
       try {
@@ -347,6 +387,128 @@ export default function ProductDetailPage({
                 </Card>
               </div>
             )}
+          </div>
+
+          {/* Customer Reviews Section */}
+          <div className="pt-8 space-y-6" style={{ borderTop: `1px solid ${C.borderLight}` }}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider block" style={{ color: C.primary }}>
+                  COMMUNITY FEEDBACK
+                </span>
+                <h3 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>
+                  Formulation Verifications & Reviews
+                </h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <StarRating rating={product.avgRating || 0} size={18} />
+                <span className="font-bold text-sm" style={{ color: C.text }}>
+                  {product.avgRating ? product.avgRating.toFixed(1) : "New"}
+                </span>
+                <span className="text-xs" style={{ color: C.textMuted }}>
+                  ({product.reviewCount || product.reviews?.length || 0} reviews)
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Submission Form */}
+              <div className="rounded-2xl border p-6" style={{ background: "#FFFFFF", borderColor: C.borderLight }}>
+                <h4 className="font-semibold text-base mb-1" style={{ color: C.text }}>
+                  Share Your Experience
+                </h4>
+                <p className="text-xs mb-4" style={{ color: C.textSecondary }}>
+                  Help others learn how this formulation performed on your skin barrier.
+                </p>
+
+                <form onSubmit={handleReviewSubmit} className="space-y-4">
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider block mb-1.5" style={{ color: C.textMuted }}>
+                      Rating
+                    </label>
+                    <div className="flex items-center gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setRating(star)}
+                          className="p-1 transition-transform hover:scale-110"
+                        >
+                          <Star
+                            size={22}
+                            fill={star <= rating ? "#F59E0B" : "none"}
+                            color={star <= rating ? "#F59E0B" : "#D1D5DB"}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider block mb-1" style={{ color: C.textMuted }}>
+                      Comment (Optional)
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Absorption rate, scent, calming effects..."
+                      className="w-full p-3 rounded-xl border text-xs outline-none"
+                      style={{ background: C.bgWarm, borderColor: C.border, color: C.text }}
+                    />
+                  </div>
+
+                  {reviewMsg && (
+                    <p className="text-xs font-medium" style={{ color: reviewMsg.includes("Thank") ? C.primary : "#EF4444" }}>
+                      {reviewMsg}
+                    </p>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={submittingReview}
+                    className="w-full rounded-xl text-xs font-semibold py-2.5"
+                    style={{ background: C.primary }}
+                  >
+                    {submittingReview ? "Submitting…" : "Publish Review"}
+                  </Button>
+                </form>
+              </div>
+
+              {/* Reviews List */}
+              <div className="lg:col-span-2 space-y-3">
+                {product.reviews && product.reviews.length > 0 ? (
+                  product.reviews.map((rev: any) => (
+                    <div key={rev.id} className="p-4 rounded-xl border" style={{ background: "#FFFFFF", borderColor: C.borderLight }}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-white" style={{ background: C.primary }}>
+                            {rev.user?.name?.[0]?.toUpperCase() || "M"}
+                          </div>
+                          <span className="font-semibold text-xs" style={{ color: C.text }}>
+                            {rev.user?.name || "Verified Customer"}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <StarRating rating={rev.rating} size={13} />
+                        </div>
+                      </div>
+                      {rev.comment && (
+                        <p className="text-xs leading-relaxed mt-1" style={{ color: C.textSecondary }}>
+                          {rev.comment}
+                        </p>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-8 rounded-2xl border text-center" style={{ background: "#FFFFFF", borderColor: C.borderLight }}>
+                    <p className="text-xs italic" style={{ color: C.textMuted }}>
+                      No community verifications yet. Be the first to verify this botanical formulation.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </main>
       </div>
