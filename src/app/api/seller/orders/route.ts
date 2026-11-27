@@ -20,21 +20,29 @@ async function authorizeSeller(request: NextRequest) {
     return { status: 401, error: "Unauthorized" } as const;
   }
 
-  const role = (session.user as { role?: string }).role;
-  if (role !== "seller" && role !== "admin") {
-    return { status: 403, error: "Seller access required" } as const;
-  }
-
+  // Check if user has a seller profile in the database
   const sellerProfile = await prisma.sellerProfile.findUnique({
     where: { userId: session.user.id },
     select: { id: true },
   });
 
-  if (!sellerProfile) {
-    return { status: 403, error: "Complete your store profile first" } as const;
+  if (sellerProfile) {
+    return { sellerProfile } as const;
   }
 
-  return { sellerProfile } as const;
+  // If no seller profile, check if user is an admin
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true },
+  });
+
+  if (user?.role === "admin") {
+    // Admin can access all or needs a fallback
+    const firstSeller = await prisma.sellerProfile.findFirst({ select: { id: true } });
+    if (firstSeller) return { sellerProfile: firstSeller } as const;
+  }
+
+  return { status: 403, error: "Complete your store profile first" } as const;
 }
 
 function cleanString(value: unknown, maxLength: number): string | null {
@@ -79,9 +87,9 @@ export async function GET(request: NextRequest) {
       status: order.status,
       paymentStatus: order.paymentStatus,
       paymentProvider: order.paymentProvider,
-      totalAmount: order.totalAmount,
+      totalAmount: Number(order.totalAmount),
       sellerSubtotal: order.items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
+        (sum, item) => sum + Number(item.price) * item.quantity,
         0,
       ),
       shippingAddress: order.shippingAddress,
@@ -102,7 +110,7 @@ export async function GET(request: NextRequest) {
       items: order.items.map((item) => ({
         id: item.id,
         quantity: item.quantity,
-        price: item.price,
+        price: Number(item.price),
         product: {
           id: item.product.id,
           title: item.product.title,

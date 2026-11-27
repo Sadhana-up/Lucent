@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ImageUpload } from "@/components/image-upload";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,6 +28,7 @@ const C = {
 };
 
 export default function SellerProfilePage() {
+  const router = useRouter();
   const { data: session } = authClient.useSession();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -101,7 +103,10 @@ export default function SellerProfilePage() {
         throw new Error(data.error || "Failed to save profile");
       }
 
-      setSuccess("Store profile saved successfully!");
+      setSuccess("Store profile saved successfully! Redirecting to dashboard...");
+      setTimeout(() => {
+        router.push("/seller/dashboard");
+      }, 1000);
     } catch (err: any) {
       setError(err.message || "Failed to save profile");
     } finally {
@@ -187,6 +192,49 @@ export default function SellerProfilePage() {
                     />
                   </div>
 
+                  <div>
+                    <label className="text-xs font-semibold block mb-1.5" style={{ color: C.textSecondary }}>
+                      Primary Product Specialties & Categories
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "Cleansers & Balms",
+                        "Active Serums & Ampoules",
+                        "Barrier Moisturizers",
+                        "SPF & Sun Protection",
+                        "Herbal & Botanical Extracts",
+                        "Acne Treatments",
+                        "Face Oils & Elixirs",
+                        "Eye & Lip Care",
+                      ].map((spec) => {
+                        const isIncluded = form.bio?.includes(spec);
+                        return (
+                          <button
+                            key={spec}
+                            type="button"
+                            onClick={() => {
+                              const currentBio = form.bio || "";
+                              if (isIncluded) {
+                                setForm({ ...form, bio: currentBio.replace(` [Specialty: ${spec}]`, "").replace(`Specialty: ${spec}`, "").trim() });
+                              } else {
+                                setForm({ ...form, bio: `${currentBio} [Specialty: ${spec}]`.trim() });
+                              }
+                            }}
+                            className="text-xs px-2.5 py-1 rounded-lg border transition-all"
+                            style={{
+                              borderColor: isIncluded ? C.primary : C.border,
+                              background: isIncluded ? C.primaryGhost : "transparent",
+                              color: isIncluded ? C.primary : C.textSecondary,
+                              fontWeight: isIncluded ? 600 : 400,
+                            }}
+                          >
+                            {isIncluded ? `✓ ${spec}` : `+ ${spec}`}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs font-semibold block mb-1" style={{ color: C.textSecondary }}>
@@ -220,6 +268,7 @@ export default function SellerProfilePage() {
               </Card>
             </div>
 
+            {/* Store Monogram / Avatar Logo Card */}
             <div className="animate-fade-in-up opacity-0 stagger-3">
               <Card
                 className="p-6 space-y-4 rounded-2xl"
@@ -231,13 +280,48 @@ export default function SellerProfilePage() {
                   boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
                 }}
               >
-                <h2 className="text-lg font-semibold border-b pb-3" style={{ color: C.text, borderColor: C.borderLight }}>
-                  Store Logo
-                </h2>
+                <div>
+                  <h2 className="text-lg font-semibold" style={{ color: C.text }}>
+                    Store Monogram / Brand Avatar
+                  </h2>
+                  <p className="text-xs mt-0.5" style={{ color: C.textMuted }}>
+                    Your primary apothecary logo or monogram icon displayed in the directory, product cards, and order receipts. Recommended: square 400×400px.
+                  </p>
+                </div>
                 <div>
                   <ImageUpload
                     value={form.logo ? [form.logo] : []}
                     onChange={(urls) => setForm({ ...form, logo: urls[0] || "" })}
+                    maxFiles={1}
+                  />
+                </div>
+              </Card>
+            </div>
+
+            {/* Panoramic Laboratory Cover Banner Card */}
+            <div className="animate-fade-in-up opacity-0 stagger-4">
+              <Card
+                className="p-6 space-y-4 rounded-2xl"
+                style={{
+                  background: "rgba(255,255,255,0.72)",
+                  backdropFilter: "blur(16px) saturate(180%)",
+                  WebkitBackdropFilter: "blur(16px) saturate(180%)",
+                  border: `1px solid ${C.borderLight}`,
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.02)",
+                }}
+              >
+                <div>
+                  <h2 className="text-lg font-semibold" style={{ color: C.text }}>
+                    Panoramic Laboratory Banner / Cover Image
+                  </h2>
+                  <p className="text-xs mt-0.5" style={{ color: C.textMuted }}>
+                    The panoramic hero background displayed on your boutique profile and at the top of your card in the Artisan Apothecaries directory (`/shops`). Recommended: 1200×400px landscape.
+                  </p>
+                </div>
+                <div>
+                  <ImageUpload
+                    value={form.banner ? [form.banner] : []}
+                    onChange={(urls) => setForm({ ...form, banner: urls[0] || "" })}
                     maxFiles={1}
                   />
                 </div>

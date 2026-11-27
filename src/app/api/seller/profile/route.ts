@@ -5,10 +5,7 @@ import { validateNepaliPhone } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-
+    const session = await auth.api.getSession({ headers: request.headers });
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -16,9 +13,7 @@ export async function GET(request: NextRequest) {
     const profile = await prisma.sellerProfile.findUnique({
       where: { userId: session.user.id },
       include: {
-        _count: {
-          select: { products: true },
-        },
+        _count: { select: { products: { where: { deletedAt: null } } } },
       },
     });
 
@@ -31,10 +26,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-
+    const session = await auth.api.getSession({ headers: request.headers });
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -42,7 +34,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { storeName, bio, logo, banner, contactEmail, phone } = body;
 
-    if (!storeName) {
+    if (!storeName?.trim()) {
       return NextResponse.json({ error: "Store name is required" }, { status: 400 });
     }
 
@@ -53,10 +45,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const baseSlug = storeName
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
+    const baseSlug = storeName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
     const existingProfile = await prisma.sellerProfile.findUnique({
       where: { userId: session.user.id },
@@ -71,33 +60,39 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const userRole = (session.user as { role?: string }).role;
+
     const profile = await prisma.sellerProfile.upsert({
       where: { userId: session.user.id },
       update: {
-        storeName,
-        bio,
-        logo,
-        banner,
-        contactEmail,
-        phone,
+        storeName: storeName.trim(),
+        bio: bio || null,
+        logo: logo || null,
+        banner: banner || null,
+        contactEmail: contactEmail || null,
+        phone: phone || null,
       },
       create: {
         userId: session.user.id,
-        storeName,
+        storeName: storeName.trim(),
         storeSlug,
-        bio,
-        logo,
-        banner,
-        contactEmail,
-        phone,
+        bio: bio || null,
+        logo: logo || null,
+        banner: banner || null,
+        contactEmail: contactEmail || null,
+        phone: phone || null,
+        // New sellers start unverified — admin must approve
+        isVerified: false,
       },
     });
 
-    // Ensure user role is updated to "seller"
-    await prisma.user.update({
-      where: { id: session.user.id },
-      data: { role: "seller" },
-    });
+    // Only promote to seller role if currently customer — do NOT touch admin
+    if (userRole === "customer") {
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { role: "seller" },
+      });
+    }
 
     return NextResponse.json(profile);
   } catch (error) {

@@ -7,19 +7,39 @@ export async function GET(request: NextRequest) {
   if (error) return error;
 
   try {
-    const sellers = await prisma.sellerProfile.findMany({
-      include: {
-        user: {
-          select: { id: true, name: true, email: true },
-        },
-        _count: {
-          select: { products: true },
-        },
-      },
-      orderBy: [{ isVerified: "asc" }, { createdAt: "desc" }],
-    });
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") ?? "20")));
+    const skip = (page - 1) * limit;
+    const verified = searchParams.get("verified");
+    const search = searchParams.get("search") || "";
 
-    return NextResponse.json(sellers);
+    const where: Record<string, unknown> = {};
+    if (verified === "true") where.isVerified = true;
+    if (verified === "false") where.isVerified = false;
+    if (search) {
+      where.OR = [
+        { storeName: { contains: search, mode: "insensitive" } },
+        { user: { email: { contains: search, mode: "insensitive" } } },
+        { user: { name: { contains: search, mode: "insensitive" } } },
+      ];
+    }
+
+    const [sellers, total] = await Promise.all([
+      prisma.sellerProfile.findMany({
+        where,
+        include: {
+          user: { select: { id: true, name: true, email: true, createdAt: true } },
+          _count: { select: { products: true } },
+        },
+        orderBy: [{ isVerified: "asc" }, { createdAt: "desc" }],
+        skip,
+        take: limit,
+      }),
+      prisma.sellerProfile.count({ where }),
+    ]);
+
+    return NextResponse.json({ sellers, total, page, limit, totalPages: Math.ceil(total / limit) });
   } catch (err) {
     console.error("Error fetching admin sellers:", err);
     return NextResponse.json({ error: "Failed to fetch sellers" }, { status: 500 });
@@ -32,21 +52,39 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { sellerId, isVerified } = body;
+    const { sellerId, isVerified, action } = body;
 
-    if (!sellerId || typeof isVerified !== "boolean") {
-      return NextResponse.json({ error: "sellerId and isVerified boolean are required" }, { status: 400 });
+    if (!sellerId) {
+      return NextResponse.json({ error: "sellerId is required" }, { status: 400 });
     }
 
-    const updated = await prisma.sellerProfile.update({
-      where: { id: sellerId },
-      data: { isVerified },
-      include: {
-        user: { select: { id: true, name: true, email: true } },
-      },
-    });
+    if (typeof isVerified === "boolean" || action === "verify" || action === "unverify") {
+      const newVerified = action === "verify" ? true : action === "unverify" ? false : Boolean(isVerified);
 
-    return NextResponse.json(updated);
+      const updated = await prisma.sellerProfile.update({
+        where: { id: sellerId },
+        data: {
+          isVerified: newVerified,
+          verifiedAt: newVerified ? new Date() : null,
+        },
+        include: {
+          user: { select: { id: true, name: true, email: true } },
+        },
+      });
+
+      await prisma.auditLog.create({
+        data: {
+          actorId: session.user.id,
+          action: newVerified ? "verify_seller" : "unverify_seller",
+          target: `seller:${sellerId}`,
+          metadata: { storeName: updated.storeName },
+        },
+      });
+
+      return NextResponse.json(updated);
+    }
+
+    return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (err) {
     console.error("Error updating seller verification:", err);
     return NextResponse.json({ error: "Failed to update verification status" }, { status: 500 });
