@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { StoreNavbar } from "@/components/store-navbar";
 import {
   ORDER_STATUS_LABELS,
   REFUND_STATUS_LABELS,
@@ -144,26 +145,21 @@ export function OrderDetailClient({ order }: { order: OrderDetail }) {
         : "Tell us why you are requesting a refund.";
 
   return (
-    <div className="min-h-screen pb-20" style={{ background: C.bg, color: C.text }}>
-      <header
-        className="sticky top-0 z-40 backdrop-blur-xl"
-        style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.9)" }}
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div className="min-h-screen pb-20 font-sans" style={{ background: C.bg, color: C.text }}>
+      <StoreNavbar />
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        <div className="flex items-center justify-between">
           <Link
             href="/shop/orders"
-            className="flex items-center gap-2 text-sm font-semibold hover:opacity-70"
-            style={{ color: C.textSecondary }}
+            className="flex items-center gap-2 text-xs font-semibold text-[#5A5F6B] hover:text-[#2D5A3D] transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> My Orders
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to My Orders
           </Link>
-          <span className="text-sm font-mono" style={{ color: C.textMuted }}>
-            #{order.orderNumber}
+          <span className="text-xs font-mono font-bold text-[#2D5A3D]">
+            Order #{order.orderNumber}
           </span>
         </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         <div className="rounded-2xl p-6" style={{ background: "#fff", border: `1px solid ${C.borderLight}` }}>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>

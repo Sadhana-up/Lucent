@@ -15,7 +15,6 @@ async function hasVerifiedPurchase(userId: string, productId: string) {
     },
     select: { id: true },
   });
-
   return Boolean(order);
 }
 
@@ -23,8 +22,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { slug } = await params;
 
-    const product = await prisma.product.findUnique({
-      where: { slug },
+    const product = await prisma.product.findFirst({
+      where: { slug, deletedAt: null },
       select: { id: true, status: true },
     });
 
@@ -88,19 +87,17 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const limit = rateLimit(
-      `review:${session.user.id}:${getClientIp(request)}`,
-    );
+    const limit = rateLimit(`review:${session.user.id}:${getClientIp(request)}`);
     if (!limit.allowed) {
       return NextResponse.json(
         { error: "Too many review attempts. Please try again shortly." },
-        { status: 429 },
+        { status: 429 }
       );
     }
 
     const { slug } = await params;
-    const product = await prisma.product.findUnique({
-      where: { slug },
+    const product = await prisma.product.findFirst({
+      where: { slug, deletedAt: null },
       select: { id: true, status: true },
     });
 
@@ -110,26 +107,35 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     const body = await request.json().catch(() => null);
     const rating = Number(body?.rating);
-    const comment =
-      typeof body?.comment === "string" ? body.comment.trim().slice(0, 2000) : "";
+    const comment = typeof body?.comment === "string" ? body.comment.trim().slice(0, 2000) : "";
 
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
       return NextResponse.json(
         { error: "Rating must be a whole number between 1 and 5." },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
-    const purchased = await hasVerifiedPurchase(
-      session.user.id,
-      product.id,
-    );
+    const purchased = await hasVerifiedPurchase(session.user.id, product.id);
     if (!purchased) {
       return NextResponse.json(
         { error: "Only verified buyers can review this product." },
-        { status: 403 },
+        { status: 403 }
       );
     }
+
+    // Find the OrderItem to link to the review
+    const orderItem = await prisma.orderItem.findFirst({
+      where: {
+        productId: product.id,
+        order: {
+          customerId: session.user.id,
+          paymentStatus: "PAID",
+          status: { notIn: ["CANCELLED", "REFUNDED"] },
+        },
+      },
+      select: { id: true },
+    });
 
     const existing = await prisma.review.findFirst({
       where: { productId: product.id, userId: session.user.id },
@@ -144,6 +150,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           data: {
             productId: product.id,
             userId: session.user.id,
+            orderItemId: orderItem?.id ?? null,
             rating,
             comment: comment || null,
             isVerified: true,

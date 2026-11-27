@@ -5,8 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number): string {
-  return `NPR ${amount.toFixed(2)}`
+export function formatCurrency(amount: number | string): string {
+  // Prisma Decimal values arrive as strings over JSON; coerce before formatting.
+  return `NPR ${Number(amount).toFixed(2)}`
 }
 
 export function validateNepaliPhone(phone: string): boolean {
