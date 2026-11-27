@@ -53,16 +53,19 @@ function SignInFormContent() {
       setError(error.message || "Invalid email or password");
     } else {
       const sessionRes = await authClient.getSession();
-      const userRole = (sessionRes.data?.user as { role?: string })?.role;
+      const user = sessionRes.data?.user as { role?: string; onboardingCompleted?: boolean };
+      const userRole = user?.role;
 
-      if (callbackUrl) {
-        router.push(callbackUrl);
-      } else if (userRole === "admin") {
+      if (userRole === "admin") {
         router.push("/admin");
       } else if (userRole === "seller") {
         router.push("/seller");
+      } else if (user?.onboardingCompleted !== true) {
+        router.push("/onboarding");
+      } else if (callbackUrl) {
+        router.push(callbackUrl);
       } else {
-        router.push("/");
+        router.push("/shop");
       }
     }
   };
@@ -70,7 +73,7 @@ function SignInFormContent() {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: callbackUrl || "/",
+      callbackURL: "/onboarding",
     });
   };
 
