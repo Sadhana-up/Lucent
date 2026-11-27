@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Sparkles,
@@ -13,7 +14,9 @@ import {
   ArrowLeft,
   Check,
   Leaf,
+  ChevronRight,
 } from "lucide-react";
+import { StoreNavbar } from "@/components/store-navbar";
 import { StarRating } from "@/components/star-rating";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -44,11 +47,13 @@ export default function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
+  const router = useRouter();
   const [product, setProduct] = useState<any>(null);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [cartError, setCartError] = useState("");
 
   // Review states
   const [rating, setRating] = useState(5);
@@ -63,18 +68,17 @@ export default function ProductDetailPage({
     setReviewMsg("");
 
     try {
-      const res = await fetch("/api/reviews", {
+      const res = await fetch(`/api/products/${slug}/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          productId: product.id,
           rating,
           comment: comment.trim() || undefined,
         }),
       });
 
       if (res.ok) {
-        setReviewMsg("Thank you! Your verification review has been published.");
+        setReviewMsg("Thank you! Your verified review has been published.");
         setComment("");
         // Reload product details to update reviews & average rating
         const refreshed = await fetch(`/api/products/${slug}`).then((r) => r.json());
@@ -111,27 +115,36 @@ export default function ProductDetailPage({
     loadProduct();
   }, [slug]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
+    setCartError("");
 
-    const cart = JSON.parse(localStorage.getItem("lucent_cart") || "[]");
-    const existingIndex = cart.findIndex((item: any) => item.productId === product.id);
-
-    if (existingIndex > -1) {
-      cart[existingIndex].quantity += quantity;
-    } else {
-      cart.push({
-        productId: product.id,
-        title: product.title,
-        price: product.discountPrice || product.price,
-        image: selectedImage || (product.images[0] ? product.images[0].url : ""),
-        quantity,
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product.id, quantity }),
       });
-    }
 
-    localStorage.setItem("lucent_cart", JSON.stringify(cart));
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2500);
+      if (res.status === 401) {
+        router.push(`/sign-in?callbackUrl=/shop/${product.slug}`);
+        return;
+      }
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setCartError(data?.error || "Failed to add to cart");
+        return;
+      }
+
+      setAdded(true);
+      try {
+        window.dispatchEvent(new Event("cart-updated"));
+      } catch {}
+      setTimeout(() => setAdded(false), 2500);
+    } catch {
+      setCartError("Failed to add to cart. Please try again.");
+    }
   };
 
   if (loading) {
@@ -169,21 +182,30 @@ export default function ProductDetailPage({
           <div className="ambient-spot ambient-spot-accent w-[400px] h-[400px] bottom-20 -left-40" />
         </div>
 
-        <header className="sticky top-0 z-40 backdrop-blur-md" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.92)" }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <Link href="/shop" className="flex items-center gap-2 text-sm font-semibold transition-colors duration-200 hover:opacity-70" style={{ color: C.textSecondary }}>
-              <ArrowLeft className="w-4 h-4" /> Back to Shop
-            </Link>
+        <StoreNavbar />
 
-            <Link href="/shop/cart">
-              <Button variant="glass" size="sm" className="rounded-xl">
-                <ShoppingBag className="w-4 h-4 mr-1.5" style={{ color: C.primary }} /> Cart
-              </Button>
-            </Link>
-          </div>
-        </header>
+        {/* Breadcrumbs */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-1">
+          <nav className="flex items-center gap-1.5 text-xs font-medium" aria-label="Breadcrumb">
+            <Link href="/shop" className="hover:opacity-70 transition-opacity" style={{ color: C.textSecondary }}>Shop</Link>
+            <ChevronRight className="w-3.5 h-3.5" style={{ color: C.textMuted }} />
+            {product?.seller && (
+              <>
+                <Link
+                  href={`/shops/${product.seller.storeSlug || ""}`}
+                  className="hover:opacity-70 transition-opacity"
+                  style={{ color: C.textSecondary }}
+                >
+                  {product.seller.storeName}
+                </Link>
+                <ChevronRight className="w-3.5 h-3.5" style={{ color: C.textMuted }} />
+              </>
+            )}
+            <span className="truncate max-w-[180px]" style={{ color: C.text }}>{product?.title ?? "Product"}</span>
+          </nav>
+        </div>
 
-        <main className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-8 space-y-12">
+        <main className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-5 space-y-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="space-y-4 animate-fade-in-left opacity-0 stagger-1">
               <div className="aspect-[4/3] w-full rounded-3xl overflow-hidden glass-card shadow-md" style={{ background: C.bgWarm }}>
@@ -243,28 +265,42 @@ export default function ProductDetailPage({
             <div className="space-y-6 animate-fade-in-right opacity-0 stagger-2">
               <div>
                 {product.seller && (
-                  <div className="flex items-center gap-2 mb-2 text-sm font-semibold" style={{ color: C.primary }}>
+                  <Link
+                    href={`/shops/${product.seller.storeSlug || ""}`}
+                    className="inline-flex items-center gap-2 mb-2 text-sm font-semibold hover:underline transition-colors"
+                    style={{ color: C.primary }}
+                    title={`Visit ${product.seller.storeName}`}
+                  >
                     <Store size={16} />
                     <span>{product.seller.storeName}</span>
                     {product.seller.isVerified && (
                       <CheckCircle2 size={16} className="text-emerald-600 fill-emerald-100" />
                     )}
-                  </div>
+                  </Link>
                 )}
 
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-snug" style={{ color: C.text }}>
                   {product.title}
                 </h1>
 
-                <div className="flex items-center gap-2 mt-2">
-                  <StarRating rating={product.avgRating || 5} size={18} />
-                  <span className="font-bold text-sm" style={{ color: C.text }}>
-                    {product.avgRating ? product.avgRating : "5.0"}
-                  </span>
-                  <span className="text-xs" style={{ color: C.textMuted }}>
-                    ({product.reviewCount || 0} reviews)
-                  </span>
-                </div>
+                {product.reviewCount && product.reviewCount > 0 ? (
+                  <div className="flex items-center gap-2 mt-2">
+                    <StarRating rating={product.avgRating || 0} size={18} />
+                    <span className="font-bold text-sm" style={{ color: C.text }}>
+                      {product.avgRating}
+                    </span>
+                    <span className="text-xs" style={{ color: C.textMuted }}>
+                      ({product.reviewCount} {product.reviewCount === 1 ? "review" : "reviews"})
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 mt-2">
+                    <StarRating rating={0} size={18} />
+                    <span className="text-xs font-medium" style={{ color: C.textMuted }}>
+                      No reviews yet (verified buyers only)
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="p-4 rounded-2xl" style={{ background: C.primaryGhost, border: `1px solid ${C.borderLight}` }}>
@@ -346,15 +382,18 @@ export default function ProductDetailPage({
                     )}
                   </Button>
                 </div>
+                {cartError && (
+                  <p className="text-sm mt-2" style={{ color: "#b42318" }}>{cartError}</p>
+                )}
 
                 <div className="grid grid-cols-2 gap-3 text-xs pt-2" style={{ color: C.textSecondary }}>
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4" style={{ color: C.primary }} />
-                    <span>Dermatologist Approved Ingredients</span>
+                    <span>Sold by a verified seller</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Truck className="w-4 h-4" style={{ color: C.accent }} />
-                    <span>Fast Verified Shipping</span>
+                    <span>Secure checkout</span>
                   </div>
                 </div>
               </div>
@@ -483,10 +522,10 @@ export default function ProductDetailPage({
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2.5">
                           <div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs text-white" style={{ background: C.primary }}>
-                            {rev.user?.name?.[0]?.toUpperCase() || "M"}
+                            {rev.user?.name?.[0]?.toUpperCase() || "C"}
                           </div>
                           <span className="font-semibold text-xs" style={{ color: C.text }}>
-                            {rev.user?.name || "Verified Customer"}
+                            {rev.user?.name || "Customer"}
                           </span>
                         </div>
                         <div className="flex items-center gap-1">
