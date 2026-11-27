@@ -10,7 +10,11 @@
     "db:seed": "npx tsx prisma/seed.ts",
     "db:seed:catalog": "npx tsx prisma/seed-catalog.ts",
     "db:seed:images": "npx tsx prisma/seeders/image-seeder.ts",
-    "db:set-password": "npx tsx scripts/set-admin-password.ts"
+    "db:set-password": "npx tsx scripts/set-admin-password.ts",
+    "verify:onboarding": "npx tsx scripts/verify-onboarding.ts",
+    "verify:seller": "npx tsx scripts/verify-seller-verification.ts",
+    "verify:reservations": "npx tsx scripts/verify-reservations.ts",
+    "verify:routines": "npx tsx scripts/verify-routines.ts"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
