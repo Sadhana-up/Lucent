@@ -10,10 +10,9 @@ const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 const PEXELS_SEARCH_URL = "https://api.pexels.com/v1/search";
 
 if (!PEXELS_API_KEY) {
-  console.error(
-    "❌ Missing PEXELS_API_KEY. Get a free key at https://www.pexels.com/api/ and add it to your .env file."
+  console.warn(
+    "⚠️ Missing PEXELS_API_KEY. Will reuse existing local images in public/seed/ if present."
   );
-  process.exit(1);
 }
 
 // Real search terms — Pexels returns actual matching photos for these,
