@@ -42,7 +42,7 @@ export default function SignIn() {
     setLoading(true);
     const { error } = await authClient.signIn.social({
       provider: 'google',
-      callbackURL: '/',
+      callbackURL: 'lucent://',
     });
     setLoading(false);
 

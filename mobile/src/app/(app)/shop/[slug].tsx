@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Image,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -25,6 +27,8 @@ export default function ShopDetailScreen() {
 
   const [shop, setShop] = useState<SellerProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     async function loadShop() {
@@ -42,6 +46,26 @@ export default function ShopDetailScreen() {
     }
     loadShop();
   }, [slug]);
+
+  const categories = useMemo(() => {
+    const map = new Map<string, string>();
+    (shop?.products || []).forEach((p) => {
+      if (p.category?.name && p.category?.slug) map.set(p.category.slug, p.category.name);
+    });
+    return Array.from(map.entries()).map(([catSlug, name]) => ({ slug: catSlug, name }));
+  }, [shop?.products]);
+
+  const filteredProducts = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return (shop?.products || []).filter((p) => {
+      const matchSearch =
+        !q ||
+        p.title.toLowerCase().includes(q) ||
+        (p.description || '').toLowerCase().includes(q);
+      const matchCategory = !selectedCategory || p.category?.slug === selectedCategory;
+      return matchSearch && matchCategory;
+    });
+  }, [shop?.products, search, selectedCategory]);
 
   const handleAddToCart = (product: Product) => {
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
@@ -70,6 +94,11 @@ export default function ShopDetailScreen() {
   }
 
   const initial = shop.storeName?.trim()?.[0]?.toUpperCase() || 'S';
+
+  const resetFilters = () => {
+    setSearch('');
+    setSelectedCategory('');
+  };
 
   const renderProduct = ({ item }: { item: Product }) => {
     const primaryImg =
@@ -156,7 +185,7 @@ export default function ShopDetailScreen() {
       </View>
 
       <FlatList
-        data={shop.products || []}
+        data={filteredProducts}
         keyExtractor={(item) => item.id}
         renderItem={renderProduct}
         numColumns={2}
@@ -243,18 +272,78 @@ export default function ShopDetailScreen() {
               )}
             </View>
 
+            {/* In-shop search & category filters */}
+            <View style={s.filterBox}>
+              <View style={s.searchBox}>
+                <Feather name="search" size={16} color={C.muted} style={{ marginRight: 8 }} />
+                <TextInput
+                  style={s.searchInput}
+                  placeholder={`Search formulations by ${shop.storeName}...`}
+                  placeholderTextColor="#9FA4AF"
+                  value={search}
+                  onChangeText={setSearch}
+                />
+                {search.length > 0 && (
+                  <Pressable onPress={() => setSearch('')} hitSlop={8}>
+                    <Feather name="x" size={15} color={C.muted} />
+                  </Pressable>
+                )}
+              </View>
+
+              {categories.length > 0 && (
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={s.categoryRow}
+                >
+                  <Pressable
+                    style={[s.categoryPill, !selectedCategory && s.categoryPillActive]}
+                    onPress={() => setSelectedCategory('')}
+                  >
+                    <Text style={[s.categoryText, !selectedCategory && s.categoryTextActive]}>
+                      All Formulations
+                    </Text>
+                  </Pressable>
+                  {categories.map((cat) => {
+                    const selected = selectedCategory === cat.slug;
+                    return (
+                      <Pressable
+                        key={cat.slug}
+                        style={[s.categoryPill, selected && s.categoryPillActive]}
+                        onPress={() => setSelectedCategory(selected ? '' : cat.slug)}
+                      >
+                        <Text style={[s.categoryText, selected && s.categoryTextActive]}>
+                          {cat.name}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </ScrollView>
+              )}
+            </View>
+
             <View style={s.catalogHeading}>
               <Text style={s.catalogHeadingText}>AVAILABLE FORMULATIONS</Text>
+              <Text style={s.catalogCount}>{filteredProducts.length} products</Text>
             </View>
           </View>
         }
         ListEmptyComponent={
           <View style={s.emptyBox}>
             <Feather name="package" size={36} color="#CBD0D8" />
-            <Text style={s.emptyTitle}>No products listed yet</Text>
-            <Text style={s.emptySub}>
-              This apothecary is currently handcrafting their next batch.
+            <Text style={s.emptyTitle}>
+              {(shop.products || []).length === 0 ? 'No products listed yet' : 'No formulations found'}
             </Text>
+            <Text style={s.emptySub}>
+              {(shop.products || []).length === 0
+                ? 'This apothecary is currently handcrafting their next batch.'
+                : 'No products match your search or selected category.'}
+            </Text>
+            {(!!search || !!selectedCategory) && (
+              <Pressable style={s.resetBtn} onPress={resetFilters}>
+                <Text style={s.resetBtnText}>Reset Filters</Text>
+              </Pressable>
+            )}
           </View>
         }
       />
@@ -442,7 +531,58 @@ const s = StyleSheet.create({
     fontSize: 11.5,
     color: C.ink2,
   },
+  filterBox: {
+    paddingHorizontal: 18,
+    paddingTop: 18,
+  },
+  searchBox: {
+    height: 42,
+    backgroundColor: '#FAF6F0',
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: '#E8E2D8',
+  },
+  searchInput: {
+    flex: 1,
+    height: '100%',
+    fontFamily: F.sansRegular,
+    fontSize: 13,
+    color: C.ink,
+  },
+  categoryRow: {
+    gap: 8,
+    paddingTop: 10,
+    paddingBottom: 2,
+  },
+  categoryPill: {
+    paddingHorizontal: 13,
+    paddingVertical: 6,
+    borderRadius: R.pill,
+    backgroundColor: '#FAF6F0',
+    borderWidth: 1,
+    borderColor: '#E8E2D8',
+  },
+  categoryPillActive: {
+    backgroundColor: C.sage,
+    borderColor: C.sage,
+  },
+  categoryText: {
+    fontFamily: F.sans,
+    fontSize: 11.5,
+    color: C.ink2,
+    fontWeight: '500',
+  },
+  categoryTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
   catalogHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 18,
     paddingTop: 18,
     paddingBottom: 10,
@@ -453,6 +593,11 @@ const s = StyleSheet.create({
     letterSpacing: 1.5,
     color: C.muted,
     fontWeight: '700',
+  },
+  catalogCount: {
+    fontFamily: F.sansRegular,
+    fontSize: 11,
+    color: C.muted,
   },
   columnWrapper: {
     justifyContent: 'space-between',
@@ -585,5 +730,19 @@ const s = StyleSheet.create({
     color: C.ink2,
     textAlign: 'center',
     marginTop: 4,
+  },
+  resetBtn: {
+    marginTop: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 8,
+    borderRadius: R.pill,
+    borderWidth: 1,
+    borderColor: C.sage,
+  },
+  resetBtnText: {
+    fontFamily: F.sans,
+    fontSize: 12,
+    color: C.sage,
+    fontWeight: '600',
   },
 });

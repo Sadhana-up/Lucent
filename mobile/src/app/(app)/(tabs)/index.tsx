@@ -164,14 +164,16 @@ export default function ShopCatalogueScreen() {
         </View>
 
         <View style={s.cardBody}>
-          <View style={s.brandRow}>
-            <Text style={s.brandName} numberOfLines={1}>
-              {item.seller?.storeName || 'Lucent Formulator'}
-            </Text>
-            {item.seller?.isVerified && (
-              <Feather name="check-circle" size={11} color={C.sage} style={{ marginLeft: 3 }} />
-            )}
-          </View>
+          {!!item.seller?.storeName && (
+            <View style={s.brandRow}>
+              <Text style={s.brandName} numberOfLines={1}>
+                {item.seller.storeName}
+              </Text>
+              {item.seller.isVerified && (
+                <Feather name="check-circle" size={11} color={C.sage} style={{ marginLeft: 3 }} />
+              )}
+            </View>
+          )}
 
           <Text style={s.productTitle} numberOfLines={2}>
             {item.title}

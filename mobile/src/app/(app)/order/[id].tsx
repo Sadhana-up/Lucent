@@ -3,10 +3,12 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -17,7 +19,8 @@ import { C, F, R } from '../../../components/lucent/theme';
 import { api, formatCurrency, resolveImageUrl } from '../../../lib/api';
 import { Order, OrderItem } from '../../../lib/types';
 
-const STATUS_STEPS = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
+const STATUS_STEPS = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
+const TERMINAL_STATUSES = ['CANCELLED', 'RETURN_REQUESTED', 'RETURNED', 'REFUNDED'];
 
 export default function OrderDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -27,6 +30,9 @@ export default function OrderDetailScreen() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [returnModalOpen, setReturnModalOpen] = useState(false);
+  const [returnReason, setReturnReason] = useState('');
+  const [submittingReturn, setSubmittingReturn] = useState(false);
 
   useEffect(() => {
     async function loadOrder() {
@@ -74,6 +80,31 @@ export default function OrderDetailScreen() {
     );
   };
 
+  const handleRequestReturn = async () => {
+    if (!order || !returnReason.trim()) {
+      Alert.alert('Reason Required', 'Please explain why you want to return this order.');
+      return;
+    }
+    setSubmittingReturn(true);
+    try {
+      const res = await api.requestReturn(order.id, returnReason.trim());
+      if (res.error) {
+        Alert.alert('Return Request Failed', res.error);
+        return;
+      }
+      if (res.data) {
+        void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+        setOrder(res.data);
+        setReturnModalOpen(false);
+        setReturnReason('');
+      }
+    } catch (e: any) {
+      Alert.alert('Error', e?.message || 'Failed to submit return request.');
+    } finally {
+      setSubmittingReturn(false);
+    }
+  };
+
   if (loading) {
     return (
       <View style={[s.centerBox, { paddingTop: insets.top }]}>
@@ -95,8 +126,8 @@ export default function OrderDetailScreen() {
     );
   }
 
-  const isCancelled = order.status === 'CANCELLED';
-  const currentStepIdx = isCancelled ? -1 : STATUS_STEPS.indexOf(order.status);
+  const isTerminal = TERMINAL_STATUSES.includes(order.status);
+  const currentStepIdx = isTerminal ? -1 : STATUS_STEPS.indexOf(order.status);
 
   return (
     <View style={[s.root, { paddingTop: insets.top }]}>
@@ -123,10 +154,21 @@ export default function OrderDetailScreen() {
         <View style={s.card}>
           <Text style={s.cardSectionTitle}>FULFILLMENT STATUS</Text>
 
-          {isCancelled ? (
+          {isTerminal ? (
             <View style={s.cancelledBox}>
-              <Feather name="x-circle" size={20} color={C.danger} />
-              <Text style={s.cancelledText}>Order was cancelled</Text>
+              <Feather
+                name={order.status === 'CANCELLED' ? 'x-circle' : 'rotate-ccw'}
+                size={20}
+                color={order.status === 'REFUNDED' ? C.sage : C.danger}
+              />
+              <View style={{ flex: 1 }}>
+                <Text style={[s.cancelledText, order.status === 'REFUNDED' && { color: C.sage }]}>
+                  {order.status.replace('_', ' ')}
+                </Text>
+                {!!order.returnReason && (
+                  <Text style={s.returnReasonText}>Reason: {order.returnReason}</Text>
+                )}
+              </View>
             </View>
           ) : (
             <View style={s.stepperRow}>
@@ -250,9 +292,19 @@ export default function OrderDetailScreen() {
               <Text style={s.notesText}>Note: {order.notes}</Text>
             </View>
           ) : null}
+
+          {!!order.trackingNumber && (
+            <View style={[s.addressRow, { marginTop: 10 }]}>
+              <Feather name="truck" size={16} color={C.sage} />
+              <Text style={s.addressText}>
+                {order.trackingCarrier ? `${order.trackingCarrier}: ` : 'Tracking: '}
+                {order.trackingNumber}
+              </Text>
+            </View>
+          )}
         </View>
 
-        {/* Customer Cancellation Option */}
+        {/* Customer Cancellation / Return Options */}
         {order.status === 'PENDING' && (
           <Pressable
             style={s.cancelBtn}
@@ -266,7 +318,56 @@ export default function OrderDetailScreen() {
             )}
           </Pressable>
         )}
+
+        {order.status === 'DELIVERED' && (
+          <Pressable
+            style={s.returnBtn}
+            onPress={() => setReturnModalOpen(true)}
+          >
+            <Feather name="rotate-ccw" size={15} color={C.ink} />
+            <Text style={s.returnBtnText}>Request a Return</Text>
+          </Pressable>
+        )}
       </ScrollView>
+
+      <Modal
+        visible={returnModalOpen}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setReturnModalOpen(false)}
+      >
+        <View style={s.modalOverlay}>
+          <View style={[s.modalCard, { paddingBottom: insets.bottom + 18 }]}>
+            <View style={s.modalHeader}>
+              <Text style={s.modalTitle}>Request Return</Text>
+              <Pressable onPress={() => setReturnModalOpen(false)} hitSlop={10}>
+                <Feather name="x" size={20} color={C.ink} />
+              </Pressable>
+            </View>
+            <Text style={s.modalSub}>Tell us what went wrong with your parcel:</Text>
+            <TextInput
+              style={s.returnInput}
+              multiline
+              numberOfLines={3}
+              placeholder="e.g. Damaged bottle, wrong item received..."
+              placeholderTextColor="#9EA3AF"
+              value={returnReason}
+              onChangeText={setReturnReason}
+            />
+            <Pressable
+              style={[s.submitReturnBtn, submittingReturn && { opacity: 0.7 }]}
+              disabled={submittingReturn}
+              onPress={handleRequestReturn}
+            >
+              {submittingReturn ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text style={s.submitReturnText}>Submit Return Request</Text>
+              )}
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -517,6 +618,84 @@ const s = StyleSheet.create({
     color: C.danger,
     fontFamily: F.sans,
     fontSize: 13.5,
+    fontWeight: '600',
+  },
+  returnReasonText: {
+    fontFamily: F.sansRegular,
+    fontSize: 11.5,
+    color: C.ink2,
+    marginTop: 2,
+  },
+  returnBtn: {
+    flexDirection: 'row',
+    gap: 8,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D6CFC4',
+    borderRadius: 14,
+    height: 46,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 6,
+  },
+  returnBtnText: {
+    color: C.ink,
+    fontFamily: F.sans,
+    fontSize: 13.5,
+    fontWeight: '600',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
+  },
+  modalCard: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: 22,
+    paddingTop: 20,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  modalTitle: {
+    fontFamily: F.serifBold,
+    fontSize: 22,
+    color: C.ink,
+  },
+  modalSub: {
+    fontFamily: F.sansRegular,
+    fontSize: 13,
+    color: C.ink2,
+    marginBottom: 12,
+  },
+  returnInput: {
+    borderWidth: 1,
+    borderColor: '#E8E2D8',
+    borderRadius: 12,
+    padding: 12,
+    height: 90,
+    fontFamily: F.sansRegular,
+    fontSize: 13,
+    color: C.ink,
+    textAlignVertical: 'top',
+    marginBottom: 16,
+  },
+  submitReturnBtn: {
+    backgroundColor: C.sage,
+    height: 48,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  submitReturnText: {
+    color: '#FFFFFF',
+    fontFamily: F.sans,
+    fontSize: 14,
     fontWeight: '600',
   },
   centerBox: {

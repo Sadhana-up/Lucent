@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   Image,
   Modal,
@@ -33,6 +34,8 @@ export default function ProductDetailScreen() {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addedToast, setAddedToast] = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
+  const [togglingWishlist, setTogglingWishlist] = useState(false);
 
   // Review modal
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -44,9 +47,15 @@ export default function ProductDetailScreen() {
     async function loadProduct() {
       if (!slug) return;
       try {
-        const res = await api.getProduct(slug);
+        const [res, wishRes] = await Promise.all([
+          api.getProduct(slug),
+          api.getWishlist(1, 100),
+        ]);
         if (res.data) {
           setProduct(res.data);
+          if (wishRes.data) {
+            setWishlisted(wishRes.data.some((w) => w.productId === res.data!.id));
+          }
         }
       } catch (e) {
         console.error('Failed to load product:', e);
@@ -56,6 +65,22 @@ export default function ProductDetailScreen() {
     }
     loadProduct();
   }, [slug]);
+
+  const handleToggleWishlist = async () => {
+    if (!product || togglingWishlist) return;
+    setTogglingWishlist(true);
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    const prev = wishlisted;
+    setWishlisted(!prev);
+    const res = await api.toggleWishlist(product.id);
+    if (res.error) {
+      setWishlisted(prev);
+      Alert.alert('Wishlist', res.error);
+    } else if (res.data) {
+      setWishlisted(res.data.wishlisted);
+    }
+    setTogglingWishlist(false);
+  };
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -69,21 +94,23 @@ export default function ProductDetailScreen() {
     if (!product) return;
     setSubmittingReview(true);
     try {
-      const res = await api.submitReview({
-        productId: product.id,
+      const res = await api.submitReview(product.slug, {
         rating: reviewRating,
-        comment: reviewComment.trim(),
+        comment: reviewComment.trim() || undefined,
       });
+      if (res.error) {
+        Alert.alert('Review Unavailable', res.error);
+        return;
+      }
       if (res.data) {
         void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-        // Refresh product
         const updatedRes = await api.getProduct(product.slug);
         if (updatedRes.data) setProduct(updatedRes.data);
         setReviewModalOpen(false);
         setReviewComment('');
       }
-    } catch (e) {
-      console.error('Error submitting review:', e);
+    } catch (e: any) {
+      Alert.alert('Error', e?.message || 'Failed to submit review.');
     } finally {
       setSubmittingReview(false);
     }
@@ -129,18 +156,31 @@ export default function ProductDetailScreen() {
           <Feather name="arrow-left" size={20} color={C.ink} />
         </Pressable>
 
-        <Pressable
-          style={s.topBarBtn}
-          onPress={() => router.push('/(app)/(tabs)/cart')}
-          hitSlop={10}
-        >
-          <Feather name="shopping-bag" size={20} color={C.ink} />
-          {totalCount > 0 && (
-            <View style={s.cartBadge}>
-              <Text style={s.cartBadgeText}>{totalCount}</Text>
-            </View>
-          )}
-        </Pressable>
+        <View style={{ flexDirection: 'row', gap: 10 }}>
+          <Pressable
+            style={s.topBarBtn}
+            onPress={handleToggleWishlist}
+            hitSlop={10}
+          >
+            <Feather
+              name="heart"
+              size={20}
+              color={wishlisted ? C.danger : C.ink}
+            />
+          </Pressable>
+          <Pressable
+            style={s.topBarBtn}
+            onPress={() => router.push('/(app)/(tabs)/cart')}
+            hitSlop={10}
+          >
+            <Feather name="shopping-bag" size={20} color={C.ink} />
+            {totalCount > 0 && (
+              <View style={s.cartBadge}>
+                <Text style={s.cartBadgeText}>{totalCount}</Text>
+              </View>
+            )}
+          </Pressable>
+        </View>
       </View>
 
       <ScrollView
@@ -334,7 +374,7 @@ export default function ProductDetailScreen() {
                       </Text>
                     </View>
                     <View style={{ flex: 1, marginLeft: 8 }}>
-                      <Text style={s.reviewAuthor}>{rev.user?.name || 'Verified Member'}</Text>
+                      <Text style={s.reviewAuthor}>{rev.user?.name || 'Customer'}</Text>
                       <View style={s.starRow}>
                         {Array.from({ length: 5 }).map((_, i) => (
                           <Feather
@@ -383,10 +423,10 @@ export default function ProductDetailScreen() {
           <Text style={s.qtyText}>{quantity}</Text>
           <Pressable
             style={s.qtyBtn}
-            onPress={() => setQuantity(Math.min(product.stock || 99, quantity + 1))}
-            disabled={quantity >= (product.stock || 99)}
+            onPress={() => setQuantity(Math.min(Math.max(1, product.stock), quantity + 1))}
+            disabled={quantity >= product.stock}
           >
-            <Feather name="plus" size={15} color={C.ink} />
+            <Feather name="plus" size={15} color={quantity >= product.stock ? C.muted : C.ink} />
           </Pressable>
         </View>
 
