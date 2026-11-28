@@ -5,6 +5,7 @@ import {
   Image,
   Pressable,
   RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -16,23 +17,37 @@ import * as Haptics from 'expo-haptics';
 import { Feather } from '@expo/vector-icons';
 import { C, F, R } from '../../../components/lucent/theme';
 import { api, formatCurrency, resolveImageUrl } from '../../../lib/api';
-import { Product, SellerProfile } from '../../../lib/types';
+import { Category, Product, SellerProfile } from '../../../lib/types';
+
+type SortOption = 'featured' | 'name' | 'newest' | 'products';
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'featured', label: 'Featured' },
+  { value: 'products', label: 'Most Formulations' },
+  { value: 'name', label: 'Name (A-Z)' },
+  { value: 'newest', label: 'Newest' },
+];
 
 export default function ShopsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
   const [shops, setShops] = useState<SellerProfile[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState('');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [sortOption, setSortOption] = useState<SortOption>('featured');
 
   const loadShops = useCallback(async () => {
     try {
       const res = await api.getShops({
         search: search.trim() || undefined,
         verified: verifiedOnly || undefined,
+        category: selectedCategory || undefined,
+        sort: sortOption === 'products' ? undefined : sortOption,
       });
       if (res.data) {
         setShops(res.data);
@@ -43,7 +58,7 @@ export default function ShopsScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [search, verifiedOnly]);
+  }, [search, verifiedOnly, selectedCategory, sortOption]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -51,6 +66,25 @@ export default function ShopsScreen() {
     }, 250);
     return () => clearTimeout(timer);
   }, [loadShops]);
+
+  useEffect(() => {
+    api.getCategories().then((res) => {
+      if (res.data) setCategories(res.data.filter((c) => !c.isDisabled));
+    });
+  }, []);
+
+  const displayedShops = sortOption === 'products'
+    ? [...shops].sort((a, b) => (b._count?.products || 0) - (a._count?.products || 0))
+    : shops;
+
+  const hasFilters = !!search || verifiedOnly || !!selectedCategory || sortOption !== 'featured';
+
+  const clearFilters = () => {
+    setSearch('');
+    setVerifiedOnly(false);
+    setSelectedCategory('');
+    setSortOption('featured');
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -65,13 +99,14 @@ export default function ShopsScreen() {
         style={s.shopCard}
         onPress={() => {
           void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-          router.push(`/(app)/shop/${item.storeSlug}` as any);
+          router.push({ pathname: '/(app)/shop/[slug]', params: { slug: item.storeSlug } });
         }}
       >
         {/* Banner area */}
         <View style={s.bannerBox}>
           {item.banner ? (
             <Image
+              alt=""
               source={{ uri: resolveImageUrl(item.banner) }}
               style={s.bannerImg}
               resizeMode="cover"
@@ -95,6 +130,7 @@ export default function ShopsScreen() {
           <View style={s.logoAndTitleRow}>
             {item.logo ? (
               <Image
+                alt=""
                 source={{ uri: resolveImageUrl(item.logo) }}
                 style={s.storeLogo}
                 resizeMode="cover"
@@ -136,6 +172,7 @@ export default function ShopsScreen() {
                   <View key={prod.id} style={s.previewThumbBox}>
                     {img ? (
                       <Image
+                        alt=""
                         source={{ uri: resolveImageUrl(img) }}
                         style={s.previewThumb}
                       />
@@ -188,17 +225,87 @@ export default function ShopsScreen() {
         <Pressable
           style={[s.toggleBtn, verifiedOnly && s.toggleBtnActive]}
           onPress={() => setVerifiedOnly(!verifiedOnly)}
+          hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
         >
           <Feather
             name="check-circle"
             size={14}
             color={verifiedOnly ? '#FFFFFF' : C.sage}
           />
-          <Text style={[s.toggleBtnText, verifiedOnly && s.toggleBtnTextActive]}>
+          <Text
+            style={[s.toggleBtnText, verifiedOnly && s.toggleBtnTextActive]}
+            numberOfLines={1}
+          >
             Verified
           </Text>
         </Pressable>
       </View>
+
+      {/* Category + sort filters */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={s.filterScroll}
+        contentContainerStyle={s.chipRow}
+      >
+        <Pressable
+          style={[s.chip, !selectedCategory && s.chipActive]}
+          onPress={() => setSelectedCategory('')}
+        >
+          <Text style={[s.chipText, !selectedCategory && s.chipTextActive]} numberOfLines={1}>
+            All Formulators
+          </Text>
+        </Pressable>
+        {categories.map((cat) => {
+          const selected = selectedCategory === cat.slug;
+          return (
+            <Pressable
+              key={cat.id}
+              style={[s.chip, selected && s.chipActive]}
+              onPress={() => setSelectedCategory(selected ? '' : cat.slug)}
+            >
+              <Text style={[s.chipText, selected && s.chipTextActive]} numberOfLines={1}>
+                {cat.name}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={[s.filterScroll, s.sortScroll]}
+        contentContainerStyle={s.sortRow}
+      >
+        {SORT_OPTIONS.map((opt) => {
+          const selected = sortOption === opt.value;
+          return (
+            <Pressable
+              key={opt.value}
+              style={[s.sortChip, selected && s.sortChipActive]}
+              onPress={() => setSortOption(opt.value)}
+            >
+              <Feather
+                name="sliders"
+                size={11}
+                color={selected ? C.sage : C.muted}
+              />
+              <Text style={[s.sortChipText, selected && s.sortChipTextActive]} numberOfLines={1}>
+                {opt.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+        {hasFilters && (
+          <Pressable style={s.resetChip} onPress={clearFilters}>
+            <Feather name="x" size={11} color="#B42318" />
+            <Text style={s.resetChipText} numberOfLines={1}>
+              Reset
+            </Text>
+          </Pressable>
+        )}
+      </ScrollView>
 
       {/* Content */}
       {loading ? (
@@ -208,7 +315,7 @@ export default function ShopsScreen() {
         </View>
       ) : (
         <FlatList
-          data={shops}
+          data={displayedShops}
           keyExtractor={(item) => item.id}
           renderItem={renderShopCard}
           contentContainerStyle={s.listContent}
@@ -226,8 +333,13 @@ export default function ShopsScreen() {
               <Feather name="home" size={40} color="#D1D5DB" />
               <Text style={s.emptyTitle}>No apothecaries found</Text>
               <Text style={s.emptySub}>
-                Try adjusting your search query or removing the verified filter.
+                Try a different keyword, category, or remove the verified filter.
               </Text>
+              {hasFilters && (
+                <Pressable style={s.emptyResetBtn} onPress={clearFilters}>
+                  <Text style={s.emptyResetText}>Reset All Filters</Text>
+                </Pressable>
+              )}
             </View>
           }
         />
@@ -265,10 +377,11 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     gap: 10,
-    marginBottom: 14,
+    marginBottom: 10,
   },
   searchBox: {
     flex: 1,
+    minWidth: 0,
     height: 42,
     backgroundColor: '#FFFFFF',
     borderRadius: 14,
@@ -286,10 +399,13 @@ const s = StyleSheet.create({
     color: C.ink,
   },
   toggleBtn: {
+    flexShrink: 0,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
     paddingHorizontal: 12,
+    minWidth: 100,
     height: 42,
     borderRadius: 14,
     backgroundColor: '#FFFFFF',
@@ -308,6 +424,95 @@ const s = StyleSheet.create({
   },
   toggleBtnTextActive: {
     color: '#FFFFFF',
+  },
+  filterScroll: {
+    flexGrow: 0,
+    flexShrink: 0,
+    height: 44,
+  },
+  sortScroll: {
+    height: 38,
+    marginBottom: 8,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingRight: 24,
+    gap: 8,
+    height: 44,
+  },
+  chip: {
+    flexShrink: 0,
+    maxWidth: 190,
+    height: 32,
+    paddingHorizontal: 13,
+    borderRadius: R.pill,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E8E2D8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chipActive: {
+    backgroundColor: C.sage,
+    borderColor: C.sage,
+  },
+  chipText: {
+    fontFamily: F.sans,
+    fontSize: 12,
+    color: C.ink2,
+    fontWeight: '500',
+  },
+  chipTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  sortRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingRight: 24,
+    gap: 8,
+    height: 38,
+  },
+  sortChip: {
+    flexShrink: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    height: 28,
+    paddingHorizontal: 10,
+    borderRadius: R.pill,
+    backgroundColor: '#F3EFE9',
+  },
+  sortChipActive: {
+    backgroundColor: '#E7F3EA',
+  },
+  sortChipText: {
+    fontFamily: F.sansRegular,
+    fontSize: 11,
+    color: C.muted,
+  },
+  sortChipTextActive: {
+    color: C.sage,
+    fontWeight: '600',
+  },
+  resetChip: {
+    flexShrink: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    height: 28,
+    paddingHorizontal: 10,
+    borderRadius: R.pill,
+    backgroundColor: '#FEE4E2',
+  },
+  resetChipText: {
+    fontFamily: F.sans,
+    fontSize: 11,
+    color: '#B42318',
+    fontWeight: '600',
   },
   listContent: {
     paddingHorizontal: 18,
@@ -494,5 +699,18 @@ const s = StyleSheet.create({
     textAlign: 'center',
     marginTop: 6,
     paddingHorizontal: 30,
+  },
+  emptyResetBtn: {
+    marginTop: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 9,
+    borderRadius: R.pill,
+    backgroundColor: C.sage,
+  },
+  emptyResetText: {
+    fontFamily: F.sans,
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
 });
