@@ -47,8 +47,6 @@ export default function SignUpPage() {
       name,
       email,
       password,
-      // @ts-ignore - initialRole is an additionalField defined in auth.ts
-      initialRole: role,
     });
 
     setLoading(false);
@@ -56,12 +54,10 @@ export default function SignUpPage() {
     if (error) {
       setError(error.message || "Something went wrong. Please try again.");
     } else {
-      const session = await authClient.getSession();
-      const userRole = session.data?.user?.role;
-      if (role === "seller" && (userRole === "seller" || userRole === "admin")) {
-        router.push("/seller");
+      if (role === "seller") {
+        router.push("/seller/profile");
       } else {
-        router.push("/");
+        router.push("/onboarding");
       }
     }
   };
@@ -69,7 +65,7 @@ export default function SignUpPage() {
   const handleGoogleSignUp = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: "/onboarding",
     });
   };
 

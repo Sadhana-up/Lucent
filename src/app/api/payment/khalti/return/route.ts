@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     const lookup = await lookupKhaltiPayment(pidx);
 
     const isCompleted = lookup.status === "Completed";
-    const amountMatches = lookup.total_amount === toPaisa(order.totalAmount);
+    const amountMatches = lookup.total_amount === toPaisa(Number(order.totalAmount));
     const referenceMatches = !order.paymentRef || order.paymentRef === lookup.pidx;
 
     if (!isCompleted || !amountMatches || !referenceMatches) {

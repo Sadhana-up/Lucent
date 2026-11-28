@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ChevronDown, Sparkles, ArrowDown, Copy, Check, Send, ImagePlus, X, Leaf } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { StoreNavbar } from "@/components/store-navbar";
 
 const API_BASE = process.env.NEXT_PUBLIC_CHAT_API_BASE ?? "/api/chat";
 
@@ -615,7 +616,8 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col" style={{ background: C.bg }}>
+    <div className="flex h-screen w-full flex-col overflow-hidden" style={{ background: C.bg }}>
+      <StoreNavbar />
       <style>{`
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }

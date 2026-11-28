@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ interface UserProfileModalProps {
 
 export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProps) {
   const router = useRouter();
+  const [imgFailed, setImgFailed] = useState(false);
 
   if (!isOpen) return null;
 
@@ -79,11 +81,13 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
         {/* Profile Section */}
         <div className="px-6 py-6 flex flex-col items-center">
           {/* Avatar with glow ring */}
-          {user.image ? (
+          {user.image && !imgFailed ? (
             <div className="relative">
               <img
                 src={user.image}
                 alt={user.name}
+                referrerPolicy="no-referrer"
+                onError={() => setImgFailed(true)}
                 className="w-20 h-20 rounded-full object-cover"
                 style={{
                   border: `3px solid ${C.primary}`,
@@ -136,6 +140,22 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
 
         {/* Account Links */}
         <div className="px-6 pb-3 space-y-2">
+          {user.role !== "seller" && user.role !== "admin" && (
+            <Link href="/shop/dashboard" className="block" onClick={onClose}>
+              <Button variant="premium" className="w-full text-sm font-semibold">
+                <Package size={14} className="mr-2" />
+                My Dashboard
+              </Button>
+            </Link>
+          )}
+          {user.role === "seller" && (
+            <Link href="/seller/dashboard" className="block" onClick={onClose}>
+              <Button variant="premium" className="w-full text-sm font-semibold">
+                <Package size={14} className="mr-2" />
+                Seller Hub Dashboard
+              </Button>
+            </Link>
+          )}
           <Link href="/shop/account" className="block" onClick={onClose}>
             <Button variant="outline" className="w-full text-sm font-medium">
               <Settings size={14} className="mr-2" />

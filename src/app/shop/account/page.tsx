@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { getProvinceOptions } from "@/lib/utils";
+import { StoreNavbar } from "@/components/store-navbar";
 
 const C = {
   primary: "#2D5A3D",
@@ -61,7 +62,17 @@ export default function AccountPage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
-  const [profile, setProfile] = useState({ name: "", phone: "" });
+  const [profile, setProfile] = useState<{
+    name: string;
+    phone: string;
+    skinType: string;
+    skinConcerns: string;
+  }>({
+    name: "",
+    phone: "",
+    skinType: "",
+    skinConcerns: "",
+  });
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
   const [profileError, setProfileError] = useState("");
@@ -81,10 +92,26 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (!session?.user) return;
-    setProfile({
-      name: session.user.name ?? "",
-      phone: (session.user as { phone?: string | null }).phone ?? "",
-    });
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && !data.error) {
+          setProfile({
+            name: data.name ?? session.user.name ?? "",
+            phone: data.phone ?? "",
+            skinType: data.skinType ?? "",
+            skinConcerns: data.skinConcerns ?? "",
+          });
+        }
+      })
+      .catch(() => {
+        setProfile({
+          name: session.user.name ?? "",
+          phone: (session.user as { phone?: string | null }).phone ?? "",
+          skinType: "",
+          skinConcerns: "",
+        });
+      });
   }, [session]);
 
   const loadAddresses = useCallback(async () => {
@@ -201,28 +228,27 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen pb-20" style={{ background: C.bg, color: C.text }}>
-      <header
-        className="sticky top-0 z-40 backdrop-blur-xl"
-        style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.9)" }}
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div className="min-h-screen pb-20 font-sans" style={{ background: C.bg, color: C.text }}>
+      <StoreNavbar />
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        <div className="flex items-center justify-between">
           <Link
             href="/shop"
-            className="flex items-center gap-2 text-sm font-semibold hover:opacity-70"
-            style={{ color: C.textSecondary }}
+            className="flex items-center gap-2 text-xs font-semibold text-[#5A5F6B] hover:text-[#2D5A3D] transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to Shop
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Shop
           </Link>
-          <div className="flex items-center gap-2">
-            <User size={18} style={{ color: C.primary }} />
-            <span className="font-semibold">My Account</span>
-          </div>
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#2D5A3D]">
+            Member Profile & Settings
+          </span>
         </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         <div className="flex flex-wrap gap-3">
+          <Link href="/shop/dashboard">
+            <Button variant="premium" className="rounded-xl font-semibold">
+              <Package className="w-4 h-4 mr-2" /> My Dashboard
+            </Button>
+          </Link>
           <Link href="/shop/orders">
             <Button variant="outline" className="rounded-xl">
               <Package className="w-4 h-4 mr-2" /> My Orders
@@ -280,6 +306,40 @@ export default function AccountPage() {
                     value={profile.phone}
                     onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                     placeholder="+977-98XXXXXXXX"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none input-focus-glow"
+                    style={{ border: `1px solid ${C.border}`, background: "#fff", color: C.text }}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
+                    Skin Type
+                  </label>
+                  <select
+                    value={profile.skinType}
+                    onChange={(e) => setProfile({ ...profile, skinType: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none input-focus-glow"
+                    style={{ border: `1px solid ${C.border}`, background: "#fff", color: C.text }}
+                  >
+                    <option value="">Select Skin Type</option>
+                    <option value="normal">Normal</option>
+                    <option value="dry">Dry</option>
+                    <option value="oily">Oily</option>
+                    <option value="combination">Combination</option>
+                    <option value="sensitive">Sensitive</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold block mb-1" style={{ color: C.textSecondary }}>
+                    Skin Concerns
+                  </label>
+                  <input
+                    type="text"
+                    value={profile.skinConcerns}
+                    onChange={(e) => setProfile({ ...profile, skinConcerns: e.target.value })}
+                    placeholder="e.g. acne, hyperpigmentation, dryness"
                     className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none input-focus-glow"
                     style={{ border: `1px solid ${C.border}`, background: "#fff", color: C.text }}
                   />

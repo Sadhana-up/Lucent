@@ -40,7 +40,8 @@ export default function SellerProductsPage() {
     try {
       const res = await fetch("/api/seller/products");
       if (res.ok) {
-        setProducts(await res.json());
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data : data?.products || []);
       }
     } catch (err) {
       console.error("Failed to fetch seller products:", err);
@@ -50,7 +51,7 @@ export default function SellerProductsPage() {
   }
 
   async function handleDelete(slug: string) {
-    if (!confirm("Are you sure you want to delete this product?")) return;
+    if (!confirm("Are you sure you want to archive this product? Archived products will be hidden from the shop while preserving order history.")) return;
 
     setDeleting(slug);
     try {
@@ -62,7 +63,7 @@ export default function SellerProductsPage() {
         setProducts(products.filter((p) => p.slug !== slug));
       }
     } catch (err) {
-      console.error("Failed to delete product:", err);
+      console.error("Failed to archive product:", err);
     } finally {
       setDeleting(null);
     }
@@ -70,12 +71,20 @@ export default function SellerProductsPage() {
 
   const filteredProducts = products.filter((p) => {
     const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === "ALL" || p.status === statusFilter;
+    const isOutOfStock = p.status === "OUT_OF_STOCK" || (Number(p.stock) || 0) <= 0;
+    let matchesStatus = true;
+    if (statusFilter === "OUT_OF_STOCK") {
+      matchesStatus = isOutOfStock;
+    } else if (statusFilter === "ACTIVE") {
+      matchesStatus = p.status === "ACTIVE" && !isOutOfStock;
+    } else if (statusFilter === "DRAFT") {
+      matchesStatus = p.status === "DRAFT";
+    }
     return matchesSearch && matchesStatus;
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6 sm:p-8">
       {/* Header */}
       <div
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 animate-fade-in"
@@ -329,32 +338,43 @@ export default function SellerProductsPage() {
                           </span>
                         )}
                       </td>
-                      <td
-                        className="p-4 text-xs font-semibold"
-                        style={{ color: C.textSecondary }}
-                      >
-                        {product.stock} units
+                      <td className="p-4">
+                        {Number(product.stock) <= 0 ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                            Out of Stock (0)
+                          </span>
+                        ) : Number(product.stock) < 5 ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                            ⚠ Low Stock ({product.stock} left)
+                          </span>
+                        ) : (
+                          <span className="text-xs font-medium text-[#1A1D21]">
+                            {product.stock} units
+                          </span>
+                        )}
                       </td>
                       <td className="p-4">
-                        <span
-                          className="px-2.5 py-1 rounded-full text-xs font-semibold"
-                          style={{
-                            background:
-                              product.status === "ACTIVE"
-                                ? "rgba(45, 90, 61, 0.08)"
-                                : product.status === "DRAFT"
-                                ? C.bgWarm
-                                : C.accentGhost,
-                            color:
-                              product.status === "ACTIVE"
-                                ? C.primary
-                                : product.status === "DRAFT"
-                                ? C.textSecondary
-                                : C.accent,
-                          }}
-                        >
-                          {product.status}
-                        </span>
+                        {Number(product.stock) <= 0 || product.status === "OUT_OF_STOCK" ? (
+                          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                            OUT OF STOCK
+                          </span>
+                        ) : (
+                          <span
+                            className="px-2.5 py-1 rounded-full text-xs font-semibold"
+                            style={{
+                              background:
+                                product.status === "ACTIVE"
+                                  ? "rgba(45, 90, 61, 0.08)"
+                                  : C.bgWarm,
+                              color:
+                                product.status === "ACTIVE"
+                                  ? C.primary
+                                  : C.textSecondary,
+                            }}
+                          >
+                            {product.status}
+                          </span>
+                        )}
                       </td>
                       <td className="p-4 text-right">
                         <div className="flex items-center justify-end gap-1">
@@ -386,7 +406,7 @@ export default function SellerProductsPage() {
                             disabled={deleting === product.slug}
                             className="p-2 rounded-lg transition-all duration-200 hover:bg-red-50 disabled:opacity-50"
                             style={{ color: "#b54a4a" }}
-                            title="Delete Product"
+                            title="Archive Product"
                           >
                             {deleting === product.slug ? (
                               <div

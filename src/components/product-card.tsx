@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useState, type MouseEvent } from "react";
 import { StarRating } from "./star-rating";
-import { Store, CheckCircle2 } from "lucide-react";
+import { Store, CheckCircle2, Heart } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 const C = {
@@ -44,9 +45,35 @@ export interface ProductCardProps {
     avgRating?: number | null;
     reviewCount?: number;
   };
+  wishlisted?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, wishlisted = false }: ProductCardProps) {
+  const [isWishlisted, setIsWishlisted] = useState(wishlisted);
+  const [toggling, setToggling] = useState(false);
+
+  const toggleWishlist = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (toggling) return;
+    setToggling(true);
+    try {
+      const res = await fetch("/api/wishlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product.id }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setIsWishlisted(data.wishlisted === true);
+      }
+    } catch (err) {
+      console.error("Failed to update wishlist:", err);
+    } finally {
+      setToggling(false);
+    }
+  };
+
   const primaryImage =
     product.images.find((img) => img.isPrimary)?.url ||
     product.images[0]?.url ||
@@ -99,6 +126,18 @@ export function ProductCard({ product }: ProductCardProps) {
             SALE
           </span>
         )}
+
+        <button
+          type="button"
+          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          aria-pressed={isWishlisted}
+          disabled={toggling}
+          onClick={toggleWishlist}
+          className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-colors"
+          style={{ background: "rgba(255,255,255,0.9)", color: isWishlisted ? "#E11D48" : C.textSecondary }}
+        >
+          <Heart size={15} fill={isWishlisted ? "currentColor" : "none"} />
+        </button>
 
         {product.skinType && (
           <span

@@ -95,9 +95,10 @@ export default function SellerDashboard() {
         }
 
         if (productsRes.ok) {
-          const prods = await productsRes.json();
+          const prodData = await productsRes.json();
+          const prods = Array.isArray(prodData) ? prodData : prodData?.products || [];
           setProducts(prods.slice(0, 5));
-          setStats((previous) => ({ ...previous, products: prods.length }));
+          setStats((previous) => ({ ...previous, products: prodData.total ?? prods.length }));
         }
       } catch (err) {
         console.error("Failed to load dashboard:", err);
@@ -144,30 +145,49 @@ export default function SellerDashboard() {
       icon: ShoppingBag,
       change: stats.monthOrders > 0 ? stats.monthOrders.toString() : "",
     },
-    { label: "Active Products", value: stats.products.toString(), icon: Package, change: "" },
+    {
+      label: "Active Products",
+      value: stats.products.toString(),
+      icon: Package,
+      change: "",
+      href: "/seller/products",
+    },
     { label: "Store Status", value: "Active", icon: TrendingUp, change: "" },
   ];
 
   return (
     <div className="flex-1 p-6 sm:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>
-            Dashboard
-          </h1>
-          <p className="text-sm mt-1" style={{ color: C.textSecondary }}>
-            Welcome back, {storeName || session?.user?.name || "Seller"}
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b" style={{ borderColor: C.borderLight }}>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight" style={{ color: C.text }}>
+              Seller Dashboard
+            </h1>
+            <p className="text-sm mt-1" style={{ color: C.textSecondary }}>
+              Welcome back, <span className="font-semibold">{storeName || session?.user?.name || "Artisan"}</span>
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/">
+              <Button variant="outline" size="sm" className="rounded-xl text-xs font-semibold">
+                ← Marketplace Home
+              </Button>
+            </Link>
+            <Link href="/seller/products/new">
+              <Button size="sm" className="rounded-xl text-xs font-semibold text-white" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
+                <PlusCircle size={14} className="mr-1.5" /> Add Product
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {metricCards.map((metric, i) => {
             const Icon = metric.icon;
-            return (
+            const cardContent = (
               <div
-                key={metric.label}
-                className="rounded-2xl p-5 hover-lift animate-fade-in-up opacity-0"
+                className="rounded-2xl p-5 hover-lift animate-fade-in-up opacity-0 block transition-all h-full"
                 style={{
                   background: "rgba(255,255,255,0.72)",
                   backdropFilter: "blur(16px) saturate(180%)",
@@ -193,7 +213,20 @@ export default function SellerDashboard() {
                     {metric.change} this month
                   </p>
                 )}
+                {metric.href && (
+                  <span className="text-[11px] font-medium text-emerald-700 mt-2 block">
+                    Manage catalog →
+                  </span>
+                )}
               </div>
+            );
+
+            return metric.href ? (
+              <Link key={metric.label} href={metric.href} className="block">
+                {cardContent}
+              </Link>
+            ) : (
+              <div key={metric.label}>{cardContent}</div>
             );
           })}
         </div>
@@ -264,7 +297,12 @@ export default function SellerDashboard() {
             }}
           >
             <div className="p-5 flex items-center justify-between" style={{ borderBottom: `1px solid ${C.borderLight}` }}>
-              <h3 className="text-sm font-semibold" style={{ color: C.text }}>Products</h3>
+              <div className="flex items-center gap-3">
+                <h3 className="text-sm font-semibold" style={{ color: C.text }}>Product Catalog</h3>
+                <Link href="/seller/products" className="text-xs font-semibold transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
+                  View all
+                </Link>
+              </div>
               <Link href="/seller/products/new" className="text-xs font-semibold flex items-center gap-1 transition-colors duration-200 hover:opacity-70" style={{ color: C.primary }}>
                 <PlusCircle size={12} /> Add new
               </Link>
@@ -282,7 +320,11 @@ export default function SellerDashboard() {
               ) : (
                 <div className="space-y-3">
                   {products.map((product) => (
-                    <div key={product.id} className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200">
+                    <Link
+                      key={product.id}
+                      href={`/seller/products/${product.id}/edit`}
+                      className="flex items-center justify-between p-3 rounded-xl transition-colors duration-200 hover:bg-[rgba(45,90,61,0.04)] block"
+                    >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden" style={{ background: C.bgWarm }}>
                           {product.images?.[0] && (
@@ -291,7 +333,7 @@ export default function SellerDashboard() {
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold truncate" style={{ color: C.text }}>{product.title}</p>
+                          <p className="text-sm font-semibold truncate hover:text-emerald-800" style={{ color: C.text }}>{product.title}</p>
                           <p className="text-xs" style={{ color: C.textMuted }}>{formatCurrency(product.price ?? 0)}</p>
                         </div>
                       </div>
@@ -304,7 +346,7 @@ export default function SellerDashboard() {
                       >
                         {product.status}
                       </span>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               )}

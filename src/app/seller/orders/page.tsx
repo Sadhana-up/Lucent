@@ -74,7 +74,8 @@ export default function SellerOrdersPage() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error ?? "Failed to load orders");
       }
-      setOrders(await res.json());
+      const data = await res.json();
+      setOrders(Array.isArray(data) ? data : data?.orders || []);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load orders");
@@ -157,7 +158,7 @@ export default function SellerOrdersPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6 sm:p-8">
       <div
         className="pb-6 animate-fade-in"
         style={{ borderBottom: `1px solid ${C.border}` }}

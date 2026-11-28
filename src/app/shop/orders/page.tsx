@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Package, Leaf, Clock, CheckCircle, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { StoreNavbar } from "@/components/store-navbar";
 
 const C = {
   primary: "#2D5A3D",
@@ -36,7 +37,7 @@ export default function OrdersPage() {
   const fetchOrders = () => {
     fetch("/api/orders")
       .then((res) => res.json())
-      .then((data) => setOrders(Array.isArray(data) ? data : []))
+      .then((data) => setOrders(Array.isArray(data) ? data : data?.orders || []))
       .catch(() => setOrders([]))
       .finally(() => setLoading(false));
   };
@@ -52,7 +53,7 @@ export default function OrdersPage() {
       const res = await fetch(`/api/orders/${orderId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "CANCELLED" }),
+        body: JSON.stringify({ action: "cancel", reason: "Cancelled by customer" }),
       });
       if (res.ok) {
         setOrders((prev) =>
@@ -67,23 +68,16 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: C.bg }}>
-      <header className="sticky top-0 z-40 backdrop-blur-xl" style={{ borderBottom: `1px solid ${C.border}`, background: "rgba(250, 251, 252, 0.85)" }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
-          <Link href="/shop" className="flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-70" style={{ color: C.primary }}>
-            <ArrowLeft size={16} />
-            Shop
-          </Link>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: C.primary }}>
-              <Leaf size={14} className="text-white" />
-            </div>
-            <span className="text-lg font-serif font-semibold" style={{ color: C.text }}>My Orders</span>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen pb-20" style={{ background: C.bg }}>
+      <StoreNavbar />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-serif font-bold text-[#1A1D21]">My Orders & Tracking</h1>
+            <p className="text-xs text-[#8C8C85] mt-0.5">Track real-time status and view details of your botanical formulations</p>
+          </div>
+        </div>
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="w-8 h-8 border-4 rounded-full animate-spin" style={{ borderColor: C.border, borderTopColor: C.primary }} />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
+import { ImpersonationBanner } from "@/components/impersonation-banner";
 import {
   SITE_DESCRIPTION,
   SITE_KEYWORDS,
@@ -64,6 +65,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" style={{ background: "#FAF6F0" }}>
         {children}
+        <ImpersonationBanner />
       </body>
     </html>
   );
