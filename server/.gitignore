@@ -20,4 +20,8 @@ dist/
 .DS_Store
 
 #logs
-*.log      
+*.log
+
+# ADK session persistence (runtime artifacts)
+artifacts/
+*.db      
