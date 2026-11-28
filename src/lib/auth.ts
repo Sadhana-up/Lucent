@@ -143,11 +143,6 @@ export const auth = betterAuth({
         required: false,
         defaultValue: "user",
       },
-      initialRole: {
-        type: "string",
-        required: false,
-        defaultValue: "user",
-      },
       skinType: {
         type: "string", // oily, dry, combination, sensitive, normal
         required: false,
@@ -186,11 +181,8 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user: { id: string; [key: string]: unknown }) => {
-          const initialRole = user.initialRole;
-          if (initialRole && typeof initialRole === "string" && initialRole !== "user") {
-            return { data: { ...user, role: initialRole } };
-          }
-          return { data: user };
+          // Security: all new users start as "customer"; roles change only via admin APIs.
+          return { data: { ...user, role: "customer" } };
         },
       },
     },

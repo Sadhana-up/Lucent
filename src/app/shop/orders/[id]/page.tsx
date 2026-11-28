@@ -41,7 +41,7 @@ export default async function OrderDetailPage({ params }: Props) {
     status: order.status,
     paymentStatus: order.paymentStatus,
     refundStatus: order.refundStatus,
-    totalAmount: order.totalAmount,
+    totalAmount: Number(order.totalAmount),
     shippingAddress: order.shippingAddress,
     contactPhone: order.contactPhone,
     notes: order.notes,
@@ -58,7 +58,7 @@ export default async function OrderDetailPage({ params }: Props) {
     items: order.items.map((item) => ({
       id: item.id,
       quantity: item.quantity,
-      price: item.price,
+      price: Number(item.price),
       product: {
         title: item.product.title,
         slug: item.product.slug,

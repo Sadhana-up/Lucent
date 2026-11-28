@@ -35,8 +35,7 @@ export default function CartScreen() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const shippingFee = subtotal > 2000 ? 0 : 150;
-  const grandTotal = subtotal + shippingFee;
+  const grandTotal = subtotal;
 
   const handlePlaceOrder = async () => {
     setErrorMessage('');
@@ -122,9 +121,11 @@ export default function CartScreen() {
             </Pressable>
           </View>
 
-          <Text style={s.itemSeller} numberOfLines={1}>
-            {item.sellerName || 'Lucent Formulator'}
-          </Text>
+          {!!item.sellerName && (
+            <Text style={s.itemSeller} numberOfLines={1}>
+              {item.sellerName}
+            </Text>
+          )}
 
           <View style={s.bottomRow}>
             <Text style={s.itemPrice}>{formatCurrency(item.price)}</Text>
@@ -192,17 +193,9 @@ export default function CartScreen() {
                 </View>
 
                 <View style={s.summaryRow}>
-                  <Text style={s.summaryLabel}>Eco Shipping (Nepal)</Text>
-                  <Text style={s.summaryValue}>
-                    {shippingFee === 0 ? 'FREE' : formatCurrency(shippingFee)}
-                  </Text>
+                  <Text style={s.summaryLabel}>Shipping</Text>
+                  <Text style={s.summaryValue}>Calculated at checkout</Text>
                 </View>
-
-                {subtotal <= 2000 && (
-                  <Text style={s.freeShipHint}>
-                    Add {formatCurrency(2000 - subtotal)} more for free delivery!
-                  </Text>
-                )}
 
                 <View style={s.divider} />
 

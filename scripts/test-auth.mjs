@@ -99,14 +99,12 @@ async function runTest(label, userPayload) {
     name: "Test Customer",
     email: "testcustomer@example.com",
     password: "TestPass123!",
-    initialRole: "user",
   });
 
   await runTest("Seller sign-up + sign-in", {
     name: "Test Seller",
     email: "testseller@example.com",
     password: "TestPass123!",
-    initialRole: "seller",
   });
 
   console.log("\n" + blue("=== Done ==="));

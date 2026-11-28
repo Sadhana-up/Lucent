@@ -6,9 +6,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { StoreNavbar } from "@/components/store-navbar";
 import { UserProfileModal } from "@/components/user-profile-modal";
-import { RoutineBuilder } from "@/components/routine-builder";
-import { ConcernsMatrix } from "@/components/concerns-matrix";
 import {
   Camera,
   MessageCircle,
@@ -23,6 +22,10 @@ import {
   Zap,
   ShoppingBag,
   Package,
+  Menu,
+  X as CloseIcon,
+  LayoutDashboard,
+  Sparkles,
 } from "lucide-react";
 
 /* ─── Palette ─── */
@@ -45,10 +48,11 @@ const C = {
 };
 
 const NAV_LINKS = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "What we check", href: "#what-we-check" },
-  { label: "Tools", href: "#tools" },
   { label: "Shop", href: "/shop" },
+  { label: "Apothecaries", href: "/shops" },
+  { label: "AI Consult", href: "/chat" },
+  { label: "How it works", href: "#how-it-works" },
+  { label: "Tools", href: "#tools" },
 ];
 
 /* ─── Data ─── */
@@ -64,7 +68,7 @@ const FEATURES = [
   { icon: FlaskConical, title: "Ingredient Check", desc: "We cross-reference every product against what your skin can actually handle." },
   { icon: Shield, title: "Barrier Watch", desc: "We flag when your routine is wearing down your skin barrier — before you notice." },
   { icon: Zap, title: "Fast Answers", desc: "No waiting rooms. Upload, chat, get your routine. Usually under five minutes." },
-  { icon: Sliders, title: "Routine Builder", desc: "Morning and evening steps laid out clearly. Swap products, adjust order." },
+  { icon: Sliders, title: "Routine Builder", desc: "Morning and evening steps laid out clearly. Swap products, adjust order.", href: "/shop/routine" },
   { icon: Layers, title: "Product Layering", desc: "See which products play well together and which ones cancel each other out." },
 ];
 
@@ -73,7 +77,7 @@ export function HomeClient() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"analyzer" | "builder" | "matrix">("analyzer");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session } = authClient.useSession();
 
   useEffect(() => {
@@ -94,101 +98,7 @@ export function HomeClient() {
     <div className="min-h-screen font-sans antialiased" style={{ background: C.bg, color: C.text }}>
 
       {/* ── Navbar ── */}
-      <header
-        className="sticky top-0 z-40 transition-all duration-300"
-        style={{
-          background: scrolled ? "rgba(250, 246, 240, 0.9)" : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-          borderBottom: scrolled ? `1px solid ${C.borderLight}` : "1px solid transparent",
-        }}
-      >
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div
-            className="flex items-center gap-2.5 cursor-pointer"
-            onClick={() => router.push("/")}
-          >
-            <img
-              src="/logo.jpeg"
-              alt="Lucent"
-              className="h-8 w-auto object-contain"
-            />
-            <span className="font-serif text-xl font-semibold" style={{ color: C.primary }}>
-              Lucene AI Nepal
-            </span>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="text-sm transition-colors duration-200"
-                style={{ color: C.textSecondary }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = C.primary)}
-                onMouseLeave={(e) => (e.currentTarget.style.color = C.textSecondary)}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            {session ? (
-              <div className="flex items-center gap-2">
-                {(session.user as { role?: string }).role !== "seller" && (session.user as { role?: string }).role !== "admin" && (
-                  <>
-                    <button
-                      onClick={() => router.push("/shop/cart")}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                      style={{ background: C.primaryGhost, color: C.primary, border: `1px solid ${C.border}` }}
-                    >
-                      <ShoppingBag size={14} />
-                    </button>
-                    <button
-                      onClick={() => router.push("/shop/orders")}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                      style={{ background: C.primaryGhost, color: C.primary, border: `1px solid ${C.border}` }}
-                    >
-                      <Package size={14} />
-                    </button>
-                  </>
-                )}
-                <button
-                  onClick={() => setProfileOpen(true)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
-                  style={{ background: C.primaryGhost, color: C.primary, border: `1px solid ${C.border}` }}
-                >
-                  {session.user.image ? (
-                    <img src={session.user.image} alt="" className="w-8 h-8 rounded-full object-cover" />
-                  ) : (
-                    session.user.name?.charAt(0).toUpperCase()
-                  )}
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-sm"
-                  style={{ color: C.textSecondary }}
-                  onClick={() => router.push("/sign-in")}
-                >
-                  Sign in
-                </Button>
-                <Button
-                  size="sm"
-                  className="text-sm font-medium text-white"
-                  style={{ background: C.primary }}
-                  onClick={() => router.push("/sign-up")}
-                >
-                  Get started
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+      <StoreNavbar />
 
       {/* ── Hero ── */}
       <section className="max-w-5xl mx-auto px-6 pt-20 pb-24 md:pt-32 md:pb-32">
@@ -232,24 +142,50 @@ export function HomeClient() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-3"
           >
-            <Button
-              size="lg"
-              className="text-sm font-medium text-white px-8 h-12"
-              style={{ background: C.primary }}
-              onClick={() => router.push("/chat")}
-            >
-              Start my skin consultation
-              <ArrowRight size={16} className="ml-2" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-sm h-12 px-8"
-              style={{ borderColor: C.border, color: C.textSecondary }}
-              onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              See how it works
-            </Button>
+            {session ? (
+              <>
+                <Button
+                  size="lg"
+                  className="text-sm font-semibold text-white px-8 h-12 rounded-xl shadow-sm"
+                  style={{ background: C.primary }}
+                  onClick={() => router.push("/shop/dashboard")}
+                >
+                  <LayoutDashboard size={16} className="mr-2" />
+                  Go to My Dashboard
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-sm h-12 px-8 rounded-xl"
+                  style={{ borderColor: C.border, color: C.textSecondary }}
+                  onClick={() => router.push("/chat")}
+                >
+                  <Sparkles size={16} className="mr-2 text-emerald-700" />
+                  Consult AI Dermatologist
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  size="lg"
+                  className="text-sm font-medium text-white px-8 h-12 rounded-xl"
+                  style={{ background: C.primary }}
+                  onClick={() => router.push("/chat")}
+                >
+                  Start my skin consultation
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-sm h-12 px-8 rounded-xl"
+                  style={{ borderColor: C.border, color: C.textSecondary }}
+                  onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  See how it works
+                </Button>
+              </>
+            )}
           </motion.div>
 
           <motion.div
@@ -342,7 +278,9 @@ export function HomeClient() {
                   <div className="mb-3">
                     <Icon size={18} style={{ color: C.primary }} />
                   </div>
-                  <h3 className="text-sm font-bold mb-1.5" style={{ color: C.text }}>{f.title}</h3>
+                  <h3 className="text-sm font-bold mb-1.5" style={{ color: C.text }}>
+                    {"href" in f && f.href ? <Link href={f.href as string} className="hover:underline">{f.title}</Link> : f.title}
+                  </h3>
                   <p className="text-sm leading-relaxed" style={{ color: C.textSecondary }}>{f.desc}</p>
                 </motion.div>
               );
@@ -365,38 +303,9 @@ export function HomeClient() {
             Explore the tools.
           </h2>
 
-          <div className="flex gap-2 mb-8">
-            {[
-              { id: "analyzer", label: "Skin Analysis", icon: Camera },
-              { id: "builder", label: "Routine Builder", icon: Sliders },
-              { id: "matrix", label: "Ingredients", icon: Layers },
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200"
-                  style={{
-                    background: isActive ? C.primary : "transparent",
-                    color: isActive ? "#fff" : C.textSecondary,
-                    border: `1px solid ${isActive ? C.primary : C.border}`,
-                  }}
-                >
-                  <Icon size={13} />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="min-h-[360px]">
-            {activeTab === "builder" && <RoutineBuilder />}
-            {activeTab === "matrix" && <ConcernsMatrix />}
-            {activeTab === "analyzer" && (
-              <div
-                className="p-10 sm:p-14 rounded-2xl text-center max-w-2xl mx-auto"
+          <div className="grid md:grid-cols-2 gap-6">
+            <div
+                className="p-10 sm:p-14 rounded-2xl text-center"
                 style={{ background: "rgba(255,255,255,0.6)", border: `1px solid ${C.borderLight}` }}
               >
                 <Camera size={28} style={{ color: C.primary }} className="mx-auto mb-5" />
@@ -416,8 +325,28 @@ export function HomeClient() {
                   Get started free
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
-              </div>
-            )}
+            </div>
+            <div
+                className="p-10 sm:p-14 rounded-2xl text-center"
+                style={{ background: "rgba(255,255,255,0.6)", border: `1px solid ${C.borderLight}` }}
+              >
+                <Sliders size={28} style={{ color: C.primary }} className="mx-auto mb-5" />
+                <h3 className="text-xl font-serif font-bold mb-3" style={{ color: C.text }}>
+                  Daily Routine Builder
+                </h3>
+                <p className="text-sm max-w-md mx-auto mb-8 leading-relaxed" style={{ color: C.textSecondary }}>
+                  Build a morning and evening routine from real products, check ingredient conflicts, and track your daily progress.
+                </p>
+                <Button
+                  size="lg"
+                  className="text-sm font-medium text-white px-8"
+                  style={{ background: C.primary }}
+                  onClick={() => router.push(session?.user ? "/shop/routine" : "/sign-in?callbackUrl=/shop/routine")}
+                >
+                  Open Routine Builder
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -542,12 +471,16 @@ export function HomeClient() {
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: C.text }}>Product</h4>
               <ul className="space-y-2">
-                {["Skin Analysis", "Skincare Chat", "Routine Builder", "Ingredient Checker"].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-xs transition-colors duration-200" style={{ color: C.textSecondary }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = C.primary)}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = C.textSecondary)}
-                    >{item}</a>
+                {[
+                  { label: "Skin Analysis", href: "/chat" },
+                  { label: "Skincare Chat", href: "/chat" },
+                  { label: "Routine Builder", href: "/shop/routine" },
+                  { label: "Ingredient Checker", href: "/chat" },
+                ].map((item) => (
+                  <li key={item.label}>
+                    <Link href={item.href} className="text-xs transition-colors duration-200 hover:underline" style={{ color: C.textSecondary }}>
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

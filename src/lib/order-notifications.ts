@@ -49,7 +49,7 @@ export async function notifySellersForOrder(orderId: string): Promise<void> {
     group.items.push({
       title: item.product.title,
       quantity: item.quantity,
-      price: item.price,
+      price: Number(item.price),
     });
     groups.set(seller.id, group);
   }
@@ -100,9 +100,9 @@ export async function notifyBuyerOrderConfirmed(orderId: string): Promise<void> 
     items: order.items.map((item) => ({
       title: item.product.title,
       quantity: item.quantity,
-      price: item.price,
+      price: Number(item.price),
     })),
-    totalAmount: order.totalAmount,
+    totalAmount: Number(order.totalAmount),
     shippingAddress: order.shippingAddress,
     contactPhone: order.contactPhone,
     paidAt: order.paidAt ?? new Date(),

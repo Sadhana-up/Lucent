@@ -13,6 +13,9 @@ import { SplashDoneContext } from '../features/splash/splashState';
 import { BallTransitionProvider } from '../components/lucent/transition';
 import { CartProvider } from '../lib/cart-context';
 
+// Expo Router SDK 58 uses an ErrorBoundary export, not a +error.tsx route.
+export { default as ErrorBoundary } from '../components/lucent/error-boundary';
+
 // Keep the native splash up until fonts are ready; fade it into our first frame.
 SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({ duration: 220, fade: true });
@@ -39,9 +42,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (!fontsLoaded) return;
     void SplashScreen.hideAsync();
-    // Simulate session/data load; the pH capsule holds at 94% until this fires.
-    const id = setTimeout(() => setAppReady(true), 250);
-    return () => clearTimeout(id);
+    setAppReady(true);
   }, [fontsLoaded]);
 
   if (!fontsLoaded || motion === null) return (
@@ -71,7 +72,7 @@ export default function RootLayout() {
             <LucentSplash
               reduceMotion={motion}
               ready={appReady}
-              minDuration={5600}
+              minDuration={1500}
               skippable
               onDone={() => {
                 consumedThisColdStart = true;
