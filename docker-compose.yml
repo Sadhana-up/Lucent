@@ -29,6 +29,8 @@ services:
       - RATE_LIMIT_WINDOW=${RATE_LIMIT_WINDOW:-60}
       - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-30}
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+    volumes:
+      - artifacts_data:/app/artifacts
     depends_on:
       db:
         condition: service_healthy
@@ -94,3 +96,4 @@ services:
 
 volumes:
   postgres_data:
+  artifacts_data:

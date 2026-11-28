@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ChevronDown, Sparkles, ArrowDown, Copy, Check, Send, ImagePlus, X, Leaf } from "lucide-react";
+import { ChevronDown, Sparkles, ArrowDown, Copy, Check, Send, ImagePlus, X, Leaf, Menu, Plus, Trash2, MessageSquare } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { StoreNavbar } from "@/components/store-navbar";
 
 const API_BASE = process.env.NEXT_PUBLIC_CHAT_API_BASE ?? "/api/chat";
+const SESSIONS_API_BASE = "/api/chat/sessions";
 
 type Role = "user" | "assistant";
 
@@ -29,6 +30,13 @@ type UploadedImage = {
   preview: string;
   base64: string;
   mimeType: string;
+};
+
+type SessionSummary = {
+  id: string;
+  title: string;
+  preview: string;
+  last_update_time: number;
 };
 
 /* ─── Design tokens ─── */
@@ -68,6 +76,19 @@ function parseSSE(buffer: string): { events: any[]; rest: string } {
     }
   }
   return { events, rest };
+}
+
+function formatRelativeTime(ts: number): string {
+  if (!ts) return "";
+  const diff = Date.now() - ts * 1000;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return new Date(ts * 1000).toLocaleDateString();
 }
 
 /* ─── Bouncing dot loader ─── */
@@ -390,6 +411,11 @@ export default function ChatPage() {
   const [showScrollBottom, setShowScrollBottom] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
 
+  const [sessions, setSessions] = useState<SessionSummary[]>([]);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -434,6 +460,88 @@ export default function ChatPage() {
       router.replace("/sign-in?callbackUrl=/chat");
     }
   }, [session, isPending, router]);
+
+  const refreshSessions = useCallback(async () => {
+    try {
+      const res = await fetch(SESSIONS_API_BASE, { method: "GET" });
+      if (!res.ok) return;
+      const data = await res.json();
+      setSessions(data.sessions ?? []);
+    } catch {
+      /* ignore transient failures */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (session) void refreshSessions();
+  }, [session, refreshSessions]);
+
+  const newChat = useCallback(() => {
+    sessionIdRef.current = null;
+    setActiveSessionId(null);
+    setMessages([]);
+    setUploadedImages([]);
+    setSidebarOpen(false);
+  }, []);
+
+  const selectSession = useCallback(
+    async (id: string) => {
+      if (busy) return;
+      setSidebarOpen(false);
+      if (id === activeSessionId && sessionIdRef.current === id) return;
+
+      setLoadingHistory(true);
+      try {
+        const res = await fetch(`${SESSIONS_API_BASE}/${encodeURIComponent(id)}`, {
+          method: "GET",
+        });
+        if (!res.ok) throw new Error("failed to load session");
+        const data = await res.json();
+        const msgs: Message[] = (data.messages ?? []).map((m: { role: Role; content?: string; reasoning?: string }) => ({
+          role: m.role,
+          content: m.content ?? "",
+          reasoning: m.reasoning ?? "",
+          streaming: false,
+          reasoningActive: false,
+          thinkingStartedAt: null,
+          thinkingEndedAt: null,
+          images: undefined,
+        }));
+        sessionIdRef.current = id;
+        setActiveSessionId(id);
+        setMessages(msgs);
+        setUploadedImages([]);
+        pinnedRef.current = true;
+        requestAnimationFrame(() => {
+          const el = scrollRef.current;
+          if (el) el.scrollTop = el.scrollHeight;
+        });
+      } catch {
+        /* ignore */
+      } finally {
+        setLoadingHistory(false);
+      }
+    },
+    [busy, activeSessionId]
+  );
+
+  const deleteSession = useCallback(
+    async (id: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      try {
+        await fetch(`${SESSIONS_API_BASE}/${encodeURIComponent(id)}`, {
+          method: "DELETE",
+        });
+      } catch {
+        /* ignore */
+      }
+      setSessions((prev) => prev.filter((s) => s.id !== id));
+      if (sessionIdRef.current === id) {
+        newChat();
+      }
+    },
+    [newChat]
+  );
 
   const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -519,6 +627,7 @@ export default function ChatPage() {
     });
 
     const idx = next.length - 1;
+    const wasNewSession = sessionIdRef.current == null;
 
     try {
       const res = await fetch(API_BASE, {
@@ -547,6 +656,7 @@ export default function ChatPage() {
         for (const ev of events) {
           if (ev.type === "session") {
             sessionIdRef.current = ev.session_id;
+            setActiveSessionId(ev.session_id);
           } else if (ev.type === "reasoning") {
             setMessages((prev) =>
               prev.map((m, i) => {
@@ -592,8 +702,9 @@ export default function ChatPage() {
         })
       );
       setBusy(false);
+      if (wasNewSession) void refreshSessions();
     }
-  }, [input, busy, messages, uploadedImages, session, router]);
+  }, [input, busy, messages, uploadedImages, session, router, refreshSessions]);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -616,7 +727,8 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden" style={{ background: C.bg }}>
+
+    <div className="flex h-screen w-full overflow-hidden" style={{ background: C.bg }}>
       <StoreNavbar />
       <style>{`
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -626,7 +738,7 @@ export default function ChatPage() {
       `}</style>
 
       {isPending && (
-        <div className="flex h-full items-center justify-center">
+        <div className="flex h-full flex-1 items-center justify-center">
           <div className="flex flex-col items-center gap-3 animate-fade-in">
             <div className="h-8 w-8 animate-spin rounded-full border-2" style={{ borderColor: C.border, borderTopColor: C.primary }} />
             <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>Verifying session...</span>
@@ -636,25 +748,113 @@ export default function ChatPage() {
 
       {!isPending && session && (
         <>
-          {/* Header — glass-strong */}
-          <div
-            className="flex items-center justify-between px-4 py-3 backdrop-blur-xl sm:px-6 sm:py-[18px]"
-            style={{
-              borderBottom: `1px solid ${C.border}`,
-              background: "rgba(250, 251, 252, 0.85)",
-              boxShadow: `0 1px 3px rgba(45, 90, 61, 0.04), inset 0 1px 0 rgba(255,255,255,0.6)`,
-            }}
+          {/* Session history sidebar */}
+          <aside
+            className={`fixed inset-y-0 left-0 z-40 flex w-[280px] flex-none flex-col transition-transform duration-300 md:static md:z-auto md:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+            style={{ background: C.bgWarm, borderRight: `1px solid ${C.border}` }}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
-                <Leaf size={14} className="text-white" />
+            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: `1px solid ${C.border}` }}>
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
+                  <Leaf size={13} className="text-white" />
+                </div>
+                <span className="text-sm font-medium" style={{ color: C.text }}>Lucent</span>
               </div>
-              <div>
-                <span className="text-sm font-medium" style={{ color: C.text }}>AI Skincare Advisor</span>
-                <span className="text-[10px] font-semibold block" style={{ color: C.textMuted }}>Ask me anything about skincare</span>
+              <button onClick={() => setSidebarOpen(false)} className="rounded p-1 transition-colors hover:bg-black/5 md:hidden" style={{ color: C.textMuted }} title="Close">
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="p-3">
+              <button
+                onClick={newChat}
+                className="flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-[13px] font-medium transition-all duration-200 hover:opacity-90"
+                style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)", color: "#fff" }}
+              >
+                <Plus size={15} />
+                New chat
+              </button>
+            </div>
+
+            <div className="custom-scroll flex-1 overflow-y-auto px-3 pb-3">
+              <span className="block px-1 pb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: C.textMuted }}>
+                Chat history
+              </span>
+              {sessions.length === 0 ? (
+                <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
+                  <MessageSquare size={18} style={{ color: C.textMuted }} />
+                  <span className="text-[12px] font-light" style={{ color: C.textMuted }}>No conversations yet</span>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  {sessions.map((s) => (
+                    <div
+                      key={s.id}
+                      onClick={() => selectSession(s.id)}
+                      className="group flex cursor-pointer items-start gap-2 rounded-lg px-3 py-2.5 transition-colors duration-150"
+                      style={{ background: activeSessionId === s.id ? C.primaryGhost : "transparent" }}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-[13px] font-medium" style={{ color: activeSessionId === s.id ? C.primary : C.text }}>
+                          {s.title}
+                        </div>
+                        {s.preview && (
+                          <div className="mt-0.5 truncate text-[11.5px] font-light" style={{ color: C.textMuted }}>
+                            {s.preview}
+                          </div>
+                        )}
+                        <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-widest" style={{ color: C.textMuted }}>
+                          {formatRelativeTime(s.last_update_time)}
+                        </div>
+                      </div>
+                      <button
+                        onClick={(e) => deleteSession(s.id, e)}
+                        className="mt-0.5 flex-none rounded p-1 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                        style={{ color: C.textMuted }}
+                        title="Delete chat"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </aside>
+
+          {sidebarOpen && (
+            <div className="fixed inset-0 z-30 bg-black/30 md:hidden" onClick={() => setSidebarOpen(false)} />
+          )}
+
+          {/* Main column */}
+          <div className="flex min-w-0 flex-1 flex-col">
+            {/* Header — glass-strong */}
+            <div
+              className="flex items-center justify-between px-4 py-3 backdrop-blur-xl sm:px-6 sm:py-[18px]"
+              style={{
+                borderBottom: `1px solid ${C.border}`,
+                background: "rgba(250, 251, 252, 0.85)",
+                boxShadow: `0 1px 3px rgba(45, 90, 61, 0.04), inset 0 1px 0 rgba(255,255,255,0.6)`,
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-black/5 md:hidden"
+                  style={{ color: C.textSecondary }}
+                  title="Chat history"
+                >
+                  <Menu size={16} />
+                </button>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #2D5A3D, #3D7A52)" }}>
+                  <Leaf size={14} className="text-white" />
+                </div>
+                <div>
+                  <span className="text-sm font-medium" style={{ color: C.text }}>AI Skincare Advisor</span>
+                  <span className="text-[10px] font-semibold block" style={{ color: C.textMuted }}>Ask me anything about skincare</span>
+                </div>
               </div>
             </div>
-          </div>
 
           <div className="relative flex min-h-0 flex-1 flex-col">
             {/* Chat area — subtle ambient background */}
@@ -666,7 +866,14 @@ export default function ChatPage() {
               }}
             >
               <div ref={contentRef} className="mx-auto max-w-3xl space-y-8 px-4 py-6 sm:px-6">
-                {messages.length === 0 && (
+                {loadingHistory && (
+                  <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
+                    <div className="h-6 w-6 animate-spin rounded-full border-2" style={{ borderColor: C.border, borderTopColor: C.primary }} />
+                    <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em]" style={{ color: C.textMuted }}>Loading conversation...</span>
+                  </div>
+                )}
+
+                {!loadingHistory && messages.length === 0 && (
                   <div className="flex flex-col items-center justify-center px-4 py-24 text-center">
                     <motion.div
                       initial={{ scale: 0.95, opacity: 0 }}
@@ -707,33 +914,35 @@ export default function ChatPage() {
                   </div>
                 )}
 
-                <AnimatePresence initial={false}>
-                  {messages.map((m, i) =>
-                    m.role === "user" ? (
-                      <UserMessage key={i} content={m.content} images={m.images} />
-                    ) : (
-                      <div key={i} className="group/msg relative">
-                        <AssistantMessage
-                          content={m.content}
-                          reasoning={m.reasoning}
-                          streaming={m.streaming}
-                          reasoningActive={m.reasoningActive}
-                          elapsedMs={m.thinkingStartedAt ? (m.thinkingEndedAt ?? Date.now()) - m.thinkingStartedAt : 0}
-                        />
-                        {!m.streaming && m.content && (
-                          <button
-                            onClick={() => copyMessage(i, m.content)}
-                            className="absolute right-0 top-0 rounded p-1.5 opacity-0 transition-opacity duration-200 hover:opacity-100 group-hover/msg:opacity-100"
-                            style={{ color: C.textMuted }}
-                            title="Copy reply"
-                          >
-                            {copiedIdx === i ? <Check size={12} style={{ color: C.primary }} /> : <Copy size={12} />}
-                          </button>
-                        )}
-                      </div>
-                    )
-                  )}
-                </AnimatePresence>
+                {!loadingHistory && (
+                  <AnimatePresence initial={false}>
+                    {messages.map((m, i) =>
+                      m.role === "user" ? (
+                        <UserMessage key={i} content={m.content} images={m.images} />
+                      ) : (
+                        <div key={i} className="group/msg relative">
+                          <AssistantMessage
+                            content={m.content}
+                            reasoning={m.reasoning}
+                            streaming={m.streaming}
+                            reasoningActive={m.reasoningActive}
+                            elapsedMs={m.thinkingStartedAt ? (m.thinkingEndedAt ?? Date.now()) - m.thinkingStartedAt : 0}
+                          />
+                          {!m.streaming && m.content && (
+                            <button
+                              onClick={() => copyMessage(i, m.content)}
+                              className="absolute right-0 top-0 rounded p-1.5 opacity-0 transition-opacity duration-200 hover:opacity-100 group-hover/msg:opacity-100"
+                              style={{ color: C.textMuted }}
+                              title="Copy reply"
+                            >
+                              {copiedIdx === i ? <Check size={12} style={{ color: C.primary }} /> : <Copy size={12} />}
+                            </button>
+                          )}
+                        </div>
+                      )
+                    )}
+                  </AnimatePresence>
+                )}
               </div>
             </div>
 
@@ -849,6 +1058,7 @@ export default function ChatPage() {
               </span>
               <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em]" style={{ color: C.primary }}>{busy ? "Thinking" : "Ready"}</span>
             </div>
+          </div>
           </div>
         </>
       )}

@@ -8,10 +8,11 @@ import pathlib
 import time
 import warnings
 from collections import defaultdict
+from contextlib import asynccontextmanager
 from typing import AsyncIterator, Optional
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
@@ -19,9 +20,11 @@ from pydantic import BaseModel
 from google.adk.agents.llm_agent import Agent
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.agents.run_config import RunConfig, StreamingMode
+from google.adk.artifacts import FileArtifactService
 from google.adk.models.llm_request import LlmRequest
 from google.adk.models.llm_response import LlmResponse
-from google.adk.runners import InMemoryRunner
+from google.adk.runners import Runner
+from google.adk.sessions.database_session_service import DatabaseSessionService
 from google.adk.skills import load_skill_from_dir
 from google.adk.tools.function_tool import FunctionTool
 from google.adk.tools.skill_toolset import SkillToolset
@@ -183,7 +186,7 @@ async def before_model_callback(
 # ---------------------------------------------------------------------------
 MODEL_NAME = "gemini-3-flash-preview"
 APP_NAME = "web_chat"
-USER_ID = "web-client"  # single-tenant demo; swap for a real user id if you add auth
+DEFAULT_USER_ID = "web-client"  # fallback when a client doesn't supply a user id
 
 # ---------------------------------------------------------------------------
 # Skills — loaded from the skills/ directory next to this file.
@@ -227,13 +230,60 @@ root_agent = Agent(
     ),
 )
 
-# One runner for the process. ADK sessions live inside runner.session_service,
-# keyed by (app_name, user_id, session_id) — this is what gives each browser
-# tab its own persistent conversation without us having to resend history on
-# every request the way the naive "resend full messages[]" approach would.
-runner = InMemoryRunner(agent=root_agent, app_name=APP_NAME)
+# ---------------------------------------------------------------------------
+# Persistent session + artifact storage
+# ---------------------------------------------------------------------------
+# ADK stores conversation history in a "session service". We swap the default
+# in-memory service for a database-backed one so conversations survive API
+# restarts (InMemoryRunner drops everything when the process exits). We reuse
+# the same Postgres instance as the rest of the app, converting the sync
+# `postgresql://` DSN into the psycopg3 async dialect SQLAlchemy needs
+# (`postgresql+psycopg://`). Set ADK_DB_URL to override (e.g. point it at
+# `sqlite+aiosqlite:///./adk_sessions.db` for a zero-dependency dev setup).
+#
+# Images are also persisted to disk (FileArtifactService) instead of memory so
+# an upload referenced by a past turn is still resolvable after a restart.
+ARTIFACTS_DIR = os.getenv(
+    "ARTIFACTS_DIR", str(pathlib.Path(__file__).parent / "artifacts")
+)
 
-app = FastAPI(title="Chat Backend")
+
+def _build_session_db_url() -> str:
+    url = os.getenv("ADK_DB_URL", "").strip()
+    if url:
+        return url
+    url = os.getenv("DATABASE_URL", "").strip()
+    if not url:
+        return "sqlite+aiosqlite:///./adk_sessions.db"
+    for prefix in ("postgresql://", "postgres://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix):]
+    return url
+
+
+pathlib.Path(ARTIFACTS_DIR).mkdir(parents=True, exist_ok=True)
+
+session_service = DatabaseSessionService(_build_session_db_url())
+artifact_service = FileArtifactService(ARTIFACTS_DIR)
+
+# One runner for the process. Sessions (and their full event history) are
+# persisted by session_service and keyed by (app_name, user_id, session_id).
+runner = Runner(
+    agent=root_agent,
+    app_name=APP_NAME,
+    session_service=session_service,
+    artifact_service=artifact_service,
+)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    # Dispose the async DB engine on shutdown so pooled connections close
+    # cleanly instead of being torn down by the process.
+    await session_service.close()
+
+
+app = FastAPI(title="Chat Backend", lifespan=lifespan)
 
 # CORS is wide open here because this service is only ever called
 # server-to-server by the Next.js route.ts proxy, never directly from the
@@ -253,6 +303,7 @@ class ImageData(BaseModel):
 
 class ChatRequest(BaseModel):
     session_id: Optional[str] = None
+    user_id: Optional[str] = None
     message: str
     images: Optional[list[ImageData]] = None  # up to 3 images
 
@@ -261,7 +312,26 @@ def sse(event: dict) -> str:
     return f"data: {json.dumps(event)}\n\n"
 
 
-async def stream_reply(session_id: str, message: str, images: Optional[list[ImageData]] = None) -> AsyncIterator[str]:
+def _derive_title(message: str) -> str:
+    cleaned = " ".join(message.split())
+    if not cleaned:
+        return "New conversation"
+    return cleaned[:80] + ("..." if len(cleaned) > 80 else "")
+
+
+def _derive_preview(message: str) -> str:
+    cleaned = " ".join(message.split())
+    if not cleaned:
+        return ""
+    return cleaned[:140] + ("..." if len(cleaned) > 140 else "")
+
+
+async def stream_reply(
+    user_id: str,
+    session_id: str,
+    message: str,
+    images: Optional[list[ImageData]] = None,
+) -> AsyncIterator[str]:
     # First frame tells the client which session it's now attached to, so it
     # can reuse it on the next turn instead of starting a fresh conversation.
     yield sse({"type": "session", "session_id": session_id})
@@ -277,7 +347,7 @@ async def stream_reply(session_id: str, message: str, images: Optional[list[Imag
             artifact = types.Part.from_bytes(data=image_bytes, mime_type=img.mime_type)
             version = await runner.artifact_service.save_artifact(
                 app_name=APP_NAME,
-                user_id=USER_ID,
+                user_id=user_id,
                 filename=filename,
                 artifact=artifact,
                 session_id=session_id,
@@ -303,9 +373,10 @@ async def stream_reply(session_id: str, message: str, images: Optional[list[Imag
 
     try:
         async for event in runner.run_async(
-            user_id=USER_ID,
+            user_id=user_id,
             session_id=session_id,
             new_message=content,
+            state_delta={"preview": _derive_preview(message)},
             run_config=RunConfig(streaming_mode=StreamingMode.SSE),
         ):
             if not event.content or not event.content.parts:
@@ -357,18 +428,19 @@ async def chat_stream(req: ChatRequest, request: Request):
             },
         )
 
-    print(f"[chat_stream] Request: session_id={req.session_id}, message={req.message[:80]}, images={len(req.images) if req.images else 0}")
+    print(f"[chat_stream] Request: user_id={req.user_id}, session_id={req.session_id}, message={req.message[:80]}, images={len(req.images) if req.images else 0}")
+    user_id = req.user_id or DEFAULT_USER_ID
     session_id = req.session_id
     if not session_id:
         session = await runner.session_service.create_session(
-            app_name=APP_NAME, user_id=USER_ID
+            app_name=APP_NAME, user_id=user_id, state={"title": _derive_title(req.message)}
         )
         session_id = session.id
         print(f"[chat_stream] Created new session: {session_id}")
 
     remaining = _limiter.remaining(ip, RATE_LIMIT_WINDOW, RATE_LIMIT_MAX)
     return StreamingResponse(
-        stream_reply(session_id, req.message, req.images),
+        stream_reply(user_id, session_id, req.message, req.images),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache, no-transform",
@@ -377,6 +449,120 @@ async def chat_stream(req: ChatRequest, request: Request):
             "X-RateLimit-Remaining": str(remaining),
         },
     )
+
+
+# ---------------------------------------------------------------------------
+# Session history endpoints
+# ---------------------------------------------------------------------------
+def _session_to_messages(session) -> list[dict]:
+    """Flatten a persisted ADK session into a UI-friendly message list.
+
+    A single agent turn may be split across several events (thoughts, tool
+    calls, final answer). We merge consecutive agent events into one assistant
+    message, separating ``thought`` parts into reasoning and the rest into the
+    visible answer text.
+    """
+    messages: list[dict] = []
+    reasoning: list[str] = []
+    answer: list[str] = []
+    timestamp: Optional[float] = None
+
+    def flush_assistant() -> None:
+        nonlocal reasoning, answer, timestamp
+        if reasoning or answer:
+            messages.append({
+                "role": "assistant",
+                "content": "".join(answer),
+                "reasoning": "".join(reasoning),
+                "timestamp": timestamp,
+            })
+        reasoning = []
+        answer = []
+        timestamp = None
+
+    for event in session.events:
+        if not event.content or not event.content.parts:
+            continue
+
+        if event.author == "user":
+            flush_assistant()
+            text = "".join(
+                part.text
+                for part in event.content.parts
+                if part.text and not getattr(part, "thought", False)
+            )
+            if text:
+                messages.append({
+                    "role": "user",
+                    "content": text,
+                    "reasoning": "",
+                    "timestamp": event.timestamp,
+                })
+        else:
+            if timestamp is None:
+                timestamp = event.timestamp
+            for part in event.content.parts:
+                if not part.text:
+                    continue
+                if getattr(part, "thought", False):
+                    reasoning.append(part.text)
+                else:
+                    answer.append(part.text)
+
+    flush_assistant()
+    return messages
+
+
+@app.get("/sessions")
+async def list_sessions(request: Request, user_id: str = Query(default=DEFAULT_USER_ID)):
+    _verify_api_key(request)
+    response = await session_service.list_sessions(
+        app_name=APP_NAME, user_id=user_id
+    )
+    sessions = []
+    for session in response.sessions:
+        state = session.state or {}
+        sessions.append({
+            "id": session.id,
+            "title": state.get("title") or "New conversation",
+            "preview": state.get("preview") or "",
+            "last_update_time": session.last_update_time,
+        })
+    sessions.sort(key=lambda s: s["last_update_time"], reverse=True)
+    return {"sessions": sessions}
+
+
+@app.get("/sessions/{session_id}")
+async def get_session_history(
+    session_id: str,
+    request: Request,
+    user_id: str = Query(default=DEFAULT_USER_ID),
+):
+    _verify_api_key(request)
+    session = await session_service.get_session(
+        app_name=APP_NAME, user_id=user_id, session_id=session_id
+    )
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+    state = session.state or {}
+    return {
+        "id": session.id,
+        "title": state.get("title") or "New conversation",
+        "messages": _session_to_messages(session),
+    }
+
+
+@app.delete("/sessions/{session_id}")
+async def delete_session_history(
+    session_id: str,
+    request: Request,
+    user_id: str = Query(default=DEFAULT_USER_ID),
+):
+    _verify_api_key(request)
+    await session_service.delete_session(
+        app_name=APP_NAME, user_id=user_id, session_id=session_id
+    )
+    return {"ok": True}
 
 
 @app.get("/health")

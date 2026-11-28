@@ -78,6 +78,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         session_id: body.session_id ?? null,
+        user_id: session.user.id,
         message: body.message,
         images: body.images ?? null,
       }),
